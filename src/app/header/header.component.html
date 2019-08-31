@@ -1,0 +1,24 @@
+<div class="section dark-bg" style="height:52px;">
+  <div class="row">
+    <div class="col-md-3 white margTop">
+      <i class="fa fa-search" aria-hidden="true"></i>
+      <input id='search' class="input" type="text" placeholder="Search.." class="search__text" name="search">
+    </div>
+    <div class="col-md-7 white text-left">
+      <mat-nav-list>
+        <mat-list-item>
+          <a [routerLink]="['/home']">Home</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a [routerLink]="['/about']">About</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a [routerLink]="['/contact']">Contact Us</a>
+        </mat-list-item>
+      </mat-nav-list>
+    </div>
+    <div class="col-md-2 white text-center margTop">
+      <a (click)="login()"><i class="fa fa-user-circle" aria-hidden="true"></i> Login</a>
+    </div>
+  </div>
+</div>
