@@ -1,0 +1,62 @@
+<div [formGroup]="form">
+  <div [ngSwitch]="field.fieldType">
+    <!-- Text Box -->
+    <mat-form-field  class="example-full-width" *ngSwitchCase="'Text'" [ngStyle]="field.style">
+      <input [id]="field.sFieldName" [ngStyle]="field.style" type="text" matInput [placeholder]="field.sPlaceHolder" [disabled]="field.bDisable" [name]="field.sFieldName" [formControlName]="field.sFieldName">
+      <mat-error [hidden]="!isValid">
+        <span>Please enter correct value of {{field.sPlaceholder}}.</span>
+      </mat-error>
+    </mat-form-field>
+    <!-- Numeric field -->
+    <mat-form-field  class="example-full-width" [ngStyle]="field.style" *ngSwitchCase="'Number'" [ngStyle]="field.style">
+      <input [id]="field.sFieldName" type="number" matInput [placeholder]="field.sPlaceHolder" [disabled]="field.bDisable" [name]="field.sFieldName" only-digits [formControlName]="field.sFieldName">
+      <mat-error [hidden]="!isValid">
+        <span>Please enter correct value of {{field.sPlaceholder}}.</span>
+      </mat-error>
+    </mat-form-field>
+    <!-- Select -->
+     <mat-form-field *ngSwitchCase="'DropDown'" [ngStyle]="field.style"  class="example-full-width">
+      <mat-select [id]="field.sFieldName" [placeholder]="field.sPlaceHolder" [disabled]="field.bDisable" [multiple]="field.mutliple" [formControlName]="field.sFieldName" >
+        <mat-option *ngFor="let opt of field.optionArray" (click)="setVal(opt)" [value]="opt">{{
+          opt }}</mat-option>
+      </mat-select>
+      <mat-error [hidden]="!isValid">
+        <span>Please enter correct value of {{field.sPlaceholder}}.</span>
+      </mat-error>
+    </mat-form-field>
+     <!-- Date -->
+    <mat-form-field *ngSwitchCase="'Date'" [ngStyle]="field.style" class="example-full-width">
+      <input matInput [id]="field.sFieldName" [placeholder]="field.sPlaceHolder" [name]="field.sFieldName" [disabled]="field.bDisable"
+        [formControlName]="field.sFieldName" [matDatepicker]="picker" (focus)="picker.open()">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error [hidden]="!isValid">
+        <span>Please enter correct value of {{field.sPlaceholder}}.</span>
+      </mat-error>
+    </mat-form-field>
+    <!-- radio button -->
+    <div class="row settobottom" *ngSwitchCase="'Radio Button'">
+      <div>
+        <span>{{field.sPlaceHolder}}: </span>
+      </div>
+      <div>
+        <mat-radio-group [name]="field.sFieldName" [id]="field.sFieldName" [disabled]="field.bDisable" [formControlName]="field.sFieldName">
+          <mat-radio-button *ngFor="let opt of field.optionArray;let i=index;" [value]="opt.value" id="field.sFieldName-{{i}}">{{opt.viewValue}}</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+    <!-- CheckBox -->
+    <mat-form-field *ngSwitchCase="'CheckBox'" class="example-full-width">
+      <mat-checkbox [name]="field.sFieldName" [id]="field.sFieldName" [disabled]="field.bDisable" [formControlName]="field.sFieldName">{{field.sPlaceHolder}}</mat-checkbox>
+    </mat-form-field>
+    <!-- Dropdown with search Option -->
+    <mat-form-field class="example-full-width" *ngSwitchCase="'Search DropDown'">
+      <mat-select [id]="field.sFieldName" [placeholder]="field.sPlaceHolder" [disabled]="field.bDisable" [formControlName]="field.sFieldName" [multiple]="field.mutliple">
+        <ngx-mat-select-search [formControlName]="field.sFieldName" [placeholderLabel]="'Type here to search'" [noEntriesFoundLabel]="'no matching value found'"></ngx-mat-select-search>
+        <mat-option (click)='setVal(search)' *ngFor="let search of field.searchArray" [value]='search'>
+          {{search}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

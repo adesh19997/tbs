@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { ProductComponent } from '../product/product.component';
+import { DataService } from '../services/data.service';
 @Component({
   selector: 'app-selling',
   templateUrl: './selling.component.html',
@@ -9,7 +10,7 @@ import { ProductComponent } from '../product/product.component';
 })
 export class SellingComponent implements OnInit {
 
-  constructor() { }
+  constructor(public data: DataService,) { }
 
   ngOnInit() {
   }

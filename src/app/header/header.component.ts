@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
-import { Observable } from 'rxjs/Observable';
 import { AuthenticateService } from "../services/authenticate.service";
 @Component({
   selector: 'app-header',
@@ -9,30 +6,26 @@ import { AuthenticateService } from "../services/authenticate.service";
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  private user: Observable<firebase.User>;
-  private userDetails: firebase.User = null;
-  constructor(private _firebaseAuth: AngularFireAuth
-    ,private auth: AuthenticateService) {
-    this.user = _firebaseAuth.authState;
+  showList: boolean = false;
+  constructor(private auth: AuthenticateService) {
   }
-
+  userDetls: any
   ngOnInit() {
-    this.user.subscribe(
-      (user) => {
-        if (user) {
-          this.userDetails = user;
-          console.log(this.userDetails);
-        }
-        else {
-          this.userDetails = null;
-        }
-      }
-    );
-
+    this.userDetls = this.auth.loggedInUser
   }
 
-  login(){
+  login() {
     this.auth.signInWithGoogle();
   }
-
+  logout() {
+    this.open();
+    this.auth.logout();
+  }
+  open(){
+    if(this.showList){
+      this.showList = false;
+    } else {
+      this.showList = true;
+    }
+  }
 }

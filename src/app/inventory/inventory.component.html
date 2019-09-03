@@ -1,0 +1,62 @@
+<app-header></app-header>
+<section *ngIf="!data.loading">
+  <div class="row white" *ngIf="!addProd">
+    <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of field">
+      <app-field [field]="fi" [form]="form"></app-field>
+    </div>
+  </div>
+  <hr>
+  <div class="row white" *ngIf="!addProd">
+    <div class="col-md-12 col-sm-12 col-lg-12 text-right">
+      <button matButton type="button" class="basicbutton" (click)="addProduct()"> Add New Product</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="!addProd">
+    <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
+      <mat-grid-list cols="3" rowHeight="1:1">
+        <mat-grid-tile *ngFor="let Product of Products">
+          <div class="row">
+            <span>{{Product.name}}</span>
+          </div>
+          <div class="row">
+            <img [src]="Product.image[0].downloadURL">
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </div>
+  <div class="row" *ngIf="addProd">
+    <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of addField">
+      <app-field [field]="fi" [form]="addform"></app-field>
+    </div>
+  </div>
+  <div class="row white" *ngIf="addProd">
+    <div class="col-md-12 col-sm-12 col-lg-12 text-right">
+      <button matButton type="button" class="basicbutton" (click)="validate()"> Add Product</button>
+    </div>
+  </div>
+  <hr>
+  <div class="row white" *ngIf="addProd && addImg">
+    <div class="col-md-12 col-sm-12 col-lg-12 text-right">
+      <button matButton type="button" class="basicbutton" (click)="validate()"> Add Image</button>
+    </div>
+    <div class="col-md-12" *ngIf="addProd && addImg" style="padding-left:0px;padding-right:0px;">
+      <mat-grid-list cols="3" rowHeight="1:1">
+        <mat-grid-tile *ngFor="let image of Product.images;let ind=index;">
+          <div class="row" *ngIf="image.state != 'running'">
+            <input type="file" id="{{Product.name+ind}}" name="{{Product.name+ind}}" #fileInput (click)="fileInput.value = null" value="" (change)="addImage($event ,image,ind)">
+            <label for="{{Product.name+ind}}">
+              <img [src]="image.downloadURL">
+            </label>
+          </div>
+          <mat-progress-bar *ngIf="image.state === 'running'" mode="indeterminate"></mat-progress-bar>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </div>
+  <div class="row white" *ngIf="addProd && addImg">
+    <div class="col-md-12 col-sm-12 col-lg-12 text-right">
+      <button matButton type="button" class="basicbutton" (click)="saveNewProd()"> Save</button>
+    </div>
+  </div>
+</section>

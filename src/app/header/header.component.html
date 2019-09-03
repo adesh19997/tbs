@@ -5,20 +5,28 @@
       <input id='search' class="input" type="text" placeholder="Search.." class="search__text" name="search">
     </div>
     <div class="col-md-7 white text-left">
-      <mat-nav-list>
-        <mat-list-item>
+      <mat-nav-list class="white">
+        <mat-list-item class=" white hor-item">
           <a [routerLink]="['/home']">Home</a>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item class="white hor-item">
           <a [routerLink]="['/about']">About</a>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item class="white hor-item">
           <a [routerLink]="['/contact']">Contact Us</a>
         </mat-list-item>
       </mat-nav-list>
     </div>
     <div class="col-md-2 white text-center margTop">
-      <a (click)="login()"><i class="fa fa-user-circle" aria-hidden="true"></i> Login</a>
+      <a (click)="login()" *ngIf="!userDetls.verified"><i class="fa fa-user-circle" aria-hidden="true"></i> Login</a>
+      <a (click)="open()" *ngIf="userDetls.verified"><img class="userImg" [src]="userDetls.userImage"></a>
+      <button mat-button class="trans-bg" [matMenuTriggerFor]="menu">{{userDetls.userName}}</button>
+      <mat-menu #menu="matMenu" overlapTrigger="true">
+        <button mat-menu-item>Cart</button>
+        <button mat-menu-item>My Orders</button>
+        <button mat-menu-item>My Info</button>
+        <button (click)="logout()" mat-menu-item>Logout</button>
+      </mat-menu>
     </div>
   </div>
 </div>

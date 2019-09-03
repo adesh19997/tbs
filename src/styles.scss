@@ -1,53 +1,85 @@
 /* You can add global styles to this file, and also import other style files */
-.dark-bg{
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.dark-bg {
     background-color: #082331;
 }
-.white-bg{
+
+.trans-bg {
+    background: transparent;
+}
+
+.white-bg {
     background-color: #FFFFFF;
 }
-.row{
+
+.row {
     margin: 0px;
 }
-.white{
+
+.white {
     color: #FFFFFF
 }
-.text-center{
-    text-align: center;
-}
-.margTop{
+
+.margTop {
     margin-top: 15px;
 }
-.light-bg{
-    background-color: #a5eaf9;  
+
+.light-bg {
+    background-color: #a5eaf9;
 }
-.text-left{
+
+.text-left {
     text-align: left;
 }
-input{
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+input {
     width: 80%;
     border-radius: 8px;
     background-color: #FFFFFF;
     border: 0px;
     padding: 5px;
 }
-section{
+
+section {
     margin-left: 0px;
     margin-right: 0px;
     width: 100%;
     background-color: #FFFFFF;
 }
-.container{
+
+.container {
     margin-left: 0px;
     margin-right: 0px;
-    padding: 0px;;
+    padding: 0px;
+    ;
     width: 100%;
     background-color: #FFFFFF;
 }
-mat-grid-tile{
+
+.basicbutton {
+    background-color: #082331;
+    border: transparent;
+    border-radius: 5px;
+    color: #FFFFFF;
+}
+.example-full-width{
+    width: 100%;
+}
+mat-grid-tile {
     box-shadow: 0px 0px 6px 1px #BDBDBD;
     background-color: #FFFFFF;
     border-radius: 15px;
 }
-mat-grid-list{
+
+mat-grid-list {
     margin: 15px;
 }
