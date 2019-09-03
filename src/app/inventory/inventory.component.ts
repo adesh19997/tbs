@@ -52,10 +52,10 @@ export class InventoryComponent implements OnInit {
   saveNewProd() {
     this.addProd = false;
     this.config.setData(this.addField, this.Product, this.addform.value);
-    if (Array.isArray(this.Products)) {
-      this.Products.push(this.Product);
+    if (Array.isArray(this.data.Products)) {
+      this.data.Products.push(this.Product);
     } else {
-      this.Products = [this.Product];
+      this.data.Products = [this.Product];
     }
     this.data.updateProductDetails(this.Product);
     this.addField = this.config.setAddFieldForm();
@@ -64,12 +64,12 @@ export class InventoryComponent implements OnInit {
   validate() {
     let i = 1;
     let tempObj = [];
-    if (Array.isArray(this.Products)) {
-      i = this.Products.length + 1;
+    if (Array.isArray(this.data.Products)) {
+      i = this.data.Products.length + 1;
     }
     this.Product.uid = this.addform.controls["ProdName"].value + this.addform.controls["Category"].value + (i).toString();
-    if (Array.isArray(this.Products)) {
-      tempObj = this.Products.filter(obj => obj.name === this.addform.controls["ProdName"].value && obj.category === this.addform.controls["Category"].value);
+    if (Array.isArray(this.data.Products)) {
+      tempObj = this.data.Products.filter(obj => obj.name === this.addform.controls["ProdName"].value && obj.category === this.addform.controls["Category"].value);
     }
     if (tempObj.length === 0) {
       this.addImg = true;
@@ -78,5 +78,10 @@ export class InventoryComponent implements OnInit {
   addImage($event, image, ind) {
     image.uid = this.Product.uid + "img" + ind.toString();
     this.storage.uploadFile($event.target.files[0], image);
+  }
+  deleteProduct(ind) {
+    this.data.deleteProductDetails(this.data.Products[ind]);
+    this.data.Products.splice(ind, 1);
+
   }
 }

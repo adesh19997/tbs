@@ -71,13 +71,23 @@ export class DataService {
     let temp = this.db.list("/Products");
     temp.valueChanges().subscribe(data => {
       this.Products = data;
+      this.Products.forEach(element => {
+        if (!Array.isArray(element.images)) {
+          element.images = [{
+            "downloadURL": "../assets/images/upload.jpg",
+            "state": "",
+            "variant": "",
+            "uid": ""
+          }]
+        }
+      });
     });
   }
   getMaster() {
     let temp = this.db.object("/Masters");
     temp.valueChanges().subscribe(data => {
       this.Master = data;
-      this.loading =false;
+      this.loading = false;
     });
   }
   getProduct() {

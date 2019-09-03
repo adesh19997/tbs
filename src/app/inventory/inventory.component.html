@@ -14,12 +14,17 @@
   <div class="row" *ngIf="!addProd">
     <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
       <mat-grid-list cols="3" rowHeight="1:1">
-        <mat-grid-tile *ngFor="let Product of Products">
+        <mat-grid-tile *ngFor="let prod of data.Products;let ind=index;">
           <div class="row">
-            <span>{{Product.name}}</span>
-          </div>
-          <div class="row">
-            <img [src]="Product.image[0].downloadURL">
+            <div class="col-md-12">
+              <span>{{prod.name}}</span>
+            </div>
+            <div class="col-md-12">
+              <img [src]="prod.images[0].downloadURL">
+            </div>
+            <div class="col-md-12 text-right">
+              <button matButton type="button" class="basicbutton" (click)="deleteProduct(ind)"> Delete</button>
+            </div>
           </div>
         </mat-grid-tile>
       </mat-grid-list>
