@@ -15,17 +15,22 @@
     <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
       <mat-grid-list cols="3" rowHeight="1:1">
         <mat-grid-tile *ngFor="let prod of data.Products;let ind=index;">
+          <mat-grid-tile-header>
+            <h4>{{prod.name}}</h4>
+          </mat-grid-tile-header>
           <div class="row">
-            <div class="col-md-12">
-              <span>{{prod.name}}</span>
-            </div>
             <div class="col-md-12">
               <img [src]="prod.images[0].downloadURL">
             </div>
-            <div class="col-md-12 text-right">
-              <button matButton type="button" class="basicbutton" (click)="deleteProduct(ind)"> Delete</button>
-            </div>
           </div>
+          <mat-grid-tile-footer>
+            <div class="row">
+              <div class="col-md-12 col-lg-12 text-right">
+                  <button matButton type="button" (click)="editProduct(ind)" class="basicbutton"> Edit</button>
+                <button matButton type="button" (click)="deleteProduct(ind)" class="basicbutton"> Delete</button>
+              </div>
+            </div>
+          </mat-grid-tile-footer>
         </mat-grid-tile>
       </mat-grid-list>
     </div>
@@ -43,7 +48,7 @@
   <hr>
   <div class="row white" *ngIf="addProd && addImg">
     <div class="col-md-12 col-sm-12 col-lg-12 text-right">
-      <button matButton type="button" class="basicbutton" (click)="validate()"> Add Image</button>
+      <button matButton type="button" class="basicbutton" (click)="addImgetoProd()"> Add Image</button>
     </div>
     <div class="col-md-12" *ngIf="addProd && addImg" style="padding-left:0px;padding-right:0px;">
       <mat-grid-list cols="3" rowHeight="1:1">

@@ -64,7 +64,7 @@ export class ConfigService {
       "bDisable": false
     }]
   }
-  geSectionForm(fields) {
+  geSectionForm(data,fields) {
     let group = {};
     fields.forEach(element => {
       var valids = [];
@@ -81,7 +81,7 @@ export class ConfigService {
         valids.push(Validators.minLength(element.maxlength));
       }
       group[element.sFieldName] = new FormControl('', valids);
-      group[element.sFieldName].V
+      group[element.sFieldName].value = this.getValue(data, element.mapping);
       if (element.fieldType === "Date" && group[element.sFieldName].value != null) {
         group[element.sFieldName].value = new Date(group[element.sFieldName].value);
       }
@@ -102,6 +102,15 @@ export class ConfigService {
       }
     });
     return new FormGroup(group);
+  }
+  getValue(data, field) {
+    let mapArr = field.split(".");
+    if (mapArr.length > 1) {
+
+    } else if (field != undefined && field != null) {
+
+      return data[field];
+    }
   }
   setAddFieldForm() {
     return [{

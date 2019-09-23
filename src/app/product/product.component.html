@@ -1,12 +1,31 @@
 <section>
   <div class="row">
     <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
-        <mat-grid-list cols="3" rowHeight="1:1">
-            <mat-grid-tile>Product-1</mat-grid-tile>
-            <mat-grid-tile>Product-2</mat-grid-tile>
-            <mat-grid-tile>Product-3</mat-grid-tile>
-            <mat-grid-tile>Product-4</mat-grid-tile>
-          </mat-grid-list>
+      <mat-grid-list cols="3" rowHeight="1:1">
+        <mat-grid-tile *ngFor="let prod of data.Products;let ind=index;">
+          <mat-grid-tile-header>
+            <h4>{{prod.name}}</h4>
+          </mat-grid-tile-header>
+          <div class="row">
+            <div class="col-md-12">
+              <img  style="width: 100%;" [src]="prod.images[0].downloadURL">
+            </div>
+          </div>
+          <mat-grid-tile-footer>
+            <div>
+              <span>Price: Rs.{{prod.price}}</span>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-lg-6 text-left">
+                <button matButton type="button" (click)="viewProduct(ind)" class="basicbutton"> View</button>
+              </div>
+              <div class="col-md-6 text-right">
+                <button matButton type="button" (click)="buyProduct(ind)" class="basicbutton"> Buy</button>
+              </div>
+            </div>
+          </mat-grid-tile-footer>
+        </mat-grid-tile>
+      </mat-grid-list>
     </div>
   </div>
 </section>

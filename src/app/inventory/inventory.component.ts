@@ -24,15 +24,18 @@ export class InventoryComponent implements OnInit {
   Product: any;
   addImg: boolean = false;
   currUser: any;
+  isEdit: boolean = false;
+  compData = {
+    selectedCat:"",
+    selectedSubCat:""
+  }
   private _onDestroy = new Subject<void>();
   constructor(private config: ConfigService,
     public data: DataService,
     public storage: StorageService,
     public user: AuthenticateService) {
     this.field = this.config.setInventoryFields();
-    this.form = this.config.geSectionForm(this.field);
-    this.addField = this.config.setAddFieldForm();
-    this.addform = this.config.geSectionForm(this.addField);
+    this.form = this.config.geSectionForm(this.compData,this.field);
   }
 
   ngOnInit() {
@@ -41,25 +44,32 @@ export class InventoryComponent implements OnInit {
   }
   addProduct() {
     if (this.currUser.verified) {
-      this.addField = this.config.setAddFieldForm();
-      this.addform = this.config.geSectionForm(this.addField);
-      this.data.loading = true;
       this.Product = this.data.getProduct();
+      this.addField = this.config.setAddFieldForm();
+      this.addform = this.config.geSectionForm(this.Product,this.addField);
+      this.data.loading = true;
       this.addProd = true;
       this.data.loading = false;
     }
   }
+  editProduct(i) {
+    this.Product = this.data.Products[i];
+    this.addProd = true;
+    this.addImg = true;
+    this.addField = this.config.setAddFieldForm();
+    this.addform = this.config.geSectionForm(this.Product,this.addField);
+    this.isEdit = true;
+  }
   saveNewProd() {
     this.addProd = false;
     this.config.setData(this.addField, this.Product, this.addform.value);
-    if (Array.isArray(this.data.Products)) {
+    if (Array.isArray(this.data.Products) && !this.isEdit) {
       this.data.Products.push(this.Product);
     } else {
       this.data.Products = [this.Product];
     }
     this.data.updateProductDetails(this.Product);
-    this.addField = this.config.setAddFieldForm();
-    this.addform = this.config.geSectionForm(this.addField);
+    this.isEdit =false;
   }
   validate() {
     let i = 1;
@@ -83,5 +93,13 @@ export class InventoryComponent implements OnInit {
     this.data.deleteProductDetails(this.data.Products[ind]);
     this.data.Products.splice(ind, 1);
 
+  }
+  addImgetoProd() {
+    this.Product.images.push({
+      "downloadURL": "../assets/images/upload.jpg",
+      "state": "",
+      "variant": "",
+      "uid": ""
+    })
   }
 }
