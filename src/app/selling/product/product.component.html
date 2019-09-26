@@ -13,14 +13,11 @@
           </div>
           <mat-grid-tile-footer>
             <div>
-              <span>Price: Rs.{{prod.price}}</span>
+              <span class="strikethrough">Price: Rs.{{prod.price}}</span>&nbsp;&nbsp;<span>Discount Price: Rs.{{prod.discountPrice}}</span>
             </div>
             <div class="row">
               <div class="col-md-6 col-lg-6 text-left">
-                <button matButton type="button" (click)="viewProduct(ind)" class="basicbutton"> View</button>
-              </div>
-              <div class="col-md-6 text-right">
-                <button matButton type="button" (click)="buyProduct(ind)" class="basicbutton"> Buy</button>
+                <button matButton type="button" (click)="gotoView(ind)" class="basicbutton"> View</button>
               </div>
             </div>
           </mat-grid-tile-footer>

@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SellingComponent } from './selling/selling.component';
-import { InventoryComponent } from './inventory/inventory.component';
+
 const routes: Routes = [
-  { path: '', redirectTo: "/products", pathMatch: 'full' },
-  { path: 'products', component: SellingComponent, data: { title: 'products' } },
-  { path: 'inventory', component: InventoryComponent, data: { title: 'Inventory' } }
+  { path: '', redirectTo: "/buy", pathMatch: 'full' },
+  { path: 'buy', loadChildren: './selling/selling.module#SellingModule', data: { title: 'Products' } },
+  { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', data: { title: 'Inventory' } }
 ];
 
 @NgModule({

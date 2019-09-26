@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
-import { FieldComponent } from '../field/field.component';
 import { ConfigService } from '../services/config.service';
 import { DataService } from '../services/data.service';
 import { StorageService } from '../services/storage.service';
@@ -12,7 +10,7 @@ import { Subject } from 'rxjs/Subject';
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.scss'],
-  providers: [HeaderComponent, FieldComponent]
+  providers: []
 })
 export class InventoryComponent implements OnInit {
   field: any = [];

@@ -192,6 +192,26 @@ export class ConfigService {
       "bDisable": false
     },
     {
+      "sFieldName": "discntPrice",
+      "sPlaceHolder": "Discount Price",
+      "fieldType": "Number",
+      "optionArray": "",
+      "maxlength": "",
+      "minlength": "",
+      "pattern": "",
+      "required": "",
+      "maxDate": "",
+      "minDate": "",
+      "click": "",
+      "change": "",
+      "style": "",
+      "condition": "",
+      "disable": "",
+      "mapping": "discountPrice",
+      "mutliple": false,
+      "bDisable": false
+    },
+    {
       "sFieldName": "Stock",
       "sPlaceHolder": "Items in Stock",
       "fieldType": "Number",

@@ -31,6 +31,7 @@ export class DataService {
     subCategory: [],
     otherParams: [],
     price: null,
+    discountPrice: null,
     stock: null,
     variants: [],
     reviews: [
@@ -87,6 +88,8 @@ export class DataService {
     let temp = this.db.object("/Masters");
     temp.valueChanges().subscribe(data => {
       this.Master = data;
+      this.loading = false;
+    },error=>{
       this.loading = false;
     });
   }

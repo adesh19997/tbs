@@ -25,6 +25,10 @@
     margin-top: 15px;
 }
 
+.strikethrough {
+    text-decoration: line-through;
+  }
+
 .light-bg {
     background-color: #a5eaf9;
 }
@@ -88,4 +92,8 @@ mat-grid-tile-header{
 }
 mat-grid-tile-footer{
     background-color: #082331 !important;
+}
+mat-progress-bar{
+    height: 3px !important;
+    color: #a5eaf9 !important;
 }
