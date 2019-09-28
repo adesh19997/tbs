@@ -3,10 +3,12 @@ import { DataService } from '../../services/data.service';
 import { StorageService } from '../../services/storage.service';
 import { AuthenticateService } from '../../services/authenticate.service';
 import { Router } from '@angular/router';
+import { CurrencyPipe } from '@angular/common';
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss']
+  styleUrls: ['./product.component.scss'],
+  providers: [CurrencyPipe]
 })
 export class ProductComponent implements OnInit {
 

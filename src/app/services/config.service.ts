@@ -64,7 +64,7 @@ export class ConfigService {
       "bDisable": false
     }]
   }
-  geSectionForm(data,fields) {
+  geSectionForm(data, fields) {
     let group = {};
     fields.forEach(element => {
       var valids = [];
@@ -129,7 +129,7 @@ export class ConfigService {
       "style": "",
       "condition": "",
       "disable": "",
-      "mapping": "name",
+      "mapping": "sName",
       "bDisable": false
     },
     {
@@ -148,7 +148,7 @@ export class ConfigService {
       "style": "",
       "condition": "",
       "disable": "",
-      "mapping": "category",
+      "mapping": "sCategory",
       "bDisable": false
     },
     {
@@ -167,7 +167,27 @@ export class ConfigService {
       "style": "",
       "condition": "",
       "disable": "",
-      "mapping": "subCategory",
+      "mapping": "aSubCategory",
+      "mutliple": true,
+      "bDisable": false
+    },
+    {
+      "sFieldName": "Brands",
+      "sPlaceHolder": "Brands",
+      "fieldType": "Search DropDown",
+      "optionArray": this.data.getMasterVal("Brands"),
+      "maxlength": "",
+      "minlength": "",
+      "pattern": "",
+      "required": "",
+      "maxDate": "",
+      "minDate": "",
+      "click": "",
+      "change": "",
+      "style": "",
+      "condition": "",
+      "disable": "",
+      "mapping": "aBrands",
       "mutliple": true,
       "bDisable": false
     },
@@ -187,7 +207,7 @@ export class ConfigService {
       "style": "",
       "condition": "",
       "disable": "",
-      "mapping": "price",
+      "mapping": "dPrice",
       "mutliple": false,
       "bDisable": false
     },
@@ -207,7 +227,7 @@ export class ConfigService {
       "style": "",
       "condition": "",
       "disable": "",
-      "mapping": "discountPrice",
+      "mapping": "dDiscountPrice",
       "mutliple": false,
       "bDisable": false
     },
@@ -227,14 +247,250 @@ export class ConfigService {
       "style": "",
       "condition": "",
       "disable": "",
-      "mapping": "stock",
+      "mapping": "dStockAvailable",
       "mutliple": false,
-      "bDisable": false
+      "bDisable": true
+    },
+    {
+      "sFieldName": "StockSold",
+      "sPlaceHolder": "Items Sold",
+      "fieldType": "Number",
+      "optionArray": "",
+      "maxlength": "",
+      "minlength": "",
+      "pattern": "",
+      "required": "",
+      "maxDate": "",
+      "minDate": "",
+      "click": "",
+      "change": "",
+      "style": "",
+      "condition": "",
+      "disable": "",
+      "mapping": "dStockSold",
+      "mutliple": false,
+      "bDisable": true
+    },
+    {
+      "sFieldName": "StockCart",
+      "sPlaceHolder": "Items in Cart",
+      "fieldType": "Number",
+      "optionArray": "",
+      "maxlength": "",
+      "minlength": "",
+      "pattern": "",
+      "required": "",
+      "maxDate": "",
+      "minDate": "",
+      "click": "",
+      "change": "",
+      "style": "",
+      "condition": "",
+      "disable": "",
+      "mapping": "dInCart",
+      "mutliple": false,
+      "bDisable": true
     }]
   }
   setData(field, dataset, formValue) {
     field.forEach(element => {
       dataset[element.mapping] = formValue[element.sFieldName];
     });
+  }
+  setBasicDatField() {
+    return [{
+      "sFieldName": "name",
+      "sPlaceHolder": "Name",
+      "fieldType": "Text",
+      "optionArray": "",
+      "maxlength": "",
+      "minlength": "",
+      "pattern": "",
+      "required": true,
+      "maxDate": "",
+      "minDate": "",
+      "click": "",
+      "change": "",
+      "style": "",
+      "condition": "",
+      "disable": "",
+      "mapping": "sName",
+      "bDisable": false
+    },
+    {
+      "sFieldName": "email",
+      "sPlaceHolder": "Email",
+      "fieldType": "Text",
+      "optionArray": "",
+      "maxlength": "",
+      "minlength": "",
+      "pattern": "",
+      "required": true,
+      "maxDate": "",
+      "minDate": "",
+      "click": "",
+      "change": "",
+      "style": "",
+      "condition": "",
+      "disable": "",
+      "mapping": "sEmail",
+      "bDisable": true
+    },
+    {
+      "sFieldName": "mobile",
+      "sPlaceHolder": "Mobile",
+      "fieldType": "Text",
+      "optionArray": "",
+      "maxlength": "",
+      "minlength": "",
+      "pattern": "",
+      "required": true,
+      "maxDate": "",
+      "minDate": "",
+      "click": "",
+      "change": "",
+      "style": "",
+      "condition": "",
+      "disable": "",
+      "mapping": "sPhoneNumber",
+      "bDisable": false
+    }]
+  }
+  setAddrFields() {
+    return [
+      {
+        "sFieldName": "line1",
+        "sPlaceHolder": "Building/floor no./flat no.",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": true,
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sLine1",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "line2",
+        "sPlaceHolder": "Area",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": true,
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sLine2",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "landmark",
+        "sPlaceHolder": "landmark",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": true,
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sLandmark",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "pin",
+        "sPlaceHolder": "Pincode",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "6",
+        "minlength": "",
+        "pattern": "",
+        "required": true,
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sPincode",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "city",
+        "sPlaceHolder": "City",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": true,
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sCity",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "state",
+        "sPlaceHolder": "State",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": true,
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sState",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "country",
+        "sPlaceHolder": "Country",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": true,
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sCountry",
+        "bDisable": false
+      }
+    ]
   }
 }

@@ -1,3 +1,39 @@
-<p>
-  my-details works!
-</p>
+<section>
+  <div class="row" style="margin-top:10px;">
+    <div class="col-md-12 col-sm-12 col-lg-12">
+      <h4>Basic Details</h4>
+    </div>
+    <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of basicField">
+      <app-field [field]="fi" [form]="form"></app-field>
+    </div>
+  </div>
+  <hr>
+  <div class="row" *ngFor="let addr of userData.aAddress;let i=index">
+    <div class="col-md-2 col-sm-2 col-lg-2">
+      <h4>Address Details</h4>
+    </div>
+    <div class="col-md-10 text-right">
+      <button matButton type="button" class="basicbutton" (click)="addAddr()"> Add Address</button>
+    </div>
+  </div>
+  <hr>
+  <div class="row" *ngFor="let addr of userData.aAddress;let i=index">
+    <div class="col-md-2 col-sm-2 col-lg-2">
+      <a (click)="setAddrType('Home',i)" [ngClass]="addr.sType=='Home'?'back':''"><i class="fa fa-home" aria-hidden="true"></i> </a>&nbsp;&nbsp;<a
+        (click)="setAddrType('Office',i)" [ngClass]="addr.sType=='Office'?'back':''"><i class="fa fa-industry" aria-hidden="true"></i> </a>&nbsp;&nbsp;<a
+        (click)="setAddrType('Other',i)" [ngClass]="addr.sType=='Other'?'back':''"><i class="fa fa-address-book-o" aria-hidden="true"></i> </a>
+    </div>
+    <div class="col-md-10 text-right">
+      <button matButton type="button" class="basicbutton" (click)="rmAddr(i)"> Remove Address</button>
+    </div>
+    <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let addr of addrField;let ind=index">
+      <app-field [field]="addr" [form]="addrForm[i]"></app-field>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-12 text-right">
+      <button matButton type="button" class="basicbutton" (click)="save()"> Save</button>
+    </div>
+  </div>
+</section>

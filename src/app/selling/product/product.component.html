@@ -4,19 +4,23 @@
       <mat-grid-list cols="3" rowHeight="1:1">
         <mat-grid-tile *ngFor="let prod of data.Products;let ind=index;">
           <mat-grid-tile-header>
-            <h4>{{prod.name}}</h4>
+            <span>{{prod.sCategory}}</span>
+            <br />
+            <h4>{{prod.sName}}</h4>
           </mat-grid-tile-header>
           <div class="row">
             <div class="col-md-12">
-              <img  style="width: 100%;" [src]="prod.images[0].downloadURL">
+              <img style="width: 100%;" [src]="prod.aImages[0].downloadURL">
             </div>
           </div>
           <mat-grid-tile-footer>
-            <div>
-              <span class="strikethrough">Price: Rs.{{prod.price}}</span>&nbsp;&nbsp;<span>Discount Price: Rs.{{prod.discountPrice}}</span>
+            <div class="row">
+                <div class="col-md-12">
+              <span class="strikethrough">{{prod.dPrice | currency:'INR':'symbol'}}</span><br /><span>{{prod.dDiscountPrice | currency:'INR':'symbol'}}</span>
+                  </div>
             </div>
             <div class="row">
-              <div class="col-md-6 col-lg-6 text-left">
+              <div class="col-md-12 col-lg-12 text-right">
                 <button matButton type="button" (click)="gotoView(ind)" class="basicbutton"> View</button>
               </div>
             </div>

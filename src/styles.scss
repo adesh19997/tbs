@@ -78,6 +78,13 @@ section {
 .example-full-width{
     width: 100%;
 }
+.card {
+    box-shadow: 0px 0px 6px 1px #BDBDBD;
+    border-radius: 5px;
+    padding: 7px 7px 5px 11px;
+    margin: 5px;
+}
+
 mat-grid-tile {
     box-shadow: 0px 0px 6px 1px #BDBDBD;
     background-color: #FFFFFF;
@@ -95,5 +102,16 @@ mat-grid-tile-footer{
 }
 mat-progress-bar{
     height: 3px !important;
-    color: #a5eaf9 !important;
+    color: #7988d4!important;
+}
+:ng-deep .mat-progress-bar-fill::after {
+    background-color: #7988d4;
+}
+
+::ng-deep .mat-progress-bar-buffer {
+    background: #7988d4;
+}
+
+::ng-deep .mat-progress-bar {
+    border-radius: 2px;
 }

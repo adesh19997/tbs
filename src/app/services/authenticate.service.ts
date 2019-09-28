@@ -7,14 +7,6 @@ import { DataService } from './data.service';
 export class AuthenticateService {
   public user: Observable<firebase.User>;
   public userDetails: firebase.User = null;
-  public loggedInUser = {
-    userName: "",
-    email:"",
-    verified:false,
-    phoneNumber:"",
-    userImage:"",
-    uid:"",
-  }
   constructor(private _firebaseAuth: AngularFireAuth,
     private data: DataService) {
     this.user = _firebaseAuth.authState;
@@ -23,18 +15,17 @@ export class AuthenticateService {
         if (user) {
           this.userDetails = user;
           if(this.userDetails.emailVerified){
-            this.loggedInUser.email = this.userDetails.email;
-            this.loggedInUser.verified = true;
-            this.loggedInUser.phoneNumber = this.userDetails.phoneNumber;
-            this.loggedInUser.userImage = this.userDetails.photoURL;
-            this.loggedInUser.uid = this.userDetails.uid;
-            this.loggedInUser.userName = this.userDetails.displayName;
-            this.data.updateUserDetls(this.loggedInUser);
+            this.data.Users.sEmail = this.userDetails.email;
+            this.data.Users.verified = true;
+            this.data.Users.sPhoneNumber = this.userDetails.phoneNumber;
+            this.data.Users.sUserImg = this.userDetails.photoURL;
+            this.data.Users.sName = this.userDetails.displayName;
+            this.data.updateUserDetls( this.data.Users);
           }
         }
         else {
           this.userDetails = null;
-          this.loggedInUser.verified = false;
+          this.data.Users.verified = false;
         }
       }
     );

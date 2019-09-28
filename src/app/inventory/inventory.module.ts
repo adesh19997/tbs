@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { InventoryRoutingModule } from './inventory-routing.module';
 import { InventoryComponent } from './/inventory.component';
-
+import { FormsModule } from '@angular/forms';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
@@ -35,6 +35,7 @@ import {SharedModule} from '../shared/shared.module';
     ReactiveFormsModule,
     MatGridListModule,
     MatProgressBarModule,
+    FormsModule,
     SharedModule
   ],
   declarations: [InventoryComponent],

@@ -15,6 +15,7 @@ import { MatInputModule, MatSelectModule, MatCheckboxModule, MatRadioModule, Mat
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { StarRatingModule } from 'angular-star-rating';
 import { SharedModule } from '../shared/shared.module';
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { SharedModule } from '../shared/shared.module';
     MatMenuModule,
     ReactiveFormsModule,
     MatGridListModule,
+    StarRatingModule,
     SharedModule
   ]
 })

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from "../services/data.service";
 import { AuthenticateService } from "../services/authenticate.service";
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -7,11 +9,13 @@ import { AuthenticateService } from "../services/authenticate.service";
 })
 export class HeaderComponent implements OnInit {
   showList: boolean = false;
-  constructor(private auth: AuthenticateService) {
+  constructor(private data: DataService,
+    private auth: AuthenticateService,
+    private router: Router) {
   }
   userDetls: any
   ngOnInit() {
-    this.userDetls = this.auth.loggedInUser
+    this.userDetls = this.data.Users;
   }
 
   login() {
@@ -21,11 +25,14 @@ export class HeaderComponent implements OnInit {
     this.open();
     this.auth.logout();
   }
-  open(){
-    if(this.showList){
+  open() {
+    if (this.showList) {
       this.showList = false;
     } else {
       this.showList = true;
     }
+  }
+  goto(route) {
+    this.router.navigate(['buy/' + route]);
   }
 }

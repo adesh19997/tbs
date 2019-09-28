@@ -19,13 +19,13 @@
           </mat-grid-tile-header>
           <div class="row">
             <div class="col-md-12">
-              <img [src]="prod.images[0].downloadURL">
+              <img [src]="prod.aImages[0].downloadURL">
             </div>
           </div>
           <mat-grid-tile-footer>
             <div class="row">
               <div class="col-md-12 col-lg-12 text-right">
-                  <button matButton type="button" (click)="editProduct(ind)" class="basicbutton"> Edit</button>
+                <button matButton type="button" (click)="editProduct(ind)" class="basicbutton"> Edit</button>
                 <button matButton type="button" (click)="deleteProduct(ind)" class="basicbutton"> Delete</button>
               </div>
             </div>
@@ -37,6 +37,13 @@
   <div class="row" *ngIf="addProd">
     <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of addField">
       <app-field [field]="fi" [form]="addform"></app-field>
+    </div>
+  </div>
+  <div class="row card" style="margin-top:20px;padding: 3px;" *ngIf="addProd">
+    <div class="col-md-12 col-sm-12 col-lg-12 ">
+      <mat-form-field class="remarks-area example-full-width">
+          <textarea matInput matTextareaAutosize name="Remarks" placeholder="Product Description" [(ngModel)]="Product.sProductDesc"></textarea>
+        </mat-form-field>
     </div>
   </div>
   <div class="row white" *ngIf="addProd">
@@ -51,7 +58,7 @@
     </div>
     <div class="col-md-12" *ngIf="addProd && addImg" style="padding-left:0px;padding-right:0px;">
       <mat-grid-list cols="3" rowHeight="1:1">
-        <mat-grid-tile *ngFor="let image of Product.images;let ind=index;">
+        <mat-grid-tile *ngFor="let image of Product.aImages;let ind=index;">
           <div class="row" *ngIf="image.state != 'running'">
             <input type="file" id="{{Product.name+ind}}" name="{{Product.name+ind}}" #fileInput (click)="fileInput.value = null" value="" (change)="addImage($event ,image,ind)">
             <label for="{{Product.name+ind}}">

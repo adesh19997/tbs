@@ -38,7 +38,7 @@ export class InventoryComponent implements OnInit {
 
   ngOnInit() {
     this.Products = this.data.Products;
-    this.currUser = this.user.loggedInUser;
+    this.currUser = this.data.Users;
   }
   addProduct() {
     if (this.currUser.verified) {
@@ -75,9 +75,9 @@ export class InventoryComponent implements OnInit {
     if (Array.isArray(this.data.Products)) {
       i = this.data.Products.length + 1;
     }
-    this.Product.uid = this.addform.controls["ProdName"].value + this.addform.controls["Category"].value + (i).toString();
+    this.Product.sUid = this.addform.controls["ProdName"].value + this.addform.controls["Category"].value + (i).toString();
     if (Array.isArray(this.data.Products)) {
-      tempObj = this.data.Products.filter(obj => obj.name === this.addform.controls["ProdName"].value && obj.category === this.addform.controls["Category"].value);
+      tempObj = this.data.Products.filter(obj => obj.sName === this.addform.controls["ProdName"].value && obj.sCategory === this.addform.controls["Category"].value);
     }
     if (tempObj.length === 0) {
       this.addImg = true;
@@ -93,7 +93,7 @@ export class InventoryComponent implements OnInit {
 
   }
   addImgetoProd() {
-    this.Product.images.push({
+    this.Product.aImages.push({
       "downloadURL": "../assets/images/upload.jpg",
       "state": "",
       "variant": "",

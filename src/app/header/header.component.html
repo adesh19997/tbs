@@ -7,7 +7,7 @@
     <div class="col-md-7 white text-left">
       <mat-nav-list class="white">
         <mat-list-item class=" white hor-item">
-          <a [routerLink]="['/home']">Home</a>
+          <a [routerLink]="['/buy']">Home</a>
         </mat-list-item>
         <mat-list-item class="white hor-item">
           <a [routerLink]="['/about']">About</a>
@@ -19,12 +19,12 @@
     </div>
     <div class="col-md-2 white text-center margTop">
       <a (click)="login()" *ngIf="!userDetls.verified"><i class="fa fa-user-circle" aria-hidden="true"></i> Login</a>
-      <a (click)="open()" *ngIf="userDetls.verified"><img class="userImg" [src]="userDetls.userImage"></a>
-      <button mat-button class="trans-bg" [matMenuTriggerFor]="menu">{{userDetls.userName}}</button>
+      <a (click)="open()" *ngIf="userDetls.verified"><img class="userImg" [src]="userDetls.sUserImg"></a>
+      <button mat-button class="trans-bg" [matMenuTriggerFor]="menu">{{userDetls.sName}}</button>
       <mat-menu #menu="matMenu" overlapTrigger="true">
-        <button mat-menu-item>Cart</button>
-        <button mat-menu-item>My Orders</button>
-        <button mat-menu-item>My Info</button>
+        <button mat-menu-item (click)="goto('cart')">Cart</button>
+        <button mat-menu-item (click)="goto('orders')">My Orders</button>
+        <button mat-menu-item (click)="goto('details')">My Info</button>
         <button (click)="logout()" mat-menu-item>Logout</button>
       </mat-menu>
     </div>
