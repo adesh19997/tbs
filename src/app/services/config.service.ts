@@ -359,6 +359,44 @@ export class ConfigService {
   setAddrFields() {
     return [
       {
+        "sFieldName": "contactPer",
+        "sPlaceHolder": "Contact Person",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": true,
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sAddrContact",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "contactMobile",
+        "sPlaceHolder": "Mobile Number",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": true,
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sPhoneNumber",
+        "bDisable": false
+      },
+      {
         "sFieldName": "line1",
         "sPlaceHolder": "Building/floor no./flat no.",
         "fieldType": "Text",
@@ -492,5 +530,26 @@ export class ConfigService {
         "bDisable": false
       }
     ]
+  }
+  setaddtoCartField() {
+    return [{
+      "sFieldName": "Quantity",
+      "sPlaceHolder": "Quantity",
+      "fieldType": "DropDown",
+      "optionArray": this.data.getMasterVal("Quantity"),
+      "maxlength": "",
+      "minlength": "",
+      "pattern": "",
+      "required": "",
+      "maxDate": "",
+      "minDate": "",
+      "click": "",
+      "change": "",
+      "style": "",
+      "condition": "",
+      "disable": "",
+      "mapping": "sQuantity",
+      "bDisable": false
+    }]
   }
 }

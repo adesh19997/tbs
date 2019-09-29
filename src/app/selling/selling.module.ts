@@ -17,13 +17,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { StarRatingModule } from 'angular-star-rating';
 import { SharedModule } from '../shared/shared.module';
+import { BuyComponent } from './buy/buy.component';
 @NgModule({
   declarations: [
     ViewProductComponent,
     CartComponent,
     ProductComponent,
     MyOrderComponent,
-    MyDetailsComponent
+    MyDetailsComponent,
+    BuyComponent
   ],
   imports: [
     CommonModule,

@@ -1,3 +1,36 @@
-<p>
-  order works!
-</p>
+<section *ngIf="!data.loading">
+  <div class="row" style="margin-top:10px;">
+    <h4>Your Orders</h4>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th>Order No.</th>
+            <th>Order Date</th>
+            <th>CustomerID</th>
+            <th>Order Amount</th>
+            <th>Order Status</th>
+            <th></th>
+          </tr>
+          <tr *ngFor="let order of Orders;let ind=index">
+            <td>{{order.sOrderNo}}</td>
+            <td>{{order.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</td>
+            <td>{{order.sCustomerId}}</td>
+            <td>{{order.dTotalAmount | currency:'INR':'symbol'}}</td>
+            <td>{{order.sOrderStatus}}</td>
+            <td>
+              <a id='editID' (click)="editOrder(ind)" title="Edit">
+                <i class="fa fa-edit"></i>
+              </a>
+              <a id="cancelEditId" (click)="deleteOrder(ind)" title="Delete">
+                <i class="fa fa-remove fa-lg"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

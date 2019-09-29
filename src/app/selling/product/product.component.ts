@@ -18,10 +18,11 @@ export class ProductComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
+    
   }
 
   gotoView(ind){
     this.data.Product = this.data.Products[ind];
-    this.router.navigate(['buy/view']);
+    this.router.navigate(['products/view']);
   }
 }

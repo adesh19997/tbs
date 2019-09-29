@@ -14,13 +14,18 @@ export class AuthenticateService {
       (user) => {
         if (user) {
           this.userDetails = user;
-          if(this.userDetails.emailVerified){
+          if (this.userDetails.emailVerified) {
             this.data.Users.sEmail = this.userDetails.email;
             this.data.Users.verified = true;
             this.data.Users.sPhoneNumber = this.userDetails.phoneNumber;
             this.data.Users.sUserImg = this.userDetails.photoURL;
             this.data.Users.sName = this.userDetails.displayName;
-            this.data.updateUserDetls( this.data.Users);
+            if (this.data.Users.sPhoneNumber != null && this.data.Users.sPhoneNumber != undefined && this.data.Users.sPhoneNumber != "") {
+              this.data.Users.uid = this.data.Users.sPhoneNumber;
+              this.data.getUserDetails(this.data.Users.uid);
+            } else {
+              this.data.getAllUsers(this.data.Users.sEmail);
+            }
           }
         }
         else {

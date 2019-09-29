@@ -41,7 +41,9 @@ export class MyDetailsComponent implements OnInit {
     this.userData.aAddress.forEach((element, ind) => {
       this.config.setData(this.addrField, element, this.addrForm[ind].value);
     });
+    this.userData.uid = this.userData.sPhoneNumber;
     this.data.updateUserDetls(this.userData);
+
   }
   addAddr() {
     this.userData.aAddress.push(JSON.parse(JSON.stringify(this.data.addrObj)));

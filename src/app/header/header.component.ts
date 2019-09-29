@@ -33,6 +33,6 @@ export class HeaderComponent implements OnInit {
     }
   }
   goto(route) {
-    this.router.navigate(['buy/' + route]);
+    this.router.navigate(['products/' + route]);
   }
 }

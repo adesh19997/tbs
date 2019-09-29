@@ -27,7 +27,7 @@
 
 .strikethrough {
     text-decoration: line-through;
-  }
+}
 
 .light-bg {
     background-color: #a5eaf9;
@@ -74,15 +74,22 @@ section {
     border: transparent;
     border-radius: 5px;
     color: #FFFFFF;
+    margin: 5px;
 }
-.example-full-width{
+
+.example-full-width {
     width: 100%;
 }
+
 .card {
     box-shadow: 0px 0px 6px 1px #BDBDBD;
     border-radius: 5px;
     padding: 7px 7px 5px 11px;
     margin: 5px;
+}
+
+.right-border {
+    border-right: 1px solid grey;
 }
 
 mat-grid-tile {
@@ -94,16 +101,45 @@ mat-grid-tile {
 mat-grid-list {
     margin: 15px;
 }
-mat-grid-tile-header{
+
+mat-grid-tile-header {
     background-color: #082331 !important;
 }
-mat-grid-tile-footer{
+
+mat-grid-tile-footer {
     background-color: #082331 !important;
 }
-mat-progress-bar{
+
+mat-progress-bar {
     height: 3px !important;
-    color: #7988d4!important;
+    color: #7988d4 !important;
 }
+
+.table {
+    & th {
+        line-height: 1.5em;
+        font-size: .875em !important;
+        color: #000000;
+        padding: .5em 1em;
+        border: 1px solid #e9ebec;
+        font-weight: 700;
+    }
+
+    & td {
+        padding: .5em 1em !important;
+        vertical-align: middle !important;
+        border: 1px solid #e9ebec;
+    }
+
+    & td:last {
+        padding: 0px;
+    }
+
+    & .mat-form-field-infix {
+        width: auto;
+    }
+}
+
 :ng-deep .mat-progress-bar-fill::after {
     background-color: #7988d4;
 }

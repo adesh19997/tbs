@@ -24,8 +24,8 @@ export class InventoryComponent implements OnInit {
   currUser: any;
   isEdit: boolean = false;
   compData = {
-    selectedCat:"",
-    selectedSubCat:""
+    selectedCat: "",
+    selectedSubCat: ""
   }
   private _onDestroy = new Subject<void>();
   constructor(private config: ConfigService,
@@ -33,7 +33,7 @@ export class InventoryComponent implements OnInit {
     public storage: StorageService,
     public user: AuthenticateService) {
     this.field = this.config.setInventoryFields();
-    this.form = this.config.geSectionForm(this.compData,this.field);
+    this.form = this.config.geSectionForm(this.compData, this.field);
   }
 
   ngOnInit() {
@@ -44,7 +44,7 @@ export class InventoryComponent implements OnInit {
     if (this.currUser.verified) {
       this.Product = this.data.getProduct();
       this.addField = this.config.setAddFieldForm();
-      this.addform = this.config.geSectionForm(this.Product,this.addField);
+      this.addform = this.config.geSectionForm(this.Product, this.addField);
       this.data.loading = true;
       this.addProd = true;
       this.data.loading = false;
@@ -55,19 +55,23 @@ export class InventoryComponent implements OnInit {
     this.addProd = true;
     this.addImg = true;
     this.addField = this.config.setAddFieldForm();
-    this.addform = this.config.geSectionForm(this.Product,this.addField);
+    this.addform = this.config.geSectionForm(this.Product, this.addField);
     this.isEdit = true;
   }
   saveNewProd() {
-    this.addProd = false;
-    this.config.setData(this.addField, this.Product, this.addform.value);
-    if (Array.isArray(this.data.Products) && !this.isEdit) {
-      this.data.Products.push(this.Product);
+    if (this.data.Users.uid != null && this.data.Users.uid != undefined && this.data.Users.uid != "") {
+      this.addProd = false;
+      this.config.setData(this.addField, this.Product, this.addform.value);
+      if (Array.isArray(this.data.Products) && !this.isEdit) {
+        this.data.Products.push(this.Product);
+      } else {
+        this.data.Products = [this.Product];
+      }
+      this.data.updateProductDetails(this.Product);
+      this.isEdit = false;
     } else {
-      this.data.Products = [this.Product];
+      alert("Please fill basic information in my-info section.");
     }
-    this.data.updateProductDetails(this.Product);
-    this.isEdit =false;
   }
   validate() {
     let i = 1;
@@ -84,12 +88,20 @@ export class InventoryComponent implements OnInit {
     }
   }
   addImage($event, image, ind) {
-    image.uid = this.Product.uid + "img" + ind.toString();
-    this.storage.uploadFile($event.target.files[0], image);
+    if (this.data.Users.uid != null && this.data.Users.uid != undefined && this.data.Users.uid != "") {
+      image.uid = this.Product.uid + "img" + ind.toString();
+      this.storage.uploadFile($event.target.files[0], image);
+    } else {
+      alert("Please fill basic information in my-info section.");
+    }
   }
   deleteProduct(ind) {
-    this.data.deleteProductDetails(this.data.Products[ind]);
-    this.data.Products.splice(ind, 1);
+    if (this.data.Users.uid != null && this.data.Users.uid != undefined && this.data.Users.uid != "") {
+      this.data.deleteProductDetails(this.data.Products[ind]);
+      this.data.Products.splice(ind, 1);
+    } else {
+      alert("Please fill basic information in my-info section.");
+    }
 
   }
   addImgetoProd() {

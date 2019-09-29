@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-
+import { DatePipe } from '@angular/common';
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 import { AngularFireModule } from 'angularfire2';
@@ -18,7 +18,7 @@ import { MatInputModule, MatSelectModule, MatCheckboxModule, MatRadioModule, Mat
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
-
+import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 @NgModule({
   declarations: [
@@ -28,6 +28,7 @@ import { HeaderComponent } from './header/header.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase, 'angular-auth-firebase'),
     AngularFireStorageModule,
     AngularFireDatabaseModule,
@@ -50,7 +51,7 @@ import { HeaderComponent } from './header/header.component';
     MatProgressBarModule
   ],
   exports: [HeaderComponent],
-  providers: [AuthenticateService, DataService, StorageService, ConfigService],
+  providers: [AuthenticateService, DataService, StorageService, ConfigService,DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
