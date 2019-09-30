@@ -31,10 +31,33 @@ export class BuyComponent implements OnInit {
       "status": "order-placed",
       "sRemarks": "order received."
     }];
-    console.log(document.getElementById('print-section').innerHTML)
-    let text = '<p>Hi ' + this.userData.sName + ', <br>Your order ' + this.Order.sOrderNo + ' is successfully placed. find the order details below.</p>' + document.getElementById('print-section').innerHTML;
-    console.log(text);
-    this.data.updateOrderDetails(this.Order,text);
+    let text = ` <html> <head><style type="text/css">.table {
+      & th {
+          line-height: 1.5em;
+          font-size: .875em !important;
+          color: #000000;
+          padding: .5em 1em;
+          border: 1px solid #e9ebec;
+          font-weight: 700;
+      }
+  
+      & td {
+          padding: .5em 1em !important;
+          vertical-align: middle !important;
+          border: 1px solid #e9ebec;
+      }
+  
+      & td:last {
+          padding: 0px;
+      }
+  
+      & .mat-form-field-infix {
+          width: auto;
+      }
+  }
+   </style> <title></title></head>`
+    text += '<p>Hi ' + this.userData.sName + ', <br>Your order ' + this.Order.sOrderNo + ' is successfully placed. find the order details below.</p>' + document.getElementById('print-section').innerHTML;
+    this.data.updateOrderDetails(this.Order, text);
   }
   setAddr(j) {
     this.form = this.config.geSectionForm(this.userData.aAddress[j], this.addrFields);

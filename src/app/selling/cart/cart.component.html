@@ -1,9 +1,13 @@
 <section style="margin-top:10px;">
   <div class="row">
-    <div class="col-md-12 text-right">
+    <div class="col-md-6 text-left">
+      <h4>Items in Cart</h4>
+    </div>
+    <div class="col-md-6 text-right">
       <button matButton type="button" class="basicbutton" (click)="buyAll()"> Buy All</button>
     </div>
   </div>
+  <hr>
   <div *ngFor="let cart of myCart;let ind=index;" class="card">
     <div class="row">
       <div class="col-md-6 text-left">

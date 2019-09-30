@@ -15,7 +15,7 @@
       <mat-grid-list cols="3" rowHeight="1:1">
         <mat-grid-tile *ngFor="let prod of data.Products;let ind=index;">
           <mat-grid-tile-header>
-            <h4>{{prod.name}}</h4>
+            <h4>{{prod.sName}}</h4>
           </mat-grid-tile-header>
           <div class="row">
             <div class="col-md-12">
@@ -35,6 +35,18 @@
     </div>
   </div>
   <div class="row" *ngIf="addProd">
+    <div class="col-md-6 col-sm-6 col-lg-6">
+      <h4>Product Details</h4>
+    </div>
+    <div class="col-md-4 col-sm-4 col-lg-4 text-right">
+      <button matButton type="button" class="basicbutton" (click)="back()"> Back</button>
+    </div>
+    <div class="col-md-2 col-sm-2 col-lg-2 text-right">
+      <button matButton type="button" class="basicbutton" (click)="saveNewProd()"> Save Changes</button>
+    </div>
+  </div>
+  <hr>
+  <div class="row" *ngIf="addProd">
     <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of addField">
       <app-field [field]="fi" [form]="addform"></app-field>
     </div>
@@ -42,8 +54,8 @@
   <div class="row card" style="margin-top:20px;padding: 3px;" *ngIf="addProd">
     <div class="col-md-12 col-sm-12 col-lg-12 ">
       <mat-form-field class="remarks-area example-full-width">
-          <textarea matInput matTextareaAutosize name="Remarks" placeholder="Product Description" [(ngModel)]="Product.sProductDesc"></textarea>
-        </mat-form-field>
+        <textarea matInput matTextareaAutosize name="Remarks" placeholder="Product Description" [(ngModel)]="Product.sProductDesc"></textarea>
+      </mat-form-field>
     </div>
   </div>
   <div class="row white" *ngIf="addProd">
@@ -52,15 +64,22 @@
     </div>
   </div>
   <hr>
-  <div class="row white" *ngIf="addProd && addImg">
-    <div class="col-md-12 col-sm-12 col-lg-12 text-right">
+  <div class="row" *ngIf="addProd && addImg">
+    <div class="col-md-6 col-sm-6 col-lg-6">
+      <h4>Product Images</h4>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 text-right">
       <button matButton type="button" class="basicbutton" (click)="addImgetoProd()"> Add Image</button>
     </div>
+  </div>
+  <hr>
+  <div class="row white" *ngIf="addProd && addImg">
     <div class="col-md-12" *ngIf="addProd && addImg" style="padding-left:0px;padding-right:0px;">
       <mat-grid-list cols="3" rowHeight="1:1">
         <mat-grid-tile *ngFor="let image of Product.aImages;let ind=index;">
           <div class="row" *ngIf="image.state != 'running'">
-            <input type="file" id="{{Product.name+ind}}" name="{{Product.name+ind}}" #fileInput (click)="fileInput.value = null" value="" (change)="addImage($event ,image,ind)">
+            <input type="file" id="{{Product.name+ind}}" name="{{Product.name+ind}}" accept="image/*" #fileInput (click)="fileInput.value = null"
+              value="" (change)="addImage($event ,image,ind)">
             <label for="{{Product.name+ind}}">
               <img [src]="image.downloadURL">
             </label>
@@ -70,9 +89,80 @@
       </mat-grid-list>
     </div>
   </div>
-  <div class="row white" *ngIf="addProd && addImg">
-    <div class="col-md-12 col-sm-12 col-lg-12 text-right">
-      <button matButton type="button" class="basicbutton" (click)="saveNewProd()"> Save</button>
+  <hr>
+  <div class="row" *ngIf="addProd && addImg">
+    <div class="col-md-6 col-sm-6 col-lg-6">
+      <h4>Stock History</h4>
+    </div>
+  </div>
+  <div class="row" *ngIf="addProd && addImg">
+    <div class="col-md-12">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th>Sr No.</th>
+            <th>Transaction Date</th>
+            <th>Action</th>
+            <th>Quantity</th>
+            <th>
+              <a id='addID' (click)="addStock(addStockPop)" title="Edit">
+                <i class="fa fa-plus"></i> Add
+              </a>
+            </th>
+          </tr>
+          <tr *ngFor="let stock of Stocks;let ind=index">
+            <td>{{ind + 1}}</td>
+            <td>{{stock.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</td>
+            <td>{{stock.sAction}}</td>
+            <td>{{stock.dQuantity}}</td>
+            <td>
+              <a id="cancelEditId" (click)="deleteStock(ind)" title="Delete">
+                <i class="fa fa-remove fa-lg"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
+
+<ng-template #addStockPop let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4>Add Stock</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row ">
+      <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of stockField">
+        <app-field [field]="fi" [form]="stockform"></app-field>
+      </div>
+    </div>
+    <hr>
+    <div class="row ">
+      <div class="col-md-12 col-sm-12 col-lg-12">
+        <h4>Stock Received from</h4>
+      </div>
+    </div>
+    <hr>
+    <div class="row ">
+      <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of addrField">
+        <app-field [field]="fi" [form]="stockRecform"></app-field>
+      </div>
+    </div>
+    <hr>
+    <div class="row ">
+      <div class="col-md-12 col-sm-12 col-lg-12">
+        <h4>Stock Delivered To</h4>
+      </div>
+    </div>
+    <hr>
+    <div class="row ">
+      <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of addrField">
+        <app-field [field]="fi" [form]="stockDelform"></app-field>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button matButton type="button" class="basicbutton" (click)="SaveStock()"> Add</button>
+  </div>
+</ng-template>

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InventoryRoutingModule } from './inventory-routing.module';
 import { InventoryComponent } from './/inventory.component';
 import { FormsModule } from '@angular/forms';
@@ -36,7 +36,8 @@ import {SharedModule} from '../shared/shared.module';
     MatGridListModule,
     MatProgressBarModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    NgbModule.forRoot(),
   ],
   declarations: [InventoryComponent],
 })

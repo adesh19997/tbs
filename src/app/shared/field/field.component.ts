@@ -42,19 +42,19 @@ export class FieldComponent implements OnInit {
   }
 
   filterBanks() {
-    this.field.searchArray = []
+    this.searchArray = []
     if (!this.field.optionArray) {
       return;
     }
     let search = this.form.controls[this.field.sFieldName].value;
     this.field.optionArray.forEach(element => {
-      let branchName = element.toLowerCase();
+      let branchName = element.viewValue.toLowerCase();
       let cmpName = search.toLowerCase();
       if (branchName.includes(cmpName)) {
-        this.field.searchArray.push(element);
+        this.searchArray.push(element);
       }
     });
-    var branchObj = _.findWhere(this.field.searchArray, { "viewValue": search });
+    var branchObj = _.findWhere(this.searchArray, { "viewValue": search });
     if (branchObj != undefined) {
       this.form.controls[this.field.sFieldName].setValue(branchObj.value);
     }

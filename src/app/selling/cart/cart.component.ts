@@ -43,6 +43,7 @@ export class CartComponent implements OnInit {
   buy(i) {
     if (this.data.Users.uid != null && this.data.Users.uid != undefined && this.data.Users.uid != "") {
       this.myCart[i].sProductName = this.myCart[i].ProdDetls.sName;
+      this.myCart[i].sProductId = this.myCart[i].ProdDetls.sUid;
       this.data.createOrder([this.myCart[i]]);
       this.router.navigate(['products/buy']);
     } else {

@@ -8,7 +8,7 @@ import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 const BASE_URL = environment.BASE_URL;
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json'})
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 @Injectable()
 export class DataService {
@@ -36,7 +36,7 @@ export class DataService {
   }
   Product = {
     sUid: "",
-    sImages: [{
+    aImages: [{
       "downloadURL": "../assets/images/upload.jpg",
       "state": "",
       "variant": "",
@@ -68,8 +68,8 @@ export class DataService {
   };
   Stock = {
     sAction: "",
-    dDate: null,
-    sProductID: "",
+    dtDate: null,
+    sProductId: "",
     dQuantity: null,
     oDest: {},
     oSource: {}
@@ -94,6 +94,7 @@ export class DataService {
     sStatus: ""
   }
   AllOrders: any = [];
+  AllStocks: any = [];
   Products: any;
   Master: any;
   loading: any = false;
@@ -184,6 +185,16 @@ export class DataService {
           .catch(function (error) {
             alert("Sorry, Order could not be placed.");
           });
+        order.aProduct.forEach(element => {
+          let tempObj = JSON.parse(JSON.stringify(this.Stock));
+          tempObj.oDest = order.oDeliveryAddr
+          tempObj.oSource = order.oDeliveryAddr
+          tempObj.dtDate = new Date();
+          tempObj.sAction = "Sold";
+          tempObj.sProductId = element.sProductId;
+          tempObj.dQuantity = Number(element.sQuantity);
+          this.updateStockDetails(tempObj);
+        });
       } else {
         alert("Sorry, Order could not be placed.");
       }
@@ -224,6 +235,23 @@ export class DataService {
       });
     }
     this.Order.oDeliveryAddr = this.Users.aAddress[0];
+  }
+  updateStockDetails(stock) {
+    let id = this.generateTempImageId();
+    this.db.object("/Stocks/" + id).update(stock);
+  }
+  getAllStocks() {
+    let temp = this.db.list("/Stocks");
+    temp.valueChanges().subscribe(data => {
+      this.AllStocks = data;
+    });
+  }
+  getStocks(id) {
+    return this.AllStocks.filter(obj => obj.sProductId == id);
+  }
+  generateTempImageId() {
+    let id = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+    return id.toUpperCase();
   }
   sendEmail(requestJson): Observable<any> {
     return this.http.post(BASE_URL + 'sendEmail', requestJson, httpOptions)

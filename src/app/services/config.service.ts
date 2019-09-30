@@ -28,7 +28,7 @@ export class ConfigService {
     return [{
       "sFieldName": "Category",
       "sPlaceHolder": "Category",
-      "fieldType": "Search DropDown",
+      "fieldType": "DropDown",
       "optionArray": this.data.getMasterVal("Category"),
       "maxlength": "",
       "minlength": "",
@@ -47,7 +47,7 @@ export class ConfigService {
     {
       "sFieldName": "SubCategory",
       "sPlaceHolder": "Sub Category",
-      "fieldType": "Search DropDown",
+      "fieldType": "DropDown",
       "optionArray": this.data.getMasterVal("Sub-Category"),
       "maxlength": "",
       "minlength": "",
@@ -135,7 +135,7 @@ export class ConfigService {
     {
       "sFieldName": "Category",
       "sPlaceHolder": "Category",
-      "fieldType": "Search DropDown",
+      "fieldType": "DropDown",
       "optionArray": this.data.getMasterVal("Sub-Category"),
       "maxlength": "",
       "minlength": "",
@@ -154,7 +154,7 @@ export class ConfigService {
     {
       "sFieldName": "SubCategory",
       "sPlaceHolder": "Sub Category",
-      "fieldType": "Search DropDown",
+      "fieldType": "DropDown",
       "optionArray": this.data.getMasterVal("Category"),
       "maxlength": "",
       "minlength": "",
@@ -174,7 +174,7 @@ export class ConfigService {
     {
       "sFieldName": "Brands",
       "sPlaceHolder": "Brands",
-      "fieldType": "Search DropDown",
+      "fieldType": "DropDown",
       "optionArray": this.data.getMasterVal("Brands"),
       "maxlength": "",
       "minlength": "",
@@ -246,7 +246,7 @@ export class ConfigService {
       "change": "",
       "style": "",
       "condition": "",
-      "disable": "",
+      "disable": true,
       "mapping": "dStockAvailable",
       "mutliple": false,
       "bDisable": true
@@ -291,6 +291,67 @@ export class ConfigService {
       "mutliple": false,
       "bDisable": true
     }]
+  }
+  setStockFieldForm() {
+    return [
+      {
+        "sFieldName": "ProdName",
+        "sPlaceHolder": "Product Id",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sProductId",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "dQuantity",
+        "sPlaceHolder": "Quantity",
+        "fieldType": "Number",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "dQuantity",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "sAction",
+        "sPlaceHolder": "Action",
+        "fieldType": "DropDown",
+        "optionArray": this.data.getMasterVal("Stock-Actions"),
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sAction",
+        "bDisable": false
+      }
+    ]
   }
   setData(field, dataset, formValue) {
     field.forEach(element => {
@@ -380,9 +441,9 @@ export class ConfigService {
       {
         "sFieldName": "contactMobile",
         "sPlaceHolder": "Mobile Number",
-        "fieldType": "Text",
+        "fieldType": "Number",
         "optionArray": "",
-        "maxlength": "",
+        "maxlength": "10",
         "minlength": "",
         "pattern": "",
         "required": true,
