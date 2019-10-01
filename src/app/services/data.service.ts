@@ -222,6 +222,7 @@ export class DataService {
     this.Order.sOrderNo = dateStr + "-" + this.Users.sPhoneNumber + '-' + this.Users.dTotalOrder.toString();
     this.Order.sCustomerId = this.Users.sPhoneNumber;
     this.Order.sOrderStatus = "Payment pending";
+    this.Order.aProduct = [];
     if (Array.isArray(products)) {
       products.forEach(element => {
         let temp = {
