@@ -92,12 +92,23 @@ export class DataService {
     dAmount: 0,
     dtAddedDate: null,
     sStatus: ""
+  };
+  selectedProd = {
+    index: 0,
+    sUrl: ""
+  };
+  orderTrack = {
+    dtDate: new Date(),
+    "status": "",
+    "sRemarks": ""
   }
+  Posters: any = [];
   AllOrders: any = [];
   AllStocks: any = [];
   Products: any;
   Master: any;
   loading: any = false;
+  onlyProduct: any = false;
   constructor(private db: AngularFireDatabase,
     public datepipe: DatePipe,
     private http: HttpClient, ) {
@@ -167,7 +178,15 @@ export class DataService {
       return this.Master[masterName];
     }
   }
-
+  updateOrder(order) {
+    this.db.object("/Orders/" + order.sOrderNo).update(order)
+      .then(function () {
+        alert("Order successfully Updated.");
+      })
+      .catch(function (error) {
+        alert("Sorry, Order could not be placed.");
+      });
+  }
   updateOrderDetails(order, html) {
     let request = {
       "mailDetails": {
@@ -249,6 +268,19 @@ export class DataService {
   }
   getStocks(id) {
     return this.AllStocks.filter(obj => obj.sProductId == id);
+  }
+  getPoster() {
+    let temp = this.db.list("/Poster");
+    this.loading = true;
+    temp.valueChanges().subscribe(data => {
+      this.loading = false;
+      this.Posters = data;
+      if (this.Posters.length > 0) {
+        this.selectedProd = this.Posters[0];
+      }
+    }, error => {
+      this.loading = false;
+    });
   }
   generateTempImageId() {
     let id = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);

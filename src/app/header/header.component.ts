@@ -9,13 +9,14 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   showList: boolean = false;
-  constructor(private data: DataService,
+  constructor(public data: DataService,
     private auth: AuthenticateService,
     private router: Router) {
   }
   userDetls: any
   ngOnInit() {
     this.userDetls = this.data.Users;
+    this.data.getPoster();
   }
 
   login() {
@@ -34,5 +35,9 @@ export class HeaderComponent implements OnInit {
   }
   goto(route) {
     this.router.navigate(['products/' + route]);
+  }
+  home(value) {
+    this.data.onlyProduct = value;
+    this.router.navigate(['/products']);
   }
 }

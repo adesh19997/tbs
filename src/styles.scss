@@ -21,6 +21,15 @@
     color: #FFFFFF
 }
 
+.dark {
+    color: #000000;
+}
+
+.font {
+    font-family: "Eina03-400";
+    font-size: 14px;
+}
+
 .margTop {
     margin-top: 15px;
 }
@@ -75,6 +84,28 @@ section {
     border-radius: 5px;
     color: #FFFFFF;
     margin: 5px;
+}
+
+.baseButton {
+    background-color: #FFFFFF;
+    border: none;
+    font-weight: 600;
+    line-height: 1.55;
+    font-size: 16px;
+    font-family: "Eina03-600";
+    letter-spacing: .5px;
+    color: #222;
+    line-height: 1.55;
+    padding: 0 10px 0 5px;
+    -moz-box-shadow: 0 -9px 0 0 #f9d4bd inset;
+    -webkit-box-shadow: 0 -9px 0 0 #f9d4bd inset;
+    -o-box-shadow: 0 -9px 0 0 #f9d4bd inset;
+    -ms-box-shadow: 0 -9px 0 0 #f9d4bd inset;
+    box-shadow: 0 -9px 0 0 #f9d4bd inset;
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    display: inline-block;
 }
 
 .example-full-width {
@@ -157,4 +188,26 @@ mat-progress-bar {
 
 ::ng-deep .mat-progress-bar {
     border-radius: 2px;
+}
+
+.box {
+    direction: ltr;
+    font-family: "Eina03-400";
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #666;
+    line-height: 1.55;
+}
+
+.modal-dialog {
+    max-width: 900px !important;
+    display: inline-block;
+    vertical-align: middle;
+    left: 20%;
+}
+
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+    z-index: 99999 !important;
 }

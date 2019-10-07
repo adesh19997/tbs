@@ -6,6 +6,8 @@ import { AuthenticateService } from '../services/authenticate.service';
 import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import * as XLSX from 'xlsx';
+type AOA = any[][];
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
@@ -30,6 +32,7 @@ export class InventoryComponent implements OnInit {
   currUser: any;
   isEdit: boolean = false;
   selectedStock: any = 0;
+  selectedProduct: any = 0;
   Stocks: any = [];
   compData = {
     selectedCat: "",
@@ -54,9 +57,10 @@ export class InventoryComponent implements OnInit {
   addProduct() {
     if (this.currUser.verified) {
       this.Stocks = [];
-      this.Product = this.data.getProduct();
+      this.Product = JSON.parse(JSON.stringify(this.data.getProduct()));
       this.addField = this.config.setAddFieldForm();
       this.addform = this.config.geSectionForm(this.Product, this.addField);
+      this.isEdit = false;
       this.data.loading = true;
       this.addProd = true;
       this.data.loading = false;
@@ -65,7 +69,7 @@ export class InventoryComponent implements OnInit {
     }
   }
   editProduct(i) {
-    this.Product = this.data.Products[i];
+    this.Product = JSON.parse(JSON.stringify(this.data.Products[i]));
     this.Stocks = this.data.getStocks(this.Product.sUid);
     this.Product.dStockSold = 0;
     this.Stocks.forEach(element => {
@@ -78,18 +82,20 @@ export class InventoryComponent implements OnInit {
     this.addField = this.config.setAddFieldForm();
     this.addform = this.config.geSectionForm(this.Product, this.addField);
     this.isEdit = true;
+    this.selectedProduct = i;
   }
   saveNewProd() {
     if (this.data.Users.uid != null && this.data.Users.uid != undefined && this.data.Users.uid != "") {
       this.addProd = false;
       this.config.setData(this.addField, this.Product, this.addform.value);
       if (Array.isArray(this.data.Products) && !this.isEdit) {
-        this.data.Products.push(this.Product);
-      } else {
-        this.data.Products = [this.Product];
+        this.data.Products.push(JSON.parse(JSON.stringify(this.Product)));
+      } else if (Array.isArray(this.data.Products) && this.selectedProduct >= 0 && this.data.Products[this.selectedProduct]) {
+        this.data.Products[this.selectedProduct] = JSON.parse(JSON.stringify(this.Product));
       }
       this.data.updateProductDetails(this.Product);
       this.isEdit = false;
+      this.Product = JSON.parse(JSON.stringify(this.data.getProduct()));
     } else {
       alert("Please fill basic information in my-info section.");
     }
@@ -114,7 +120,7 @@ export class InventoryComponent implements OnInit {
   }
   addImage($event, image, ind) {
     if (this.data.Users.uid != null && this.data.Users.uid != undefined && this.data.Users.uid != "") {
-      image.uid = this.Product.uid + "img" + ind.toString();
+      image.uid = this.Product.sUid + "-img-00" + ind.toString();
       this.storage.uploadFile($event.target.files[0], image);
     } else {
       alert("Please fill basic information in my-info section.");
@@ -165,5 +171,15 @@ export class InventoryComponent implements OnInit {
   }
   openPopup(newContents) {
     this.modalRef = this.modalService.open(newContents, { windowClass: 'buss-modal' });
+  }
+  downloadMaster() {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.Stocks);
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.Product.sUid+'.xlsx');
+
   }
 }

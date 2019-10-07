@@ -1,11 +1,47 @@
 <section>
+  <div class="row" *ngIf="!data.onlyProduct">
+    <div class="col-md-12" style="padding:25px;">
+      <img class="posterImg" [src]="data.selectedProd.sUrl">
+      <div class="bottom-left">
+        <a (click)="poster('prev')"><i class="fa fa-chevron-left arrow"></i> </a>
+        <a (click)="poster('next')"><i class="fa fa-chevron-right arrow"></i></a>
+      </div>
+    </div>
+  </div>
   <div class="row">
-    <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
-      <mat-grid-list cols="3" rowHeight="1:1">
+    <div class="col-md-12 text-center" style="padding:25px;" *ngIf="!data.onlyProduct">
+      <button matButton type="button" class="baseButton"> See All Product</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 col-lg-3 col-sm-3 box" *ngFor="let prod of data.Products;let ind=index;">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <img id="prodImg-{{ind}}" name="prodImg-{{ind}}" alt="Avatar" [src]="prod.aImages[0].downloadURL" class="prodImg">
+        </div>
+        <div class="middle">
+          <a (click)="gotoView(ind)"><i class="fa fa fa-search Icon" ></i></a>
+          <a (click)="addToCart()"><i class="fa fa-shopping-cart Icon"></i></a>
+        </div>
+      </div>
+      <div class="row" style="margin-top:20px;">
+        <div class="col-md-12 text-center">
+          <h4 class="title"><a>{{prod.sName}}</a></h4>
+        </div>
+        <div class="col-md-12 text-center">
+          <span class="strikethrough">{{prod.dPrice | currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span style="color: black;">{{prod.dDiscountPrice |
+            currency:'INR':'symbol'}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 
+  <mat-grid-list cols="3" rowHeight="1:1">
         <mat-grid-tile *ngFor="let prod of data.Products;let ind=index;">
           <mat-grid-tile-header>
-            <span>{{prod.sCategory}}</span>
-            <br />
             <h4>{{prod.sName}}</h4>
           </mat-grid-tile-header>
           <div class="row">
@@ -27,6 +63,4 @@
           </mat-grid-tile-footer>
         </mat-grid-tile>
       </mat-grid-list>
-    </div>
-  </div>
-</section>
+ -->

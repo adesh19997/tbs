@@ -1,19 +1,44 @@
 .hor-item {
-  float: right;
+  float: left;
 }
 
 .userImg {
   width: 19%;
   border-radius: 50%;
   height: 83%;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 mat-menu {
   position: absolute;
   display: inline;
   z-index: 1;
+  color: #999;
+  margin: 0;
+  position: absolute;
+  top: 100%;
+  background: #FFF;
+  border: 1px solid #eee;
+  text-align: left;
 }
 
-.mat-nav-list .mat-list-item{
-  color: #FFFFFF;
+.mat-nav-list .mat-list-item {
+  line-height: 20px;
+  color: #222;
+  font-weight: 600;
+}
+
+img {
+  height: 80%;
+  width: 100%;
+}
+
+.icon {
+  font-size: 22px;
+  margin: 5px;
+  vertical-align: middle;
+  margin-left: 10px;
+  margin-right: 10px;
+
 }

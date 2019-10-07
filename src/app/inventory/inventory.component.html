@@ -94,6 +94,9 @@
     <div class="col-md-6 col-sm-6 col-lg-6">
       <h4>Stock History</h4>
     </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 text-right">
+      <button matButton type="button" class="basicbutton" (click)="downloadMaster()"> Download History</button>
+    </div>
   </div>
   <div class="row" *ngIf="addProd && addImg">
     <div class="col-md-12">
@@ -130,6 +133,7 @@
 <ng-template #addStockPop let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4>Add Stock</h4>
+    <button id="inv1" type="button" class="close" aria-label="Close" (click)="c('Close click')" style="float:right;padding-top: 0px;">&times;</button>
   </div>
   <div class="modal-body">
     <div class="row ">

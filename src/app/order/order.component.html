@@ -1,7 +1,14 @@
 <section *ngIf="!data.loading">
+  <hr>
   <div class="row" style="margin-top:10px;">
-    <h4>Your Orders</h4>
+    <div class="col-md-6 col-sm-6 col-lg-6 text-left">
+      <h4>Your Orders</h4>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 text-right">
+      <button matButton type="button" class="basicbutton" (click)="downloadMaster()"> Download History</button>
+    </div>
   </div>
+  <hr>
   <div class="row">
     <div class="col-md-12">
       <table class="table">
@@ -14,18 +21,18 @@
             <th>Order Status</th>
             <th></th>
           </tr>
-          <tr *ngFor="let order of Orders;let ind=index">
+          <tr *ngFor="let order of data.AllOrders;let ind=index">
             <td>{{order.sOrderNo}}</td>
             <td>{{order.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</td>
             <td>{{order.sCustomerId}}</td>
             <td>{{order.dTotalAmount | currency:'INR':'symbol'}}</td>
             <td>{{order.sOrderStatus}}</td>
             <td>
-              <a id='editID' (click)="editOrder(ind)" title="Edit">
+              <a id='editID' (click)="editOrderDetl(ind,editOrder)" title="Edit">
                 <i class="fa fa-edit"></i>
               </a>
-              <a id="cancelEditId" (click)="deleteOrder(ind)" title="Delete">
-                <i class="fa fa-remove fa-lg"></i>
+              <a id='editID' (click)="viewOrderTrack(ind,viewTrack)" title="View">
+                <i class="fa fa-eye"></i>
               </a>
             </td>
           </tr>
@@ -34,3 +41,55 @@
     </div>
   </div>
 </section>
+<ng-template #editOrder let-c="close" let-d="dismiss" class="modal-dialog">
+  <div class="modal-header">
+    <h4>Order Details</h4>
+    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')" style="float:right;padding-top: 0px;">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="row ">
+      <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of orderField">
+        <app-field [field]="fi" [form]="orderform"></app-field>
+      </div>
+    </div>
+    <hr>
+    <div class="row card">
+      <div class="col-md-12 col-sm-12 col-lg-12 ">
+        <mat-form-field class="remarks-area example-full-width">
+          <textarea matInput matTextareaAutosize name="Remarks" placeholder="Description" [(ngModel)]="orderTrack.sRemarks"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button matButton type="button" class="basicbutton" (click)="SaveOrder()"> Add</button>
+  </div>
+</ng-template>
+<ng-template #viewTrack let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4>Order Track : {{data.AllOrders[selectedOrder].sOrderNo}}</h4>
+    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')" style="float:right;padding-top: 0px;">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="row ">
+      <div class="col-md-12">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>Date</th>
+              <th>Updated By</th>
+              <th>Status Chnaged To</th>
+              <th>Description</th>
+            </tr>
+            <tr *ngFor="let order of data.AllOrders[selectedOrder].aOrderTrack;let ind=index">
+              <td>{{order.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</td>
+              <td>{{order.sDoneBy}}</td>
+              <td>{{order.status}}</td>
+              <td>{{order.sRemarks}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-template>

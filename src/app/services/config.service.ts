@@ -49,6 +49,7 @@ export class ConfigService {
       "sPlaceHolder": "Sub Category",
       "fieldType": "DropDown",
       "optionArray": this.data.getMasterVal("Sub-Category"),
+      "mutliple":true,
       "maxlength": "",
       "minlength": "",
       "pattern": "",
@@ -594,7 +595,7 @@ export class ConfigService {
   }
   setaddtoCartField() {
     return [{
-      "sFieldName": "Quantity",
+      "sFieldName": "sQuantity",
       "sPlaceHolder": "Quantity",
       "fieldType": "DropDown",
       "optionArray": this.data.getMasterVal("Quantity"),
@@ -612,5 +613,66 @@ export class ConfigService {
       "mapping": "sQuantity",
       "bDisable": false
     }]
+  }
+  setOrderTrackField() {
+    return [
+      {
+        "sFieldName": "sStatus",
+        "sPlaceHolder": "Status",
+        "fieldType": "DropDown",
+        "optionArray": this.data.getMasterVal("Order_Stage"),
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "status",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "sDoneBy",
+        "sPlaceHolder": "Updated By",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sDoneBy",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "sContact",
+        "sPlaceHolder": "Update Person Contact",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sContact",
+        "bDisable": false
+      }
+    ]
   }
 }

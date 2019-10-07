@@ -1,28 +1,27 @@
-<div class="section dark-bg" style="height:52px;">
+<div class="section white" style="height:52px;margin-bottom: 30px;">
   <div class="row">
-    <div class="col-md-3 white margTop">
-      <i class="fa fa-search" aria-hidden="true"></i>
-      <input id='search' class="input" type="text" placeholder="Search.." class="search__text" name="search">
+    <div class="col-md-2 white margTop">
+      <img src="https://firebasestorage.googleapis.com/v0/b/tecpixels-bs.appspot.com/o/Home%2Flogo.png?alt=media&token=03c0b15c-6caf-4f63-a95a-4474b0e0257a">
     </div>
-    <div class="col-md-7 white text-left">
-      <mat-nav-list class="white">
-        <mat-list-item class=" white hor-item">
-          <a [routerLink]="['/products']">Home</a>
+    <div class="col-md-8 dark text-left">
+      <mat-nav-list class="dark font text-left">
+        <mat-list-item class="dark font hor-item">
+          <a (click)="home(true)">Home</a>
         </mat-list-item>
-        <mat-list-item class="white hor-item">
-          <a [routerLink]="['/about']">About</a>
+        <mat-list-item class="dark font hor-item">
+          <a (click)="home(true)">Products</a>
         </mat-list-item>
-        <mat-list-item class="white hor-item">
+        <mat-list-item class="dark font hor-item">
           <a [routerLink]="['/contact']">Contact Us</a>
         </mat-list-item>
       </mat-nav-list>
     </div>
-    <div class="col-md-2 white text-center margTop">
-      <a (click)="login()" *ngIf="!userDetls.verified"><i class="fa fa-user-circle" aria-hidden="true"></i> Login</a>
-      <a (click)="open()" *ngIf="userDetls.verified"><img class="userImg" [src]="userDetls.sUserImg"></a>
-      <button mat-button class="trans-bg" [matMenuTriggerFor]="menu">{{userDetls.sName}}</button>
+    <div class="col-md-2 dark text-right margTop">
+      <a (click)="login()" *ngIf="!userDetls.verified"><i class="fa fa-user-o icon" aria-hidden="true"></i></a>
+      <a (click)="goto('cart')" *ngIf="userDetls.verified"><i class="fa fa-shopping-cart icon"></i></a>
+      <a [matMenuTriggerFor]="menu" *ngIf="userDetls.verified"> <i class="fa fa-user-o icon"></i></a>
+      <!-- <button mat-button class="dark font" >{{userDetls.sName}}</button> -->
       <mat-menu #menu="matMenu" overlapTrigger="true">
-        <button mat-menu-item (click)="goto('cart')">Cart</button>
         <button mat-menu-item (click)="goto('orders')">My Orders</button>
         <button mat-menu-item (click)="goto('details')">My Info</button>
         <button (click)="logout()" mat-menu-item>Logout</button>

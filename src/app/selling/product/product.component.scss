@@ -1,0 +1,77 @@
+.posterImg {
+    width: 100%;
+    height: 100vh;
+}
+
+.arrow {
+    font-family: "FontAwesome";
+    font-size: 34px;
+    color: #ccc;
+    text-align: center;
+    color: #cecece;
+    opacity: 0.6;
+}
+
+.bottom-left {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+}
+
+.box {
+    direction: ltr;
+    font-family: "Eina03-400";
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.55;
+}
+
+.prodImg {
+    height: 40vh;
+    max-width: 100%;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.pad {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.title {
+    font-family: "Eina03-600";
+    font-weight: 400;
+    text-transform: capitalize;
+    font-size: 20px;
+    line-height: 20px;
+    color: black;
+}
+
+.middle {
+    position: absolute;
+    top: 0;
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5);
+    /* Black see-through */
+    color: black;
+    width: 100%;
+    transition: .5s ease;
+    opacity: 0;
+    font-size: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.box:hover .middle {
+    opacity: 1;
+}
+
+
+
+.Icon {
+    margin: 5px;
+    color: #FFFFFF;
+    font-size: 22px;
+    font-weight: 100;
+}
