@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 })
 export class CartComponent implements OnInit {
   myCart: any = [];
+  totalItem: any = 0;
+  totalCost: any = 0;
   constructor(public data: DataService,
     private config: ConfigService,
     private router: Router) {
@@ -27,8 +29,10 @@ export class CartComponent implements OnInit {
         let tempProdObj = this.data.Products.filter(obj => obj.sUid === element.sProductId);
         if (tempProdObj.length > 0) {
           Object.assign(element, { "ProdDetls": tempProdObj[0] });
+          this.totalCost += Number(tempProdObj[0].dDiscountPrice);
         }
       });
+      this.totalItem = this.myCart.length;
     }
   }
   delete(i) {

@@ -1,0 +1,33 @@
+.card {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 1px 3px 1px rgba(50,50,50,.04);
+    border-radius: 0;
+    border: 1px solid #e1e1e1;
+    border-top-width: 3px;
+    margin: 0 0 20px;
+    padding: 0;
+}
+h4 {
+    text-transform: uppercase;
+    color: #000;
+    font-weight: 600;
+}
+.label {
+    font-size: 14px;
+    font-family: "Eina03-600";
+    font-weight: 600;
+    color: #2a363b;
+}
+ul{
+    list-style:none !important;
+}
+.text1{
+    font-size: 14px;
+    color: #666;
+}
+.text2{
+    font-size: 14px;
+    color: black;
+    font-weight: 600;
+}
