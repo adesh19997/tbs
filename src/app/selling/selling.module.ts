@@ -18,6 +18,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { StarRatingModule } from 'angular-star-rating';
 import { SharedModule } from '../shared/shared.module';
 import { BuyComponent } from './buy/buy.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     ViewProductComponent,
@@ -46,6 +47,7 @@ import { BuyComponent } from './buy/buy.component';
     NgxMatSelectSearchModule,
     MatMenuModule,
     ReactiveFormsModule,
+    FormsModule,
     MatGridListModule,
     StarRatingModule,
     SharedModule

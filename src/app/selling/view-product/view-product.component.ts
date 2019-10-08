@@ -15,6 +15,7 @@ export class ViewProductComponent implements OnInit {
   addtoCartFields: any = [];
   form: FormGroup;
   cart: any = {};
+  dQuantitiy: any = 1;
   constructor(public data: DataService,
     private config: ConfigService,
     private router: Router) {
@@ -32,6 +33,7 @@ export class ViewProductComponent implements OnInit {
   addToCart() {
     this.config.setData(this.addtoCartFields, this.cart, this.form.value);
     this.cart.sStatus = "new";
+    this.cart.sQuantity = this.dQuantitiy;
     this.cart.dtAddedDate = new Date();
     this.cart.sProductId = this.product.sUid;
     this.cart.dAmount = this.product.dDiscountPrice;
@@ -48,7 +50,7 @@ export class ViewProductComponent implements OnInit {
       let temp = [{
         sProductId: this.product.sUid,
         sProductName: this.product.sName,
-        sQuantity: this.cart.sQuantity,
+        sQuantity: this.dQuantitiy,
         dAmount: Number(this.product.dDiscountPrice)
       }]
       this.data.createOrder(temp);

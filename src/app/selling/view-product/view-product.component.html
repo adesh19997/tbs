@@ -1,51 +1,47 @@
-<section>
-  <div class="row" style="margin-top:10px;">
-    <div class="col-md-10 right-border">
+<section  style="margin-top:20px;">
+  <div class="row">
+    <div class="col-md-6 col-sm-6 col-lg-6">
+      <img [src]="product.aImages[0].downloadURL" class="showImg">
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6">
       <div class="row">
-        <div class="col-md-6 text-left">
-          <span>{{product.sCategory}}</span>
-          <br />
+        <div class="col-md-12">
           <h4>{{product.sName}}</h4>
         </div>
-        <div class="col-md-6 text-right">
+        <div class="col-md-12" style="margin-bottom:10px;">
+          <span [ngClass]="product.dAvgRating>=1 ? 'fa fa-star checked':'fa fa-star'"></span>
+          <span [ngClass]="product.dAvgRating>=2 ? 'fa fa-star checked':'fa fa-star'"></span>
+          <span [ngClass]="product.dAvgRating>=3 ? 'fa fa-star checked':'fa fa-star'"></span>
+          <span [ngClass]="product.dAvgRating>=4 ? 'fa fa-star checked':'fa fa-star'"></span>
+          <span [ngClass]="product.dAvgRating>=5 ? 'fa fa-star checked':'fa fa-star'"></span>
+        </div>
+        <div class="col-md-12" style="margin-bottom:10px;">
           <span class="strikethrough">{{product.dPrice | currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<h4>{{product.dDiscountPrice
             | currency:'INR':'symbol'}}</h4>
-          <br />
-          <!-- <star-rating-comp [starType]="'svg'" [rating]="product.dAvgRating"></star-rating-comp> -->
         </div>
-      </div>
-      <hr>
-      <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
-          <img [src]="product.aImages[0].downloadURL">
+        <div class="col-md-12" style="margin-bottom:10px;">
+          <span class="control-label">{{product.sShortDesc}}</span>
         </div>
-        <div class="col-md-1"></div>
-      </div>
-      <hr>
-      <div class="row card">
-        <div class="col-md-12 ">
-          <h4>Description</h4>
+        <div class="col-md-12" style="margin-bottom:10px;">
+          <span class="control-label">QUANTITY</span>
+          <input type="number" style="width:50px;" min="1" [(ngModel)]="dQuantitiy">
         </div>
-        <div class="col-md-12 ">
-          {{product.sProductDesc}}
+        <div class="col-md-6" style="margin-bottom:10px;">
+          <button matButton type="button" class="darkButton example-full-width" (click)="addToCart()"> Add to Cart</button>
+        </div>
+        <div class="col-md-6" style="margin-bottom:10px;">
+          <button matButton type="button" class="darkButton example-full-width" (click)="buy()"> Buy</button>
         </div>
       </div>
     </div>
-    <div class="col-md-2">
-      <div class="row">
-        <div class="col-md-12" *ngFor="let field of addtoCartFields">
-          <app-field [field]="field" [form]="form"></app-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12" style="margin-top:10px;">
-          <button matButton type="button" class="basicbutton example-full-width" (click)="addToCart()"> Add to Cart</button>
-        </div>
-        <div class="col-md-12" style="margin-top:10px;">
-          <button matButton type="button" class="basicbutton example-full-width" (click)="buy()"> Buy</button>
-        </div>
-      </div>
+  </div>
+  <hr>
+  <div class="row" style="margin-top:10px;">
+    <div class="col-md-12">
+      <h4>DESCRIPTION</h4>
+    </div>
+    <div class="col-md-12" style="padding:20px;">
+      <p class="product-description">{{product.sProductDesc}}</p>
     </div>
   </div>
 </section>

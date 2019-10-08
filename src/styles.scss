@@ -211,3 +211,24 @@ mat-progress-bar {
 .cdk-overlay-container {
     z-index: 99999 !important;
 }
+
+.rating {
+    color: orange;
+}
+
+.darkButton {
+    background: #222;
+    min-width: 245px;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 40px;
+    border-radius: 0;
+    font-size: 12px;
+    font-family: 'Poppins';
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.darkButton:hover .orange {
+    color: orangered;
+}
