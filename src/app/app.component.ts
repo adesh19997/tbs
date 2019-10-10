@@ -16,6 +16,6 @@ export class AppComponent {
     this.data.loading = true;
     this.data.getMaster();
     this.data.getProducts();
-  
+    this.data.getOrder();
   }
 }
