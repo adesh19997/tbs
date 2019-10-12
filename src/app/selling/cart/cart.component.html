@@ -26,7 +26,7 @@
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4">
-                  <input type="number" style="width:50px;" min="1" [(ngModel)]="dQuantitiy">
+                  <input type="number" name="quant-{{ind}}" id="quant-{{ind}}" style="width:50px;border:1px solid;border-radius: 0px;" min="1" [(ngModel)]="dQuantitiy">
                 </div>
                 <div class="col-md-1 col-lg-1">
                   <a id='editID' (click)="delete(ind)" title="Edit">

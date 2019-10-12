@@ -6,5 +6,6 @@ export const environment = {
     databaseURL: 'https://tecpixels-bs.firebaseio.com',
     projectId: 'tecpixels-bs',
     storageBucket: 'gs://tecpixels-bs.appspot.com/',
-}
+  },
+  BASE_URL: "https://us-central1-tecpixels-bs.cloudfunctions.net/app/"
 };

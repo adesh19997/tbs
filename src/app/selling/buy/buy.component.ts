@@ -3,6 +3,7 @@ import { CurrencyPipe } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { ConfigService } from '../../services/config.service';
 import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-buy',
   templateUrl: './buy.component.html',
@@ -15,7 +16,8 @@ export class BuyComponent implements OnInit {
   form: FormGroup;
   addrFields: any = [];
   constructor(public data: DataService,
-    private config: ConfigService) {
+    private config: ConfigService,
+    private router: Router) {
     this.Order = this.data.Order;
     this.userData = this.data.Users;
     this.addrFields = this.config.setAddrFields();
@@ -61,5 +63,8 @@ export class BuyComponent implements OnInit {
   }
   setAddr(j) {
     this.form = this.config.geSectionForm(this.userData.aAddress[j], this.addrFields);
+  }
+  goto(){
+    this.router.navigate(['products']);
   }
 }

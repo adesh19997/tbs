@@ -1,0 +1,154 @@
+[debug] [2019-10-12T10:44:52.963Z] ----------------------------------------------------------------------
+[debug] [2019-10-12T10:44:52.966Z] Command:       /usr/bin/node /home/adesh/.npm-global/bin/firebase deploy
+[debug] [2019-10-12T10:44:52.966Z] CLI Version:   7.4.0
+[debug] [2019-10-12T10:44:52.966Z] Platform:      linux
+[debug] [2019-10-12T10:44:52.966Z] Node Version:  v8.15.0
+[debug] [2019-10-12T10:44:52.966Z] Time:          Sat Oct 12 2019 16:14:52 GMT+0530 (IST)
+[debug] [2019-10-12T10:44:52.966Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-12T10:44:52.973Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-12T10:44:52.973Z] > authorizing via signed-in user
+[debug] [2019-10-12T10:44:52.973Z] [iam] checking project tecpixels-bs for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2019-10-12T10:44:52.975Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/tecpixels-bs:testIamPermissions  
+
+[debug] [2019-10-12T10:45:03.162Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:03.172Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tecpixels-bs  
+ 
+[debug] [2019-10-12T10:45:04.170Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'tecpixels-bs'...
+[info] 
+[info] i  deploying functions, hosting
+[debug] [2019-10-12T10:45:15.101Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "8"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "firebase": "^7.2.0",
+    "firebase-admin": "^8.0.0",
+    "firebase-functions": "^3.1.0",
+    "nodemailer": "^6.3.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.1.6"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[debug] [2019-10-12T10:45:15.102Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/tecpixels-bs/services/cloudfunctions.googleapis.com  
+ 
+[debug] [2019-10-12T10:45:15.103Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/tecpixels-bs/services/runtimeconfig.googleapis.com  
+ 
+[debug] [2019-10-12T10:45:17.933Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2019-10-12T10:45:23.831Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:23.834Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tecpixels-bs/adminSdkConfig  
+ 
+[debug] [2019-10-12T10:45:24.341Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:24.346Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/tecpixels-bs/versions  
+
+[debug] [2019-10-12T10:45:27.414Z] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2019-10-12T10:45:27.418Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/tecpixels-bs/configs  
+ 
+[debug] [2019-10-12T10:45:28.232Z] <<< HTTP RESPONSE 200
+[info] i  functions: packaged functions (33.95 KB) for uploading
+[debug] [2019-10-12T10:45:28.899Z] >>> HTTP REQUEST POST https://cloudfunctions.googleapis.com/v1/projects/tecpixels-bs/locations/us-central1/functions:generateUploadUrl  
+ 
+[debug] [2019-10-12T10:45:30.690Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:30.693Z] >>> HTTP REQUEST PUT https://storage.googleapis.com/gcf-upload-us-central1-8a792a06-1fc7-495e-9ce4-85c18f8f8ff8/0f5300e8-ab8c-4be7-baf3-ccbf21767a8e.zip?GoogleAccessId=service-605455174309@gcf-admin-robot.iam.gserviceaccount.com&Expires=1570878930&Signature=MSyXQyb1yuKhsCD%2B%2BGhPYiykSYhli%2BF8GP3oHv5YEOb0Rd7lAfTBNbdGVqyvSa97Vaic1FhIgzi7KJipr4F%2BeD6uO9AXMiMLJqtn3imk0cLCU0iJVo%2F0hTeMcLvjaJiAem0TCx3ndZxhrxqSfCwBdODSjIi65Wld5es%2F3%2FtXEdNpHNlFjs0uh4CZAChp8sg5sLenWKL1H%2FxJWwESQaZDpqIiBCoaNWwjYwCVJBHzHkFndiupAVMiTBUdqpq88BIcCCSO8zHrDS1%2BVWMJ2%2B502mfGLdaaNWrmFpB0onTeAt5qIuiMRFnCi1167oa%2BtCA9fKTuW7qg236hN56ChkDOYw%3D%3D  
+ <request body omitted>
+[debug] [2019-10-12T10:45:31.611Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: functions folder uploaded successfully
+[info] i  hosting[tecpixels-bs]: beginning deploy...
+[info] i  hosting[tecpixels-bs]: found 18 files in dist
+[debug] [2019-10-12T10:45:31.638Z] [hosting] hash cache [ZGlzdA] load error: lines is not defined
+[debug] [2019-10-12T10:45:31.916Z] [hosting] hash cache [ZGlzdA] stored for 18 files
+[debug] [2019-10-12T10:45:31.917Z] [hosting][hash queue][FINAL]
+[debug] [2019-10-12T10:45:31.917Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/tecpixels-bs/versions/44b7a79cc104fbd7:populateFiles  
+ <request body omitted>
+[debug] [2019-10-12T10:45:34.396Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:34.407Z] [hosting][populate queue][FINAL]
+[debug] [2019-10-12T10:45:34.408Z] [hosting] uploads queued: 11
+[debug] [2019-10-12T10:45:39.070Z] [hosting][upload queue][FINAL]
+[info] ✔  hosting[tecpixels-bs]: file upload complete
+[debug] [2019-10-12T10:45:39.072Z] [hosting] deploy completed after 7456ms
+[debug] [2019-10-12T10:45:39.724Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/tecpixels-bs/locations/-/functions  
+ 
+[debug] [2019-10-12T10:45:40.932Z] <<< HTTP RESPONSE 200
+[info] i  functions: updating Node.js 8 function app(us-central1)...
+[debug] [2019-10-12T10:45:40.944Z] Trigger is:  {"httpsTrigger":{}}
+[debug] [2019-10-12T10:45:40.950Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/tecpixels-bs/services/cloudscheduler.googleapis.com  
+ 
+[debug] [2019-10-12T10:45:43.084Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:43.094Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/tecpixels-bs/locations/us-central1/functions/app {"updateMask":"sourceUploadUrl,name,labels,runtime,httpsTrigger"} 
+
+[debug] [2019-10-12T10:45:44.412Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:44.422Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/tecpixels-bs/locations/-/functions  
+ 
+[debug] [2019-10-12T10:45:45.435Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:45.442Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:45:46.152Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:48.156Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:45:49.020Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:51.023Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:45:51.799Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:53.802Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:45:54.651Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:56.656Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:45:57.621Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:45:59.627Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:00.591Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:02.595Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:03.560Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:05.563Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:06.428Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:08.432Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:09.208Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:11.213Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:12.164Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:14.169Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:15.135Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:17.136Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:17.794Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:19.797Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:20.456Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:22.460Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:23.426Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:25.430Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:26.293Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:28.298Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:29.262Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:31.267Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:32.232Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-12T10:46:34.235Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dGVjcGl4ZWxzLWJzL3VzLWNlbnRyYWwxL2FwcC85bkdOYzAxcnVmOA  
+ 
+[debug] [2019-10-12T10:46:35.186Z] <<< HTTP RESPONSE 200

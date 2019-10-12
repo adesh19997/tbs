@@ -144,6 +144,9 @@ export class DataService {
       if (snapshot.val() && snapshot.val() instanceof Object) {
         this.Users = snapshot.val();
       }
+    })
+    .catch(function(erroe){
+      
     });
   }
   getAllUsers(uid) {
@@ -296,6 +299,11 @@ export class DataService {
   }
   private handleErrorObservable(error: any) {
     return Observable.throw(error);
+  }
+  postDataToServer(requestJson, endpoint): Observable<any> {
+    return this.http.post(BASE_URL + endpoint, requestJson, httpOptions)
+      .map(this.returnJsonResponse)
+      .catch(this.handleErrorObservable)
   }
 }
 

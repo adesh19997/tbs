@@ -109,7 +109,6 @@ export class ConfigService {
     if (mapArr.length > 1) {
 
     } else if (field != undefined && field != null) {
-
       return data[field];
     }
   }
@@ -692,6 +691,104 @@ export class ConfigService {
         "disable": "",
         "mapping": "sContact",
         "bDisable": false
+      }
+    ]
+  }
+  setAnalyticStockField() {
+    return [
+      {
+        PlaceHolder: "Total in Stock",
+        value: null,
+        mapping: "dTotalStock"
+      },
+      {
+        PlaceHolder: "Total sold",
+        value: null,
+        mapping: "dTotalSold"
+      },
+      {
+        PlaceHolder: "Total Products",
+        value: null,
+        mapping: "dTotalProducts"
+      },
+      {
+        PlaceHolder: "Products with Maximum Stock",
+        value: [],
+        mapping: "aMaxStockProd"
+      },
+      {
+        PlaceHolder: "Products with Minimum Stock",
+        value: [],
+        mapping: "aMinStockProd"
+      },
+      {
+        PlaceHolder: "Products Sold this Month",
+        value: null,
+        mapping: "dMonthSale"
+      },
+      {
+        PlaceHolder: "Products Sold this Week",
+        value: null,
+        mapping: "dWeekSale"
+      },
+      {
+        PlaceHolder: "Products Sold YesterDay",
+        value: null,
+        mapping: "dDaySale"
+      },
+      {
+        PlaceHolder: "Most Ordered Products",
+        value: [],
+        mapping: "aMostSold"
+      },
+      {
+        PlaceHolder: "least Ordered Products",
+        value: [],
+        mapping: "aLeastSold"
+      }
+    ]
+  }
+  setAnalyticOrderField() {
+    return [
+      {
+        PlaceHolder: "Orders To be Shipped",
+        value: null,
+        mapping: "dOrderToBeShipped"
+      },
+      {
+        PlaceHolder: "Orders on the Way",
+        value: null,
+        mapping: "dOrderOnWay"
+      },
+      {
+        PlaceHolder: "Orders out for delivery",
+        value: null,
+        mapping: "dOrderDelivery"
+      },
+      {
+        PlaceHolder: "Total Orders Delivered",
+        value: [],
+        mapping: "dOrderDelivered"
+      },
+      {
+        PlaceHolder: "Total Orders Cancelled",
+        value: [],
+        mapping: "dOrderCancelled"
+      },
+      {
+        PlaceHolder: "Orders Placed this Month",
+        value: null,
+        mapping: "dOrderMonth"
+      },
+      {
+        PlaceHolder: "Orders Placed this Week",
+        value: null,
+        mapping: "dOrderWeek"
+      },
+      {
+        PlaceHolder: "Orders Placed YesterDay",
+        value: null,
+        mapping: "dOrderYesterday"
       }
     ]
   }

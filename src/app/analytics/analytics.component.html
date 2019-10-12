@@ -1,0 +1,48 @@
+<section *ngIf="!data.loading">
+  <div class="row">
+    <div class="col-md-6 card">
+      <div class="row">
+        <h4>Stock Analysis</h4>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table">
+            <tr *ngFor="let data of Stock">
+              <th>{{data.PlaceHolder}}</th>
+              <td>{{data.value}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <button matButton type="button" class="darkButton" (click)="gotoDetails()"> Details</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 card">
+      <div class="row">
+        <h4>Order Analysis</h4>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table">
+            <tr *ngFor="let data of Order">
+              <th>{{data.PlaceHolder}}</th>
+              <td>{{data.value}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <button matButton type="button" class="darkButton" (click)="gotoDetails()"> Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
