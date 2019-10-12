@@ -22,10 +22,10 @@ export class AnalyticsComponent implements OnInit {
     this.data.postDataToServer({}, 'basicAnalysis').subscribe(response => {
       if (response instanceof Object) {
         this.Order.forEach(element => {
-          this.config.getValue(this.Order, element.mapping);
+          this.config.getDataValue(element, element.mapping, response);
         });
         this.Stock.forEach(element => {
-          this.config.getValue(this.Order, element.mapping);
+          this.config.getDataValue(element, element.mapping, response);
         });
       }
     }, error => {

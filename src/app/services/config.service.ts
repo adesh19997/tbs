@@ -112,6 +112,14 @@ export class ConfigService {
       return data[field];
     }
   }
+  getDataValue(data, field, input) {
+    let mapArr = field.split(".");
+    if (mapArr.length > 1) {
+
+    } else if (field != undefined && field != null) {
+      return data.value = input[field];
+    }
+  }
   setAddFieldForm() {
     return [{
       "sFieldName": "ProdName",
