@@ -53,7 +53,8 @@ app.post('/basicAnalysis', function (req, res) {
 		aMaxStockProd: [],
 		aMinStockProd: [],
 		aMostSold: [],
-		aLeastSold: []
+		aLeastSold: [],
+		dOrderPlaced: 0
 	};
 	firebase.database().ref('/Products').once('value', function (snapshot) {
 		Products = snapshot.val();
@@ -107,6 +108,9 @@ app.post('/basicAnalysis', function (req, res) {
 					}
 					if (Orders[orderKeys[i]].sOrderStatus == "OS5") {
 						responseData.dOrderDelivery += 1;
+					}
+					if (Orders[orderKeys[i]].sOrderStatus == "OS1") {
+						responseData.dOrderPlaced += 1;
 					}
 				}
 				console.log("done");

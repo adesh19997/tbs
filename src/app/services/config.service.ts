@@ -759,6 +759,11 @@ export class ConfigService {
   setAnalyticOrderField() {
     return [
       {
+        PlaceHolder: "Orders Placed, Payment Pending",
+        value: null,
+        mapping: "dOrderPlaced"
+      },
+      {
         PlaceHolder: "Orders To be Shipped",
         value: null,
         mapping: "dOrderToBeShipped"
