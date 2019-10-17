@@ -64,6 +64,7 @@ export class DataService {
     sOrderStatus: "",
     dTotalAmount: null,
     dtDate: null,
+    sPaymentMade: "",
     aOrderTrack: []
   };
   Stock = {
@@ -101,6 +102,13 @@ export class DataService {
     dtDate: new Date(),
     "status": "",
     "sRemarks": ""
+  };
+  reviewObj = {
+    sDescription: "",
+    dRating: 0,
+    sUserID: this.Users.sPhoneNumber,
+    sUserName: this.Users.sName,
+    dtDate: new Date()
   }
   Posters: any = [];
   AllOrders: any = [];
@@ -145,9 +153,9 @@ export class DataService {
         this.Users = snapshot.val();
       }
     })
-    .catch(function(erroe){
-      
-    });
+      .catch(function (erroe) {
+
+      });
   }
   getAllUsers(uid) {
     let temp = this.db.list("/Users");
@@ -293,6 +301,17 @@ export class DataService {
     return this.http.post(BASE_URL + 'sendEmail', requestJson, httpOptions)
       .map(this.returnJsonResponse)
       .catch(this.handleErrorObservable)
+  }
+  getFilteredProducts(req) {
+    this.postDataToServer(req, 'getFilteredProducts').subscribe(response => {
+      if (Array.isArray(response)) {
+        this.Products = response;
+      } else {
+        alert("error fetching products");
+      }
+    }, error => {
+      alert("error fetching products" + error);
+    })
   }
   private returnJsonResponse(res: any) {
     return res;

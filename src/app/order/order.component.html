@@ -4,7 +4,10 @@
     <div class="col-md-6 col-sm-6 col-lg-6 text-left">
       <h4>Your Orders</h4>
     </div>
-    <div class="col-md-6 col-sm-6 col-lg-6 text-right">
+    <div class="col-md-4 col-sm-4 col-lg-4 text-right">
+      <button matButton type="button" class="basicbutton" (click)="createHeader(addOrder)"> Create Order</button>
+    </div>
+    <div class="col-md-2 col-sm-2 col-lg-2 text-right">
       <button matButton type="button" class="basicbutton" (click)="downloadMaster()"> Download History</button>
     </div>
   </div>
@@ -14,11 +17,32 @@
       <table class="table">
         <tbody>
           <tr>
-            <th>Order No.</th>
-            <th>Order Date</th>
-            <th>CustomerID</th>
-            <th>Order Amount</th>
-            <th>Order Status</th>
+            <th (click)="sortTable('Order','sOrderNo')">Order No.
+              <a class="text-left" (click)="sortTable('Order','sOrderNo')">
+                <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i>
+                <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i>
+              </a>
+            </th>
+            <th (click)="sortTable('Order','dtDate')">Order Date
+              <a class="text-left" (click)="sortTable('Order','dtDate')">
+                <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i> </a>
+            </th>
+            <th (click)="sortTable('Order','sCustomerId')">CustomerID
+              <a class="text-left" (click)="sortTable('Order','sCustomerId')"> <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down"
+                  *ngIf="dir=='asc'"></i> </a>
+            </th>
+            <th (click)="sortTable('Order','dTotalAmount')">Order Amount
+              <a class="text-left" (click)="sortTable('Order','dTotalAmount')"> <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down"
+                  *ngIf="dir=='asc'"></i> </a>
+            </th>
+            <th (click)="sortTable('Order','sOrderStatus')">Order Status
+              <a class="text-left" (click)="sortTable('Order','sOrderStatus')"> <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down"
+                  *ngIf="dir=='asc'"></i> </a>
+            </th>
+            <th (click)="sortTable('Order','sPaymentMade')">Payment Mode
+              <a class="text-left" (click)="sortTable('Order','sPaymentMade')"> <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down"
+                  *ngIf="dir=='asc'"></i> </a>
+            </th>
             <th></th>
           </tr>
           <tr *ngFor="let order of data.AllOrders;let ind=index">
@@ -27,6 +51,7 @@
             <td>{{order.sCustomerId}}</td>
             <td>{{order.dTotalAmount | currency:'INR':'symbol'}}</td>
             <td>{{order.sOrderStatus}}</td>
+            <td>{{order.sPaymentMade}}</td>
             <td>
               <a id='editID' (click)="editOrderDetl(ind,editOrder)" title="Edit">
                 <i class="fa fa-edit"></i>
@@ -76,12 +101,17 @@
         <table class="table">
           <tbody>
             <tr>
-              <th>Date</th>
+              <th>Sr. No.</th>
+              <th>
+                Date
+
+              </th>
               <th>Updated By</th>
               <th>Status Chnaged To</th>
               <th>Description</th>
             </tr>
             <tr *ngFor="let order of data.AllOrders[selectedOrder].aOrderTrack;let ind=index">
+              <td>{{ind + 1}}</td>
               <td>{{order.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</td>
               <td>{{order.sDoneBy}}</td>
               <td>{{order.status}}</td>
@@ -93,3 +123,138 @@
     </div>
   </div>
 </ng-template>
+<ng-template #addOrder let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4>Place Order</h4>
+    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')" style="float:right;padding-top: 0px;">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="row ">
+      <div class="col-md-12 col-sm-12 col-lg-12">
+        <h4>Order Details</h4>
+      </div>
+      <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of newOrderField">
+        <app-field [field]="fi" [form]="newOrder"></app-field>
+      </div>
+      <hr>
+      <div class="col-md-12 col-sm-12 col-lg-12">
+        <h4>Delivery Address</h4>
+      </div>
+      <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of addrField">
+        <app-field [field]="fi" [form]="addrForm"></app-field>
+      </div>
+      <hr>
+      <div class="col-md-12 col-sm-12 col-lg-12">
+        <h4>Products</h4>
+      </div>
+      <div class="col-md-12 col-sm-12 col-lg-12">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>Sr No.</th>
+              <th>Product Name </th>
+              <th>Product ID</th>
+              <th>Quantity</th>
+              <th>Amount Per Item</th>
+              <th>
+                <a id='addID' (click)="addProduct()" title="Edit">
+                  <i class="fa fa-plus"></i> Add
+                </a>
+              </th>
+            </tr>
+            <tr *ngFor="let product of aOrderProducts;let ind=index">
+              <td>{{ind + 1}}</td>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-select id="prdt-{{ind}}" placeholder="Name" name="prdt-{{ind}}" [(ngModel)]="product.sProductName">
+                    <mat-option *ngFor="let opt of data.Products" (click)="setProdData(opt,ind)" [value]="opt.sName">{{
+                      opt.sName }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+              <td>{{product.sProductId}}</td>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <input id="qnt-{{ind}}" type="number" matInput placeholder="Quantity" name="qnt-{{ind}}" [(ngModel)]="product.sQuantity">
+                </mat-form-field>
+              </td>
+              <td>{{product.dAmount | currency:'INR':'symbol'}}</td>
+              <td>
+                <a id="cancelEditId" (click)="deleteProduct(ind)" title="Delete">
+                  <i class="fa fa-remove fa-lg"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button matButton type="button" class="basicbutton" (click)="placeOrder(reviewOrder)"> Confirm Order</button>
+  </div>
+</ng-template>
+<ng-template #reviewOrder let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4>Review Order</h4>
+    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')" style="float:right;padding-top: 0px;">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="row ">
+      <div class="col-md-12">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th class="text-left">Total Items</th>
+              <td class="text-right">{{tempOrder.dTotalQuantity}}</td>
+            </tr>
+            <tr>
+              <th class="text-left">Total Amount</th>
+              <td class="text-right">{{tempOrder.dTotalAmount | currency:'INR':'symbol'}}</td>
+            </tr>
+            <tr>
+              <th colspan="2">
+                Promo Codes
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button matButton type="button" class="basicbutton" (click)="confirm()"> Place Order</button>
+  </div>
+</ng-template>
+<div style="display:none;">
+  <div class="col-md-12" id="print-section">
+    <table class="border">
+      <tbody>
+        <tr class="borderStyle">
+          <th class="borderStyle">Sr No.</th>
+          <th class="borderStyle">Product Name </th>
+          <th class="borderStyle">Quantity</th>
+          <th class="borderStyle"> Amount Per Item</th>
+        </tr>
+        <tr class="borderStyle" *ngFor="let product of aOrderProducts;let ind=index">
+          <td class="borderStyle">{{ind + 1}}</td>
+          <td class="borderStyle">
+            {{product.sProductName}}
+          </td>
+          <td class="borderStyle">
+            {{product.sQuantity}}
+          </td>
+          <td class="borderStyle">{{product.dAmount | currency:'INR':'symbol'}}</td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr>
+          <th class="text-left borderStyle">Total Items</th>
+          <td class="text-right borderStyle">{{tempOrder.dTotalQuantity}}</td>
+          <th class="text-left borderStyle">Total Amount</th>
+          <td class="text-right borderStyle">{{tempOrder.dTotalAmount | currency:'INR':'symbol'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

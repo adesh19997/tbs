@@ -11,7 +11,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { MatListModule } from '@angular/material/list';
-import { MatInputModule, MatSelectModule, MatCheckboxModule, MatRadioModule, MatIconModule, MatDialogModule, MatButtonModule, MatDatepickerModule, MatMenuModule, MatProgressBarModule } from '@angular/material';
+import { MatInputModule, MatSelectModule,MatStepperModule, MatCheckboxModule, MatRadioModule, MatIconModule, MatDialogModule, MatButtonModule, MatDatepickerModule, MatMenuModule, MatProgressBarModule } from '@angular/material';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -50,6 +50,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     MatGridListModule,
     StarRatingModule,
+    MatStepperModule,
     SharedModule
   ]
 })

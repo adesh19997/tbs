@@ -3,30 +3,44 @@ import { FormGroup } from '@angular/forms';
 import { DataService } from '../services/data.service';
 import { ConfigService } from '../services/config.service';
 import { DatePipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
 import * as XLSX from 'xlsx';
+import * as _ from 'underscore';
 type AOA = any[][];
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
-  providers: [DatePipe]
+  providers: [DatePipe, CurrencyPipe]
 })
 export class OrderComponent implements OnInit {
   public modalRef: any;
   userData: any = {};
   orderField: any = [];
+  newOrderField: any = [];
+  addrField: any = [];
   orderform: FormGroup;
+  newOrder: FormGroup;
+  addrForm: FormGroup;
   selectedOrder: any = -1;
   orderTrack: any;
+  orderObj: any = {};
+  aOrderProducts: any = [];
+  deliverAddr = this.data.addrObj;
+  tempOrder: any = this.data.Order;
   constructor(public data: DataService,
     private modalService: NgbModal,
+    public datepipe: DatePipe,
     private config: ConfigService) {
     this.data.getOrder();
     this.userData = this.data.Users;
     this.orderField = this.config.setOrderTrackField();
   }
-
+  dir: any = "";
+  private _onDestroy = new Subject<void>();
   ngOnInit() {
   }
   openPopup(newContents) {
@@ -51,7 +65,7 @@ export class OrderComponent implements OnInit {
   }
   downloadMaster() {
     /* generate worksheet */
-     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.data.AllOrders);
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.data.AllOrders);
     /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
@@ -59,5 +73,131 @@ export class OrderComponent implements OnInit {
     /* save to file */
     XLSX.writeFile(wb, 'Orders.xlsx');
 
+  }
+  sortTable(dataTable, key) {
+    if (dataTable == "Order") {
+      if (this.dir == 'asc') {
+        this.data.AllOrders = _.sortBy(this.data.AllOrders, key).reverse();
+        this.dir = 'dsc'
+      } else {
+        this.data.AllOrders = _.sortBy(this.data.AllOrders, key);
+        this.dir = 'asc'
+      }
+    }
+  }
+  createHeader(addOrder) {
+    this.newOrderField = this.config.setCreateOffLineOrderFields();
+    this.addrField = this.config.setAddrFields();
+    this.newOrder = this.config.geSectionForm({}, this.newOrderField);
+    this.addrForm = this.config.geSectionForm(this.deliverAddr, this.addrField);
+    this.aOrderProducts = [{
+      sProductId: "",
+      sProductName: "",
+      sQuantity: "",
+      dAmount: 0
+    }];
+    if (this.newOrder.controls["Category"]) {
+      this.newOrder.controls["Category"].valueChanges
+        .pipe(takeUntil(this._onDestroy))
+        .subscribe(() => {
+          let req = {
+            "sCategory": this.newOrder.controls["Category"].value,
+            "aSubCategory": this.newOrder.controls["SubCategory"].value,
+            "aBrands": this.newOrder.controls["Brands"].value,
+          }
+          this.data.getFilteredProducts(req);
+        });
+    }
+    if (this.newOrder.controls["SubCategory"]) {
+      this.newOrder.controls["SubCategory"].valueChanges
+        .pipe(takeUntil(this._onDestroy))
+        .subscribe(() => {
+          let req = {
+            "sCategory": this.newOrder.controls["Category"].value,
+            "aSubCategory": this.newOrder.controls["SubCategory"].value,
+            "aBrands": this.newOrder.controls["Brands"].value,
+          }
+          this.data.getFilteredProducts(req);
+        });
+    }
+    if (this.newOrder.controls["Brands"]) {
+      this.newOrder.controls["Brands"].valueChanges
+        .pipe(takeUntil(this._onDestroy))
+        .subscribe(() => {
+          let req = {
+            "sCategory": this.newOrder.controls["Category"].value,
+            "aSubCategory": this.newOrder.controls["SubCategory"].value,
+            "aBrands": this.newOrder.controls["Brands"].value,
+          }
+          this.data.getFilteredProducts(req);
+        });
+    }
+    this.openPopup(addOrder);
+  }
+  placeOrder(content) {
+    this.config.setData(this.newOrderField, this.tempOrder, this.newOrder.value);
+    this.config.setData(this.addrField, this.deliverAddr, this.addrForm.value);
+
+    let date = new Date();
+    let dateStr = this.datepipe.transform(date, 'dd-MM-yyyy');
+    this.tempOrder.dtDate = new Date();
+    this.tempOrder.dTotalAmount = 0;
+    if (this.data.Users.dTotalOrder >= 0) {
+      this.data.Users.dTotalOrder += 1;
+    } else {
+      this.data.Users.dTotalOrder = 1;
+    }
+    this.tempOrder.sOrderNo = dateStr + "-" + this.tempOrder.sCustomerId + '-' + this.data.Users.dTotalOrder.toString();
+    this.tempOrder.sOrderStatus = "OS2";
+    this.tempOrder.aProduct = this.aOrderProducts;
+    this.tempOrder.sPaymentMade = "Direct-Cash";
+    this.tempOrder.oDeliveryAddr = this.deliverAddr;
+    this.calculateTotal();
+    this.modalRef.close();
+    this.openPopup(content)
+  }
+  deleteProduct(ind) {
+    this.aOrderProducts.splice(ind, 1);
+  }
+  addProduct() {
+    this.aOrderProducts.push({
+      sProductId: "",
+      sProductName: "",
+      sQuantity: "",
+      dAmount: 0
+    })
+  }
+  setProdData(opt, ind) {
+    this.aOrderProducts[ind].sProductId = opt.sUid;
+    this.aOrderProducts[ind].sProductName = opt.sName;
+    this.aOrderProducts[ind].dAmount = opt.dDiscountPrice;
+  }
+  calculateTotal() {
+    this.tempOrder.dTotalQuantity = 0;
+    this.tempOrder.dTotalAmount = 0;
+    this.aOrderProducts.forEach(element => {
+      this.tempOrder.dTotalAmount += Number(element.dAmount) * Number(element.sQuantity);
+      this.tempOrder.dTotalQuantity += Number(element.sQuantity);
+    });
+  }
+  confirm() {
+    this.tempOrder.aOrderTrack = [{
+      dtDate: new Date(),
+      "status": "order-placed",
+      "sRemarks": "order received."
+    }];
+    let text = ` <html> <head><style type="text/css">
+    .border {
+      border-collapse: collapse;
+      border: 1px solid #000000;
+      text-align: center;
+    }
+    .borderStyle{
+      border: 1px solid #000000;
+    }
+   </style> <title></title></head>`
+    text += '<body><p>Hi ' + this.userData.sName + ', <br>Your order ' + this.tempOrder.sOrderNo + ' is successfully placed. find the order details below.</p></body></html>' + document.getElementById('print-section').innerHTML;
+    this.data.updateOrderDetails(this.tempOrder, text);
+    this.modalRef.close();
   }
 }

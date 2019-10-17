@@ -37,6 +37,38 @@ app.post('/sendEmail', function (req, res) {
 			res.end(JSON.stringify(info));
 	});
 });
+
+app.post('/getFilteredProducts', function (req, res) {
+	firebase.database().ref('/Products').once('value', function (snapshot) {
+		Products = snapshot.val();
+		var filterKeys = Object.keys(req.body.filterParams);
+		let prodKeys = Object.keys(Products);
+		var ProdList = []
+		for (var j = 0; j < prodKeys.length; j++) {
+			let bAdd = true;
+			for (var i = 0; i < filterKeys.length; i++) {
+				if (typeof Products[prodKeys[j]][filterKeys[i]] == "string") {
+					if (Products[prodKeys[j]][filterKeys[i]] != req.body.filterParams[filterKeys[i]]) {
+						bAdd = false;
+					}
+				} else if (Array.isArray(Products[prodKeys[j]][filterKeys[i]])) {
+					if (!Products[prodKeys[j]][filterKeys[i]].includes(req.body.filterParams[filterKeys[i]])) {
+						bAdd = false;
+					}
+				}
+			}
+
+			if (bAdd) {
+				ProdList.push(Products[prodKeys[j]])
+			}
+		}
+		res.end(JSON.stringify(ProdList));
+	})
+		.catch(function (error) {
+			res.end(JSON.stringify(error));
+		});
+});
+
 app.post('/basicAnalysis', function (req, res) {
 	let Products = [];
 	let Orders = [];
@@ -113,7 +145,6 @@ app.post('/basicAnalysis', function (req, res) {
 						responseData.dOrderPlaced += 1;
 					}
 				}
-				console.log("done");
 				res.end(JSON.stringify(responseData));
 			})
 				.catch(function (error) {

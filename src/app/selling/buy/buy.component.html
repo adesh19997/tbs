@@ -1,72 +1,167 @@
 <section style="margin-top:10px;">
-  <div class="row card">
-    <div class="col-md-10 right-border">
+  <div class="row">
+    <div class="col-md-9 right-border">
+      <mat-horizontal-stepper linear="true" #buyStepper>
+        <mat-step [stepControl]="firstFormGroup" class="card">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Personal Information</ng-template>
+            <div class="row">
+              <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let addr of basicFields;let ind=index">
+                <app-field [field]="addr" [form]="basicData"></app-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <button mat-button class="basicbutton white" matStepperNext>Next</button>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup" class="card">
+          <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Address Details</ng-template>
+            <div class="row">
+              <h6>Select From Existing Address</h6>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-4 " *ngFor="let addr of userData.aAddress;let j=index;">
+                <div class="row card">
+                  <h4>{{addr.sType}}</h4>
+                  <h6>{{addr.sAddrContact}}</h6>
+                  <span>{{addr.sLine1}}, {{addr.sLine2}}.</span>
+                  <span>{{addr.sLandMark}}, {{addr.sLine2}}.</span>
+                  <span>{{addr.sCity}}, {{addr.sState}},</span>
+                  <span>{{addr.sCountry}}.</span>
+                  <span>{{addr.sPhoneNumber}}</span>
+                  <br />
+                  <button matButton type="button" class="basicbutton example-full-width" (click)="setAddr(j)"> select</button>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <h6>Shipping Address</h6>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let addr of addrFields;let ind=index">
+                <app-field [field]="addr" [form]="form"></app-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 text-left">
+                <button mat-button class="basicbutton" matStepperPrevious>Back</button>
+              </div>
+              <div class="col-md-6 text-right">
+                <button mat-button class="basicbutton" matStepperNext>Next</button>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step class="card" [stepControl]="thirdFormGroup">
+          <ng-template matStepLabel>Place Order</ng-template>
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table text-left">
+                <tbody>
+                  <tr>
+                    <th>Order No.</th>
+                    <td colspan="3">{{Order.sOrderNo}}</td>
+                  </tr>
+                  <tr>
+                    <th>Sr. No</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                  </tr>
+                  <tr *ngFor="let product of Order.aProduct;let ind=index;">
+                    <td>{{ind + 1}}</td>
+                    <td>{{product.sProductName}}</td>
+                    <td>{{product.sQuantity}}</td>
+                    <td>{{product.dAmount | currency:'INR':'symbol'}}</td>
+                  </tr>
+                  <tr>
+                    <th>Total Amount</th>
+                    <td colspan="3" class="text-right">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 text-left">
+              <button mat-button class="basicbutton" matStepperPrevious>Back</button>
+            </div>
+            <div class="col-md-6 text-right">
+              <button mat-button class="darkButton" (click)="buy()">Place Order</button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </div>
+    <div class="col-md-3">
       <div class="row">
-        <h4>Place Your Order</h4>
-      </div>
-      <div class="row">
-        <div class="col-md-12" id="print-section">
-          <table class="table text-left">
+        <div class="col-md-12">
+          <table class="table">
             <tbody>
               <tr>
-                <th>Order No.</th>
-                <td colspan="3">{{Order.sOrderNo}}</td>
+                <th class="text-left">Total Items</th>
+                <td class="text-right">{{Order.dTotalQuantity}}</td>
               </tr>
               <tr>
-                <th>Sr. No</th>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Amount</th>
-              </tr>
-              <tr *ngFor="let product of Order.aProduct;let ind=index;">
-                <td>{{ind + 1}}</td>
-                <td>{{product.sProductName}}</td>
-                <td>{{product.sQuantity}}</td>
-                <td>{{product.dAmount | currency:'INR':'symbol'}}</td>
+                <th class="text-left">Total Amount</th>
+                <td class="text-right">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
               </tr>
               <tr>
-                <th>Total Amount</th>
-                <td colspan="3" class="text-right">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
+                <th colspan="2">
+                  Promo Codes
+                </th>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
       <hr>
-      <div class="row">
-        <h4>Select Existing Address</h4>
-      </div>
-      <div class="row">
-        <div class="col-md-4 " *ngFor="let addr of userData.aAddress;let j=index;">
-          <div class="row card">
-            <h4>{{addr.sType}}</h4>
-            <h6>{{addr.sAddrContact}} ({{addr.sPhoneNumber}})</h6>
-            <span>{{addr.sLine1}}, {{addr.sLine2}}.</span>
-            <span>{{addr.sLandMark}}, {{addr.sLine2}}.</span>
-            <span>{{addr.sLandMark}}, {{addr.sCity}}, {{addr.sState}},</span>
-            <span>{{addr.sCountry}}.</span>
-            <br />
-            <button matButton type="button" class="basicbutton example-full-width" (click)="setAddr(j)"> select</button>
-          </div>
+      <div class="row" style="margin-top:10px;">
+        <div class="col-md-6 text-center">
+          <button matButton type="button" class="darkButton" style="min-width:0px !important;" (click)="buy()"> BUY</button>
         </div>
-      </div>
-      <hr>
-      <div class="row">
-        <h4>Shipping Address</h4>
-      </div>
-      <div class="row">
-        <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let addr of addrFields;let ind=index">
-          <app-field [field]="addr" [form]="form"></app-field>
+        <div class="col-md-6 text-center">
+          <button matButton type="button" style="min-width:0px !important;" class="darkButton" (click)="goto()"> CANCEL</button>
         </div>
-      </div>
-    </div>
-    <div class="col-md-2">
-      <div class="col-md-12" style="margin-top:10px;">
-        <button matButton type="button" class="darkButton" (click)="buy()"> BUY</button>
-      </div>
-      <div class="col-md-12" style="margin-top:10px;">
-        <button matButton type="button" class="darkButton" (click)="goto()"> CANCEL</button>
       </div>
     </div>
   </div>
 </section>
+<div style="display:none;">
+  <div class="col-md-12" id="print-section">
+    <table class="border">
+      <tbody>
+        <tr class="borderStyle">
+          <th class="borderStyle">Sr No.</th>
+          <th class="borderStyle">Product Name </th>
+          <th class="borderStyle">Quantity</th>
+          <th class="borderStyle"> Amount Per Item</th>
+        </tr>
+        <tr class="borderStyle" *ngFor="let product of Order.aProduct;let ind=index">
+          <td class="borderStyle">{{ind + 1}}</td>
+          <td class="borderStyle">
+            {{product.sProductName}}
+          </td>
+          <td class="borderStyle">
+            {{product.sQuantity}}
+          </td>
+          <td class="borderStyle">{{product.dAmount | currency:'INR':'symbol'}}</td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr>
+          <th class="text-left borderStyle">Total Items</th>
+          <td class="text-right borderStyle">{{Order.dTotalQuantity}}</td>
+          <th class="text-left borderStyle">Total Amount</th>
+          <td class="text-right borderStyle">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

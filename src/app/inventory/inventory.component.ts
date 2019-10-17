@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import * as XLSX from 'xlsx';
+import * as _ from 'underscore';
 type AOA = any[][];
 @Component({
   selector: 'app-inventory',
@@ -37,7 +38,8 @@ export class InventoryComponent implements OnInit {
   compData = {
     selectedCat: "",
     selectedSubCat: ""
-  }
+  };
+  dir: any = "";
   constructor(private config: ConfigService,
     public data: DataService,
     public storage: StorageService,
@@ -88,6 +90,7 @@ export class InventoryComponent implements OnInit {
     if (this.data.Users.uid != null && this.data.Users.uid != undefined && this.data.Users.uid != "") {
       this.addProd = false;
       this.config.setData(this.addField, this.Product, this.addform.value);
+      this.Product.dDiscountPercent = (((Number(this.Product.dPrice) -Number(this.Product.dDiscountPrice))/Number(this.Product.dPrice))*100).toFixed(2);
       if (Array.isArray(this.data.Products) && !this.isEdit) {
         this.data.Products.push(JSON.parse(JSON.stringify(this.Product)));
       } else if (Array.isArray(this.data.Products) && this.selectedProduct >= 0 && this.data.Products[this.selectedProduct]) {
@@ -179,7 +182,35 @@ export class InventoryComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
 
     /* save to file */
-    XLSX.writeFile(wb, this.Product.sUid+'.xlsx');
+    XLSX.writeFile(wb, this.Product.sUid + '.xlsx');
 
+  }
+  downloadProductList() {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.data.Products);
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, "ProductList" + '.xlsx');
+  }
+  sortTable(dataTable, key) {
+    if (dataTable == "ProductList") {
+      if (this.dir == 'asc') {
+        this.data.Products = _.sortBy(this.data.Products, key).reverse();
+        this.dir = 'dsc'
+      } else {
+        this.data.Products = _.sortBy(this.data.Products, key);
+        this.dir = 'asc'
+      }
+    } else if(dataTable == 'Stock'){
+      if (this.dir == 'asc') {
+        this.Stocks = _.sortBy(this.Stocks, key).reverse();
+        this.dir = 'dsc'
+      } else {
+        this.Stocks = _.sortBy(this.Stocks, key);
+        this.dir = 'asc'
+      }
+    }
   }
 }

@@ -4,11 +4,12 @@ import { DataService } from '../../services/data.service';
 import { ConfigService } from '../../services/config.service';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-view-product',
   templateUrl: './view-product.component.html',
   styleUrls: ['./view-product.component.scss'],
-  providers: [CurrencyPipe]
+  providers: [CurrencyPipe, DatePipe]
 })
 export class ViewProductComponent implements OnInit {
   product: any;
@@ -16,16 +17,24 @@ export class ViewProductComponent implements OnInit {
   form: FormGroup;
   cart: any = {};
   dQuantitiy: any = 1;
+  selectedImgUrl: any = "";
+  dRating: any = 0;
+  reviewDesc: any = "";
   constructor(public data: DataService,
     private config: ConfigService,
     private router: Router) {
     this.product = this.data.Product;
+    this.selectedImgUrl = this.product.aImages[0].downloadURL;
+    this.product.selectedImgInd = 0;
     this.addtoCartFields = this.config.setaddtoCartField();
     this.cart = this.data.cartObj;
     this.setForm();
   }
 
   ngOnInit() {
+    if (!Array.isArray(this.product.aReviews)) {
+      this.product.aReviews = [];
+    }
   }
   setForm() {
     this.form = this.config.geSectionForm(this.cart, this.addtoCartFields);
@@ -58,5 +67,34 @@ export class ViewProductComponent implements OnInit {
     } else {
       alert("Please fill basic information in my-info section.");
     }
+  }
+  poster(type) {
+    if (type == 'prev' && this.product.selectedImgInd != 0) {
+      this.selectedImgUrl = this.product.aImages[(this.product.selectedImgInd - 1)].downloadURL;
+      this.product.selectedImgInd = this.product.selectedImgInd - 1;
+    } else if (this.product.selectedImgInd != this.product.aImages.length - 1) {
+      this.selectedImgUrl = this.product.aImages[(this.product.selectedImgInd + 1)].downloadURL;
+      this.product.selectedImgInd = this.product.selectedImgInd + 1;
+    }
+  }
+  addReview() {
+    if (!Array.isArray(this.product.aReviews)) {
+      this.product.aReviews = [];
+    }
+    let reviewObj = JSON.parse(JSON.stringify(this.data.reviewObj));
+    reviewObj.dRating = this.dRating;
+    reviewObj.sDescription = this.reviewDesc;
+    reviewObj.sUserID = this.data.Users.sPhoneNumber;
+    reviewObj.sUserName = this.data.Users.sName;
+    this.product.aReviews.push(reviewObj);
+    this.product.dAvgRating = 0;
+    this.product.aReviews.forEach(element => {
+      this.product.dAvgRating += element.dRating;
+    });
+    this.product.dAvgRating = Math.ceil(this.product.dAvgRating / this.product.aReviews.length);
+    this.data.updateProductDetails(this.product);
+  }
+  setRating(rating) {
+    this.dRating = rating;
   }
 }

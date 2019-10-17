@@ -20,8 +20,11 @@
           <img id="prodImg-{{ind}}" name="prodImg-{{ind}}" alt="Avatar" [src]="prod.aImages[0].downloadURL" class="prodImg">
         </div>
         <div class="middle">
-          <a (click)="gotoView(ind)"><i class="fa fa fa-search Icon" ></i></a>
+          <a (click)="gotoView(ind)"><i class="fa fa fa-search Icon"></i></a>
           <a (click)="addToCart()"><i class="fa fa-shopping-cart Icon"></i></a>
+        </div>
+        <div class="bottom">
+          <span class="Icon">{{prod.sShortDesc}}</span>
         </div>
       </div>
       <div class="row" style="margin-top:20px;">
@@ -30,7 +33,7 @@
         </div>
         <div class="col-md-12 text-center">
           <span class="strikethrough">{{prod.dPrice | currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span style="color: black;">{{prod.dDiscountPrice |
-            currency:'INR':'symbol'}}</span>
+            currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span>{{prod.dDiscountPercent}} % off</span>
         </div>
       </div>
     </div>

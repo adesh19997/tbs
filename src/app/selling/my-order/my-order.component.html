@@ -24,21 +24,65 @@
                 <br />
               </div>
             </div>
-            <div class="col-md-3 col-lg-3 text-center">
-              <!-- <div>
-                <span style="font-weight: 600;font-size:14px">{{order.dTotalAmount | currency:'INR':'symbol'}}</span>
-              </div> -->
+            <div class="col-md-6 col-lg-6 text-center">
+              <div style="margin-bottom: 10px;"></div>
+              <div class="card">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <th class="text-left">Total Items</th>
+                      <td class="text-right">{{order.aProduct.length}}</td>
+                    </tr>
+                    <tr>
+                      <th class="text-left">Total Amount</th>
+                      <td class="text-right">{{order.dTotalAmount | currency:'INR':'symbol'}}</td>
+                    </tr>
+                    <!--  <tr>
+                    <th colspan="2">
+                      Promo Codes
+                    </th>
+                  </tr> -->
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="col-md-5 col-lg-5 text-right">
+            <div class="col-md-2 col-lg-2 text-right">
               <span class="orangered" style="font-weight: 600;font-size:14px">{{order.sOrderStatus}}</span>
+            </div>
+          </div>
+          <div class="row card" *ngIf="selectedTrack==ind">
+            <div class="col-md-12 col-lg-12" style="margin-top: 10px;">
+              <h6>Order Tracking Details</h6>
+            </div>
+            <div class="col-md-12 col-lg-12">
+              <mat-vertical-stepper [linear]="isLinear" #buyStepper>
+                <mat-step [stepControl]="firstFormGroup" *ngFor="let track of order.aOrderTrack;">
+                  <form [formGroup]="firstFormGroup">
+                    <div class="row">
+                      <div class="col-md-6 text-left">
+                        <span class="orangered" style="font-weight: 600;font-size:14px">Status: {{track.status}}</span>
+                      </div>
+                      <div class="col-md-6 text-left">
+                        <p style="font-weight: 600;font-size:14px">OnDate: {{order.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</p>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-md-12 text-left">
+                        <span style="font-weight: 600;font-size:14px">Description: {{track.sRemarks}}</span>
+                      </div>
+                    </div>
+                  </form>
+                </mat-step>
+              </mat-vertical-stepper>
             </div>
           </div>
           <div class="row">
             <div class="col-md-10 text-right">
-              <button matButton type="button" class="darkButton" (click)="buy(ind)"> TRACK ORDER</button>
+              <button matButton type="button" class="darkButton" (click)="track(ind)"> TRACK ORDER</button>
             </div>
             <div class="col-md-2 text-right">
-              <button matButton type="button" class="darkButton" (click)="buy(ind)"> CANCEL ORDER</button>
+              <button matButton type="button" class="darkButton" (click)="cancel(ind)"> CANCEL ORDER</button>
             </div>
           </div>
           <hr>

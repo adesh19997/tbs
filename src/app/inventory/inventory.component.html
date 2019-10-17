@@ -1,37 +1,59 @@
 <section *ngIf="!data.loading">
-  <div class="row white" *ngIf="!addProd">
-    <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of field">
-      <app-field [field]="fi" [form]="form"></app-field>
+  <div class="row" *ngIf="!addProd">
+    <div class="col-md-6 col-sm-6 col-lg-6">
+      <h4>Product List</h4>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 text-right">
+      <button matButton type="button" class="basicbutton" (click)="downloadProductList()"> Download History</button>
     </div>
   </div>
   <hr>
-  <div class="row white" *ngIf="!addProd">
-    <div class="col-md-12 col-sm-12 col-lg-12 text-right">
-      <button matButton type="button" class="basicbutton" (click)="addProduct()"> Add New Product</button>
-    </div>
-  </div>
   <div class="row" *ngIf="!addProd">
-    <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
-      <mat-grid-list cols="3" rowHeight="1:1">
-        <mat-grid-tile *ngFor="let prod of data.Products;let ind=index;">
-          <mat-grid-tile-header>
-            <h4>{{prod.sName}}</h4>
-          </mat-grid-tile-header>
-          <div class="row">
-            <div class="col-md-12">
-              <img [src]="prod.aImages[0].downloadURL">
-            </div>
-          </div>
-          <mat-grid-tile-footer>
-            <div class="row">
-              <div class="col-md-12 col-lg-12 text-right">
-                <button matButton type="button" (click)="editProduct(ind)" class="basicbutton"> Edit</button>
-                <button matButton type="button" (click)="deleteProduct(ind)" class="basicbutton"> Delete</button>
-              </div>
-            </div>
-          </mat-grid-tile-footer>
-        </mat-grid-tile>
-      </mat-grid-list>
+    <div class="col-md-12" id="print-section">
+      <table class="table text-left">
+        <tbody>
+          <tr>
+            <th>Sr.No</th>
+            <th (click)="sortTable('ProductList','sUid')">Product ID
+              <a class="text-left" (click)="sortTable('ProductList','sUid')">
+                <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i>
+                <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i>
+              </a>
+            </th>
+            <th (click)="sortTable('ProductList','sName')">Product Name
+              <a class="text-left" (click)="sortTable('ProductList','sName')">
+                <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i>
+                <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i>
+              </a>
+            </th>
+            <th (click)="sortTable('ProductList','dStockAvailable')">Stock Available
+              <a class="text-left" (click)="sortTable('ProductList','dStockAvailable')">
+                <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i>
+                <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i>
+              </a>
+            </th>
+            <th>
+              <a id='addID' (click)="addProduct()" title="Edit">
+                <i class="fa fa-plus"></i> Add
+              </a>
+            </th>
+          </tr>
+          <tr *ngFor="let prod of data.Products;let ind=index;">
+            <td>{{ind +1}}</td>
+            <td>{{prod.sUid}}</td>
+            <td>{{prod.sName}}</td>
+            <td>{{prod.dStockAvailable}}</td>
+            <td>
+              <a id='editID' (click)="editProduct(ind)" title="Edit">
+                <i class="fa fa-edit"></i>
+              </a>
+              <a id="cancelEditId" (click)="deleteProduct(ind)" title="Delete">
+                <i class="fa fa-remove fa-lg"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   <div class="row" *ngIf="addProd">
@@ -78,9 +100,9 @@
       <mat-grid-list cols="3" rowHeight="1:1">
         <mat-grid-tile *ngFor="let image of Product.aImages;let ind=index;">
           <div class="row" *ngIf="image.state != 'running'">
-            <input type="file" id="{{Product.name+ind}}" name="{{Product.name+ind}}" accept="image/*" #fileInput (click)="fileInput.value = null"
+            <input type="file" id="{{Product.sName+ind}}" name="{{Product.sName+ind}}" accept="image/*" #fileInput (click)="fileInput.value = null"
               value="" (change)="addImage($event ,image,ind)">
-            <label for="{{Product.name+ind}}">
+            <label for="{{Product.sName+ind}}">
               <img [src]="image.downloadURL">
             </label>
           </div>
@@ -104,9 +126,24 @@
         <tbody>
           <tr>
             <th>Sr No.</th>
-            <th>Transaction Date</th>
-            <th>Action</th>
-            <th>Quantity</th>
+            <th (click)="sortTable('Stock','dtDate')">Transaction Date
+              <a class="text-left" (click)="sortTable('Stock','dtDate')">
+                <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i>
+                <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i>
+              </a>
+            </th>
+            <th (click)="sortTable('Stock','sAction')">Action
+              <a class="text-left" (click)="sortTable('Stock','sAction')">
+                <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i>
+                <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i>
+              </a>
+            </th>
+            <th (click)="sortTable('Stock','dQuantity')">Quantity
+              <a class="text-left" (click)="sortTable('Stock','dQuantity')">
+                <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i>
+                <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i>
+              </a>
+            </th>
             <th>
               <a id='addID' (click)="addStock(addStockPop)" title="Edit">
                 <i class="fa fa-plus"></i> Add
