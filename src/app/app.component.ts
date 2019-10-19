@@ -10,12 +10,12 @@ export class AppComponent {
   mode: any = 'indeterminate';
   value: any = 30;
   constructor(public data: DataService) {
-
+    this.data.getProducts();
   }
   ngOnInit() {
     this.data.loading = true;
     this.data.getMaster();
-    this.data.getProducts();
     this.data.getOrder();
+
   }
 }

@@ -1,7 +1,7 @@
 <section style="margin-top:10px;">
   <div class="row">
     <div class="col-md-9 right-border">
-      <mat-horizontal-stepper linear="true" #buyStepper>
+      <mat-horizontal-stepper [linear]="isLinear" #buyStepper>
         <mat-step [stepControl]="firstFormGroup" class="card">
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Personal Information</ng-template>
@@ -58,9 +58,10 @@
             </div>
           </form>
         </mat-step>
-        <mat-step class="card" [stepControl]="thirdFormGroup">
+        <mat-step class="card" [stepControl]="thirdFormGroup" >
           <ng-template matStepLabel>Place Order</ng-template>
-          <div class="row">
+          <form [formGroup]="thirdFormGroup" >
+          <div class="row" >
             <div class="col-md-12">
               <table class="table text-left">
                 <tbody>
@@ -96,6 +97,7 @@
               <button mat-button class="darkButton" (click)="buy()">Place Order</button>
             </div>
           </div>
+          </form>
         </mat-step>
       </mat-horizontal-stepper>
     </div>

@@ -14,7 +14,16 @@ export class ProductComponent implements OnInit {
   constructor(public data: DataService,
     public storage: StorageService,
     public user: AuthenticateService,
-    private router: Router) { }
+    private router: Router) {
+    if (sessionStorage.getItem("payTmReq") && sessionStorage.getItem("currOrder")) {
+      let tempObj = JSON.parse(sessionStorage.getItem("payTmReq"));
+      if (tempObj instanceof Object) {
+        this.data.payTmObj = JSON.parse(sessionStorage.getItem("payTmReq"));
+        this.data.Order = JSON.parse(sessionStorage.getItem("currOrder"));
+        this.router.navigate(['products/buy']);
+      }
+    }
+  }
 
   ngOnInit() {
     this.data.selectedProd = this.data.Posters[0];
@@ -24,12 +33,12 @@ export class ProductComponent implements OnInit {
     this.data.Product = this.data.Products[ind];
     this.router.navigate(['products/view']);
   }
-  addToCart() {
+  addToCart(ind) {
     let cart = JSON.parse(JSON.stringify(this.data.cartObj));
     cart.sStatus = "new";
     cart.dtAddedDate = new Date();
-    cart.sProductId = this.data.Product.sUid;
-    cart.dAmount = this.data.Product.dDiscountPrice;
+    cart.sProductId = this.data.Products[ind].sUid;
+    cart.dAmount = this.data.Products[ind].dDiscountPrice;
     cart.sQuantity = "1";
     if (Array.isArray(this.data.Users.aCart)) {
       this.data.Users.aCart.push(cart);

@@ -24,7 +24,12 @@ export class BuyComponent implements OnInit {
     private config: ConfigService,
     private router: Router,
     private _formBuilder: FormBuilder) {
-    this.Order = this.data.Order;
+    if (sessionStorage.getItem("currOrder")) {
+      this.Order = JSON.parse(sessionStorage.getItem("currOrder"));
+      this.data.checkTransStatus();
+    } else {
+      this.Order = this.data.Order;
+    }
     this.userData = this.data.Users;
     this.addrFields = this.config.setAddrFields();
     this.basicFields = this.config.setBasicDatField();
@@ -40,7 +45,7 @@ export class BuyComponent implements OnInit {
       secondCtrl: ['', Validators.required]
     });
     this.thirdFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
+      thirdCtrl: ['', Validators.required]
     });
     this.calculateTotal()
   }
@@ -62,9 +67,14 @@ export class BuyComponent implements OnInit {
     }
 
    </style> <title></title></head>`
-    text += '<body><p>Hi ' + this.userData.sName + ', <br>Your order ' + this.Order.sOrderNo + ' is successfully placed. find the order details below.</p></body></html>'  + document.getElementById('print-section').innerHTML;
+    text += '<body><p>Hi ' + this.userData.sName + ', <br>Your order ' + this.Order.sOrderNo + ' is successfully placed. find the order details below.</p></body></html>' + document.getElementById('print-section').innerHTML;
     this.Order.sPaymentMade = "PayTM";
-    this.data.updateOrderDetails(this.Order, text);
+    this.data.payTmObj.CUST_ID = this.data.Users.sPhoneNumber;
+    this.data.payTmObj.EMAIL = this.data.Users.sEmail;
+    this.data.payTmObj.MOBILE_NO = this.data.Users.sPhoneNumber;
+    this.data.payTmObj.ORDER_ID = this.Order.sOrderNo;
+    this.data.payTmObj.TXN_AMOUNT = this.Order.dTotalAmount.toString();
+    this.data.updateOrderDetails(this.Order, text, true);
   }
   setAddr(j) {
     this.form = this.config.geSectionForm(this.userData.aAddress[j], this.addrFields);

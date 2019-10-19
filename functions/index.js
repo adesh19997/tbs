@@ -1,8 +1,8 @@
 const functions = require('firebase-functions');
-const cors = require('cors')({ origin: true });
 var express = require('express');
 const firebase = require("firebase");
 var app = express();
+const checksum_lib = require('./checksum');
 firebase.initializeApp({
 	apiKey: 'AIzaSyAHdBM-Y1cnQ2ZATN3sdAv01SDc3SNo3Ws',
 	authDomain: 'tecpixels-bs.firebaseapp.com',
@@ -11,7 +11,10 @@ firebase.initializeApp({
 	storageBucket: 'gs://tecpixels-bs.appspot.com/'
 });
 app.use(express.json());
-app.use(cors);
+
+var cors = require('cors');
+app.use(cors());
+
 app.post('/sendEmail', function (req, res) {
 	var nodemailer = require('nodemailer');
 
@@ -37,6 +40,18 @@ app.post('/sendEmail', function (req, res) {
 			res.end(JSON.stringify(info));
 	});
 });
+
+app.post('/checksum', function (req, res) {
+	checksum_lib.genchecksum(req.body.Params, "BzCxdUD6wWkUbeSm", function(err, checksum){
+		if(checksum){
+			res.end(JSON.stringify(checksum));
+		} else {
+			res.end(JSON.stringify(err));
+		}
+	})
+	
+});
+
 
 app.post('/getFilteredProducts', function (req, res) {
 	firebase.database().ref('/Products').once('value', function (snapshot) {
@@ -98,7 +113,6 @@ app.post('/basicAnalysis', function (req, res) {
 				let orderKeys = Object.keys(Orders);
 				let stockKeys = Object.keys(Stock);
 				responseData.dTotalProducts = prodKeys.length;
-				console.log("inside 1");
 				for (var i = 0; i < prodKeys.length; i++) {
 					if (Products[prodKeys[i]].dStockAvailable) {
 						responseData.dTotalStock += Number(Products[prodKeys[i]].dStockAvailable);

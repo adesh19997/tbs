@@ -40,6 +40,7 @@ export class CartComponent implements OnInit {
       this.myCart.splice(i, 1);
       this.data.Users.aCart.splice(i, 1);
       this.data.updateUserDetls(this.data.Users);
+      this.calculateCartTotal();
     } else {
       alert("Please fill basic information in my-info section.");
     }
@@ -61,5 +62,17 @@ export class CartComponent implements OnInit {
     } else {
       alert("Please fill basic information in my-info section.");
     }
+  }
+  calculateCartTotal() {
+    this.totalCost = 0;
+    this.totalItem = 0;
+    this.myCart.forEach(element => {
+      let tempProdObj = this.data.Products.filter(obj => obj.sUid === element.sProductId);
+      if (tempProdObj.length > 0) {
+        Object.assign(element, { "ProdDetls": tempProdObj[0] });
+        this.totalCost += Number(tempProdObj[0].dDiscountPrice);
+      }
+    });
+    this.totalItem = this.myCart.length;
   }
 }

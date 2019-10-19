@@ -6,6 +6,8 @@ import { environment } from "../../environments/environment";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
+import * as _ from 'underscore';
+
 const BASE_URL = environment.BASE_URL;
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -62,10 +64,12 @@ export class DataService {
     sCustomerId: "",
     oDeliveryAddr: {},
     sOrderStatus: "",
+    sOrderViewStatus: "",
     dTotalAmount: null,
     dtDate: null,
     sPaymentMade: "",
-    aOrderTrack: []
+    aOrderTrack: [],
+    transResponse: null
   };
   Stock = {
     sAction: "",
@@ -110,6 +114,18 @@ export class DataService {
     sUserName: this.Users.sName,
     dtDate: new Date()
   }
+  payTmObj = {
+    "MID": environment.PAYTM_MID,
+    "WEBSITE": "WEBSTAGING",
+    "INDUSTRY_TYPE_ID": "Retail",
+    "CHANNEL_ID": "WEB",
+    "ORDER_ID": "xxxxx",
+    "CUST_ID": "xxxxx",
+    "MOBILE_NO": "xxxx",
+    "EMAIL": "xxxx",
+    "TXN_AMOUNT": "1.00",
+    "CALLBACK_URL": "https://tecpixels-bs.firebaseapp.com/"
+  };
   Posters: any = [];
   AllOrders: any = [];
   AllStocks: any = [];
@@ -117,6 +133,7 @@ export class DataService {
   Master: any;
   loading: any = false;
   onlyProduct: any = false;
+  paytmTransResponse: any = {}
   constructor(private db: AngularFireDatabase,
     public datepipe: DatePipe,
     private http: HttpClient, ) {
@@ -198,7 +215,7 @@ export class DataService {
         alert("Sorry, Order could not be placed.");
       });
   }
-  updateOrderDetails(order, html) {
+  updateOrderDetails(order, html, transaction) {
     let request = {
       "mailDetails": {
         "sEmail": this.Users.sEmail,
@@ -210,10 +227,10 @@ export class DataService {
       if (res.accepted.length > 0) {
         this.db.object("/Orders/" + order.sOrderNo).update(order)
           .then(function () {
-            alert("Order successfully Placed");
+
           })
           .catch(function (error) {
-            alert("Sorry, Order could not be placed.");
+
           });
         order.aProduct.forEach(element => {
           let tempObj = JSON.parse(JSON.stringify(this.Stock));
@@ -225,8 +242,11 @@ export class DataService {
           tempObj.dQuantity = Number(element.sQuantity);
           this.updateStockDetails(tempObj);
         });
+        if (transaction) {
+          this.initiatePayment();
+        }
       } else {
-        alert("Sorry, Order could not be placed.");
+
       }
     })
 
@@ -252,6 +272,11 @@ export class DataService {
     this.Order.sOrderNo = dateStr + "-" + this.Users.sPhoneNumber + '-' + this.Users.dTotalOrder.toString();
     this.Order.sCustomerId = this.Users.sPhoneNumber;
     this.Order.sOrderStatus = "OS1";
+    let master = this.getMasterVal("Order_Stage");
+    let masterOBJ = _.findWhere(master, { "viewValue": "OS1" });
+    if (masterOBJ) {
+      this.Order.sOrderViewStatus = masterOBJ.viewValue;
+    }
     this.Order.aProduct = [];
     if (Array.isArray(products)) {
       products.forEach(element => {
@@ -313,6 +338,38 @@ export class DataService {
       alert("error fetching products" + error);
     })
   }
+  initiatePayment() {
+    let req = {
+      "Params": this.payTmObj
+    };
+    this.postDataToServer(req, "checksum").subscribe(response => {
+      this.payTmObj['CHECKSUMHASH'] = response;
+      this.createPaytmForm();
+    }, error => {
+      alert("Order could not be placed,please try again after some time.");
+    })
+  }
+  createPaytmForm() {
+    sessionStorage.setItem("payTmReq", JSON.stringify(this.payTmObj));
+    sessionStorage.setItem("currOrder",JSON.stringify(this.Order));
+    const my_form: any = document.createElement('form');
+    my_form.name = 'paytm_form';
+    my_form.method = 'post';
+    my_form.action = 'https://securegw-stage.paytm.in/order/process';
+
+    const myParams = Object.keys(this.payTmObj);
+    for (let i = 0; i < myParams.length; i++) {
+      const key = myParams[i];
+      let my_tb: any = document.createElement('input');
+      my_tb.type = 'hidden';
+      my_tb.name = key;
+      my_tb.value = this.payTmObj[key];
+      my_form.appendChild(my_tb);
+    };
+
+    document.body.appendChild(my_form);
+    my_form.submit();
+  };
   private returnJsonResponse(res: any) {
     return res;
   }
@@ -323,6 +380,65 @@ export class DataService {
     return this.http.post(BASE_URL + endpoint, requestJson, httpOptions)
       .map(this.returnJsonResponse)
       .catch(this.handleErrorObservable)
+  }
+  postDataToPaytm(requestJson): Observable<any> {
+    return this.http.post('https://securegw-stage.paytm.in/order/status', requestJson, httpOptions)
+      .map(this.returnJsonResponse)
+      .catch(this.handleErrorObservable)
+  }
+  checkTransStatus() {
+    let request = {
+      "MID": this.payTmObj.MID,
+      "ORDERID": this.payTmObj.ORDER_ID,
+      "CHECKSUMHASH": this.payTmObj['CHECKSUMHASH']
+    }
+    this.postDataToPaytm(request).subscribe(response => {
+      this.paytmTransResponse = response;
+      this.Order.transResponse = response;
+      let master = this.getMasterVal("Order_Stage");
+      let alertMsg = "";
+      let text = ` <html> <head><style type="text/css">
+      .border {
+            border-collapse: collapse;
+            border: 1px solid #000000;
+            text-align: center;
+          }
+          .borderStyle{
+            border: 1px solid #000000;
+          }
+
+        </style> <title></title></head>`
+      if (response.STATUS == "TXN_SUCCESS") {
+        this.Order.sOrderStatus = "OS2";
+
+        let masterOBJ = _.findWhere(master, { "viewValue": "OS2" });
+        if (masterOBJ) {
+          this.Order.sOrderViewStatus = masterOBJ.viewValue;
+        }
+        text += '<body><p>Hi ' + this.Users.sName + ', <br>Payment for your order ' + this.Order.sOrderNo + ' is successfully done. Your payment transaction ID is: ' + response.TXNID;
+        alertMsg = "Congragulations payment done successfully!";
+      } else if (response.STATUS == "TXN_FAILURE") {
+        let masterOBJ = _.findWhere(master, { "viewValue": "OS00" });
+        if (masterOBJ) {
+          this.Order.sOrderViewStatus = masterOBJ.viewValue;
+        }
+        text += '<body><p>Hi ' + this.Users.sName + ', <br>Payment for your order ' + this.Order.sOrderNo + ' has failed. Your payment transaction ID is: ' + response.TXNID;
+        alertMsg = response.RESPMSG;
+      } else {
+        let masterOBJ = _.findWhere(master, { "viewValue": "OS99" });
+        if (masterOBJ) {
+          this.Order.sOrderViewStatus = masterOBJ.viewValue;
+        }
+        text += '<body><p>Hi ' + this.Users.sName + ', <br>Payment for your order ' + this.Order.sOrderNo + ' is pending. Your payment transaction ID is: ' + response.TXNID;
+        alertMsg = response.RESPMSG;
+      }
+      sessionStorage.removeItem("currOrder");
+      sessionStorage.removeItem("payTmReq");
+      this.updateOrderDetails(this.Order, text, false);
+      alert(alertMsg);
+    }, error => {
+      alert("error fetching products" + error);
+    })
   }
 }
 

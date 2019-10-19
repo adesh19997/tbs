@@ -12,5 +12,6 @@ export const environment = {
       projectId: 'tecpixels-bs',
       storageBucket: 'gs://tecpixels-bs.appspot.com/',
   },
-  BASE_URL:"https://us-central1-tecpixels-bs.cloudfunctions.net/app/"
+  BASE_URL:"https://us-central1-tecpixels-bs.cloudfunctions.net/app/",
+  PAYTM_MID:"pmePaM98534008405439"
 };

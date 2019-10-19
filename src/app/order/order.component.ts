@@ -197,7 +197,7 @@ export class OrderComponent implements OnInit {
     }
    </style> <title></title></head>`
     text += '<body><p>Hi ' + this.userData.sName + ', <br>Your order ' + this.tempOrder.sOrderNo + ' is successfully placed. find the order details below.</p></body></html>' + document.getElementById('print-section').innerHTML;
-    this.data.updateOrderDetails(this.tempOrder, text);
+    this.data.updateOrderDetails(this.tempOrder, text,false);
     this.modalRef.close();
   }
 }

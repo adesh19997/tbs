@@ -50,7 +50,7 @@
             <td>{{order.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</td>
             <td>{{order.sCustomerId}}</td>
             <td>{{order.dTotalAmount | currency:'INR':'symbol'}}</td>
-            <td>{{order.sOrderStatus}}</td>
+            <td>{{order.sOrderViewStatus(order.sOrderStatus)}}</td>
             <td>{{order.sPaymentMade}}</td>
             <td>
               <a id='editID' (click)="editOrderDetl(ind,editOrder)" title="Edit">
