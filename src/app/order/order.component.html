@@ -25,23 +25,24 @@
             </th>
             <th (click)="sortTable('Order','dtDate')">Order Date
               <a class="text-left" (click)="sortTable('Order','dtDate')">
-                <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i> </a>
+                <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i>
+              </a>
             </th>
             <th (click)="sortTable('Order','sCustomerId')">CustomerID
-              <a class="text-left" (click)="sortTable('Order','sCustomerId')"> <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down"
-                  *ngIf="dir=='asc'"></i> </a>
+              <a class="text-left" (click)="sortTable('Order','sCustomerId')"> <i class="fa fa-caret-up"
+                  *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i> </a>
             </th>
             <th (click)="sortTable('Order','dTotalAmount')">Order Amount
-              <a class="text-left" (click)="sortTable('Order','dTotalAmount')"> <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down"
-                  *ngIf="dir=='asc'"></i> </a>
+              <a class="text-left" (click)="sortTable('Order','dTotalAmount')"> <i class="fa fa-caret-up"
+                  *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i> </a>
             </th>
             <th (click)="sortTable('Order','sOrderStatus')">Order Status
-              <a class="text-left" (click)="sortTable('Order','sOrderStatus')"> <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down"
-                  *ngIf="dir=='asc'"></i> </a>
+              <a class="text-left" (click)="sortTable('Order','sOrderStatus')"> <i class="fa fa-caret-up"
+                  *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i> </a>
             </th>
             <th (click)="sortTable('Order','sPaymentMade')">Payment Mode
-              <a class="text-left" (click)="sortTable('Order','sPaymentMade')"> <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down"
-                  *ngIf="dir=='asc'"></i> </a>
+              <a class="text-left" (click)="sortTable('Order','sPaymentMade')"> <i class="fa fa-caret-up"
+                  *ngIf="dir!='asc'"></i> <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i> </a>
             </th>
             <th></th>
           </tr>
@@ -50,7 +51,7 @@
             <td>{{order.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</td>
             <td>{{order.sCustomerId}}</td>
             <td>{{order.dTotalAmount | currency:'INR':'symbol'}}</td>
-            <td>{{order.sOrderViewStatus(order.sOrderStatus)}}</td>
+            <td>{{order.sOrderViewStatus }} : {{order.sOrderStatus}}</td>
             <td>{{order.sPaymentMade}}</td>
             <td>
               <a id='editID' (click)="editOrderDetl(ind,editOrder)" title="Edit">
@@ -69,7 +70,8 @@
 <ng-template #editOrder let-c="close" let-d="dismiss" class="modal-dialog">
   <div class="modal-header">
     <h4>Order Details</h4>
-    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')" style="float:right;padding-top: 0px;">&times;</button>
+    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')"
+      style="float:right;padding-top: 0px;">&times;</button>
   </div>
   <div class="modal-body">
     <div class="row ">
@@ -81,7 +83,8 @@
     <div class="row card">
       <div class="col-md-12 col-sm-12 col-lg-12 ">
         <mat-form-field class="remarks-area example-full-width">
-          <textarea matInput matTextareaAutosize name="Remarks" placeholder="Description" [(ngModel)]="orderTrack.sRemarks"></textarea>
+          <textarea matInput matTextareaAutosize name="Remarks" placeholder="Description"
+            [(ngModel)]="orderTrack.sRemarks"></textarea>
         </mat-form-field>
       </div>
     </div>
@@ -93,7 +96,8 @@
 <ng-template #viewTrack let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4>Order Track : {{data.AllOrders[selectedOrder].sOrderNo}}</h4>
-    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')" style="float:right;padding-top: 0px;">&times;</button>
+    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')"
+      style="float:right;padding-top: 0px;">&times;</button>
   </div>
   <div class="modal-body">
     <div class="row ">
@@ -126,7 +130,8 @@
 <ng-template #addOrder let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4>Place Order</h4>
-    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')" style="float:right;padding-top: 0px;">&times;</button>
+    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')"
+      style="float:right;padding-top: 0px;">&times;</button>
   </div>
   <div class="modal-body">
     <div class="row ">
@@ -166,7 +171,8 @@
               <td>{{ind + 1}}</td>
               <td>
                 <mat-form-field class="example-full-width">
-                  <mat-select id="prdt-{{ind}}" placeholder="Name" name="prdt-{{ind}}" [(ngModel)]="product.sProductName">
+                  <mat-select id="prdt-{{ind}}" placeholder="Name" name="prdt-{{ind}}"
+                    [(ngModel)]="product.sProductName">
                     <mat-option *ngFor="let opt of data.Products" (click)="setProdData(opt,ind)" [value]="opt.sName">{{
                       opt.sName }}</mat-option>
                   </mat-select>
@@ -175,7 +181,8 @@
               <td>{{product.sProductId}}</td>
               <td>
                 <mat-form-field class="example-full-width">
-                  <input id="qnt-{{ind}}" type="number" matInput placeholder="Quantity" name="qnt-{{ind}}" [(ngModel)]="product.sQuantity">
+                  <input id="qnt-{{ind}}" type="number" matInput placeholder="Quantity" name="qnt-{{ind}}"
+                    [(ngModel)]="product.sQuantity">
                 </mat-form-field>
               </td>
               <td>{{product.dAmount | currency:'INR':'symbol'}}</td>
@@ -197,7 +204,8 @@
 <ng-template #reviewOrder let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4>Review Order</h4>
-    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')" style="float:right;padding-top: 0px;">&times;</button>
+    <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')"
+      style="float:right;padding-top: 0px;">&times;</button>
   </div>
   <div class="modal-body">
     <div class="row ">
@@ -221,6 +229,19 @@
         </table>
       </div>
     </div>
+    <div class="row ">
+      <div class="col-md-12">
+        <div>
+          <span>Payment Option: </span>
+        </div>
+        <div>
+          <mat-radio-group name="paymentOptiom" id="paymentOptiom" [(ngModel)]="tempOrder.sPaymentMade">
+            <mat-radio-button value="Direct-Cash" id="paymentOptiom-{{1}}">Cash</mat-radio-button>
+            <mat-radio-button value="PayTM" id="paymentOptiom-{{2}}">Online</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
     <button matButton type="button" class="basicbutton" (click)="confirm()"> Place Order</button>
@@ -230,6 +251,10 @@
   <div class="col-md-12" id="print-section">
     <table class="border">
       <tbody>
+        <tr class="borderStyle">
+          <th class="borderStyle">Order No.</th>
+          <th colspan="3">{{tempOrder.sOrderNo}}</th>
+        </tr>
         <tr class="borderStyle">
           <th class="borderStyle">Sr No.</th>
           <th class="borderStyle">Product Name </th>

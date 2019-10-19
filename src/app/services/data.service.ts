@@ -65,11 +65,13 @@ export class DataService {
     oDeliveryAddr: {},
     sOrderStatus: "",
     sOrderViewStatus: "",
-    dTotalAmount: null,
+    dTotalAmount: 0,
+    dTotalQuantity: 0,
     dtDate: null,
     sPaymentMade: "",
     aOrderTrack: [],
-    transResponse: null
+    transResponse: null,
+    sOrderSource: "website"
   };
   Stock = {
     sAction: "",
@@ -277,12 +279,13 @@ export class DataService {
     }
     this.Order.dtDate = new Date();
     this.Order.dTotalAmount = 0;
+    this.Order.dTotalQuantity = 0;
     this.Users.dTotalOrder = this.AllOrders.length + 1;
     this.Order.sOrderNo = "YMS" + dateStr + this.Users.sPhoneNumber + this.Users.dTotalOrder.toString();
     this.Order.sCustomerId = this.Users.sPhoneNumber;
     this.Order.sOrderStatus = "OS1";
     let master = this.getMasterVal("Order_Stage");
-    let masterOBJ = _.findWhere(master, { "viewValue": "OS1" });
+    let masterOBJ = _.findWhere(master, { "value": "OS1" });
     if (masterOBJ) {
       this.Order.sOrderViewStatus = masterOBJ.viewValue;
     }
@@ -296,7 +299,8 @@ export class DataService {
           dAmount: element.dAmount
         };
         this.Order.aProduct.push(temp);
-        this.Order.dTotalAmount += Number(element.dAmount);
+        this.Order.dTotalAmount += Number(element.dAmount) * Number(element.sQuantity);
+        this.Order.dTotalQuantity += Number(element.sQuantity);
       });
     }
     this.Order.oDeliveryAddr = this.Users.aAddress[0];
@@ -360,12 +364,24 @@ export class DataService {
     })
   }
   initiatePayment() {
+    this.payTmObj.CUST_ID = this.Users.sPhoneNumber;
+    this.payTmObj.EMAIL = this.Users.sEmail;
+    this.payTmObj.MOBILE_NO = this.Users.sPhoneNumber;
+    this.payTmObj.ORDER_ID = this.Order.sOrderNo;
+    this.payTmObj.TXN_AMOUNT = this.Order.dTotalAmount.toString();
+    if (this.Order.sOrderSource == "Offline") {
+      this.payTmObj.CALLBACK_URL = "https://tecpixels-bs.firebaseapp.com/#/orders"
+    } else {
+      this.payTmObj.CALLBACK_URL = "https://tecpixels-bs.firebaseapp.com/"
+    }
     let req = {
       "Params": this.payTmObj
     };
     this.postDataToServer(req, "checksum").subscribe(response => {
       this.bDisableScreen = false;
       this.payTmObj['CHECKSUMHASH'] = response;
+      sessionStorage.setItem("payTmReq", JSON.stringify(this.payTmObj));
+      sessionStorage.setItem("currOrder", JSON.stringify(this.Order));
       this.createPaytmForm();
     }, error => {
       this.bDisableScreen = false;
@@ -373,8 +389,6 @@ export class DataService {
     })
   }
   createPaytmForm() {
-    sessionStorage.setItem("payTmReq", JSON.stringify(this.payTmObj));
-    sessionStorage.setItem("currOrder", JSON.stringify(this.Order));
     const my_form: any = document.createElement('form');
     my_form.name = 'paytm_form';
     my_form.method = 'post';
@@ -434,21 +448,21 @@ export class DataService {
       if (response.STATUS == "TXN_SUCCESS") {
         this.Order.sOrderStatus = "OS2";
 
-        let masterOBJ = _.findWhere(master, { "viewValue": "OS2" });
+        let masterOBJ = _.findWhere(master, { "value": "OS2" });
         if (masterOBJ) {
           this.Order.sOrderViewStatus = masterOBJ.viewValue;
         }
         text += '<body><p>Hi ' + this.Users.sName + ', <br>Payment for your order ' + this.Order.sOrderNo + ' is successfully done. Your payment transaction ID is: ' + response.TXNID;
         alertMsg = "Congragulations payment done successfully!";
       } else if (response.STATUS == "TXN_FAILURE") {
-        let masterOBJ = _.findWhere(master, { "viewValue": "OS00" });
+        let masterOBJ = _.findWhere(master, { "value": "OS00" });
         if (masterOBJ) {
           this.Order.sOrderViewStatus = masterOBJ.viewValue;
         }
         text += '<body><p>Hi ' + this.Users.sName + ', <br>Payment for your order ' + this.Order.sOrderNo + ' has failed. Your payment transaction ID is: ' + response.TXNID;
         alertMsg = response.RESPMSG;
       } else {
-        let masterOBJ = _.findWhere(master, { "viewValue": "OS99" });
+        let masterOBJ = _.findWhere(master, { "value": "OS99" });
         if (masterOBJ) {
           this.Order.sOrderViewStatus = masterOBJ.viewValue;
         }

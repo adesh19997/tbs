@@ -1,5 +1,5 @@
 <section style="padding:25px;">
-  <div class="row">
+  <div class="row" *ngIf="Order.sOrderStatus != 'OS00' && Order.sOrderStatus != 'OS99' && Order.sOrderStatus != 'OS2'">
     <div class="col-md-9 right-border">
       <mat-horizontal-stepper [linear]="isLinear" #buyStepper>
         <mat-step [stepControl]="firstFormGroup" class="card">
@@ -35,7 +35,8 @@
                   <span>{{addr.sCountry}}.</span>
                   <span>{{addr.sPhoneNumber}}</span>
                   <br />
-                  <button matButton type="button" class="basicbutton example-full-width" (click)="setAddr(j)"> select</button>
+                  <button matButton type="button" class="basicbutton example-full-width" (click)="setAddr(j)">
+                    select</button>
                 </div>
               </div>
             </div>
@@ -58,45 +59,41 @@
             </div>
           </form>
         </mat-step>
-        <mat-step class="card" [stepControl]="thirdFormGroup" >
+        <mat-step class="card" [stepControl]="thirdFormGroup">
           <ng-template matStepLabel>Place Order</ng-template>
-          <form [formGroup]="thirdFormGroup" >
-          <div class="row" >
-            <div class="col-md-12">
-              <table class="table text-left">
-                <tbody>
-                  <tr>
-                    <th>Order No.</th>
-                    <td colspan="3">{{Order.sOrderNo}}</td>
-                  </tr>
-                  <tr>
-                    <th>Sr. No</th>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
-                    <th>Amount</th>
-                  </tr>
-                  <tr *ngFor="let product of Order.aProduct;let ind=index;">
-                    <td>{{ind + 1}}</td>
-                    <td>{{product.sProductName}}</td>
-                    <td>{{product.sQuantity}}</td>
-                    <td>{{product.dAmount | currency:'INR':'symbol'}}</td>
-                  </tr>
-                  <tr>
-                    <th>Total Amount</th>
-                    <td colspan="3" class="text-right">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
-                  </tr>
-                </tbody>
-              </table>
+          <form [formGroup]="thirdFormGroup">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table text-left">
+                  <tbody>
+                    <tr>
+                      <th>Sr. No</th>
+                      <th>Product Name</th>
+                      <th>Quantity</th>
+                      <th>Amount</th>
+                    </tr>
+                    <tr *ngFor="let product of Order.aProduct;let ind=index;">
+                      <td>{{ind + 1}}</td>
+                      <td>{{product.sProductName}}</td>
+                      <td>{{product.sQuantity}}</td>
+                      <td>{{product.dAmount | currency:'INR':'symbol'}}</td>
+                    </tr>
+                    <tr>
+                      <th>Total Amount</th>
+                      <td colspan="3" class="text-right">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 text-left">
-              <button mat-button class="basicbutton" matStepperPrevious>Back</button>
+            <div class="row">
+              <div class="col-md-6 text-left">
+                <button mat-button class="basicbutton" matStepperPrevious>Back</button>
+              </div>
+              <div class="col-md-6 text-right">
+                <button mat-button class="darkButton" (click)="buy()">Place Order</button>
+              </div>
             </div>
-            <div class="col-md-6 text-right">
-              <button mat-button class="darkButton" (click)="buy()">Place Order</button>
-            </div>
-          </div>
           </form>
         </mat-step>
       </mat-horizontal-stepper>
@@ -126,19 +123,42 @@
       <hr>
       <div class="row" style="margin-top:10px;">
         <div class="col-md-6 text-center">
-          <button matButton type="button" class="darkButton" style="min-width:0px !important;" (click)="buy()"> BUY</button>
+          <button matButton type="button" class="darkButton" style="min-width:0px !important;" (click)="buy()">
+            BUY</button>
         </div>
         <div class="col-md-6 text-center">
-          <button matButton type="button" style="min-width:0px !important;" class="darkButton" (click)="goto()"> CANCEL</button>
+          <button matButton type="button" style="min-width:0px !important;" class="darkButton" (click)="goto()">
+            CANCEL</button>
         </div>
       </div>
     </div>
+  </div>
+  <div class="row" *ngIf="Order.sOrderStatus == 'OS00' || Order.sOrderStatus == 'OS99' || Order.sOrderStatus == 'OS2'">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 text-center card">
+      <div style="margin-bottom:30px;margin-top:30px;">
+        <h6 *ngIf="Order.sOrderStatus == 'OS2'">Your Order {{Order.sOrderNo}} has been Successfully placed.</h6>
+        <h6 *ngIf="Order.sOrderStatus == 'OS00'">Payment Your Order {{Order.sOrderNo}} has failed.</h6>
+        <h6 *ngIf="Order.sOrderStatus == 'OS99'">Payment Your Order {{Order.sOrderNo}} is still Pending.</h6>
+      </div>
+      <div style="margin-bottom:30px;">
+        <button mat-button class="darkButton" (click)="buy()" *ngIf="Order.sOrderStatus == 'OS00'">Retry
+          Payment</button>
+        <button mat-button class="darkButton" (click)="goto()"
+          *ngIf="Order.sOrderStatus == 'OS2' || Order.sOrderStatus == 'OS99'">Continue Shopping</button>
+      </div>
+    </div>
+    <div class="col-md-3"></div>
   </div>
 </section>
 <div style="display:none;">
   <div class="col-md-12" id="print-section">
     <table class="border">
       <tbody>
+        <tr class="borderStyle">
+          <th class="borderStyle">Order No.</th>
+          <th colspan="3">{{Order.sOrderNo}}</th>
+        </tr>
         <tr class="borderStyle">
           <th class="borderStyle">Sr No.</th>
           <th class="borderStyle">Product Name </th>

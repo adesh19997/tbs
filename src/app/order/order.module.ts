@@ -5,7 +5,7 @@ import { OrderRoutingModule } from './order-routing.module';
 import { OrderComponent } from './order.component';
 import {SharedModule} from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
-import { MatInputModule, MatSelectModule,MatButtonModule } from '@angular/material';
+import { MatInputModule, MatSelectModule,MatButtonModule,MatRadioModule } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   imports: [
@@ -16,6 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatSelectModule,
     MatButtonModule,
     ReactiveFormsModule,
+    MatRadioModule,
     FormsModule,
     NgbModule.forRoot(),
   ],

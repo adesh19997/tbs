@@ -70,9 +70,10 @@ export class CartComponent implements OnInit {
       let tempProdObj = this.data.Products.filter(obj => obj.sUid === element.sProductId);
       if (tempProdObj.length > 0) {
         Object.assign(element, { "ProdDetls": tempProdObj[0] });
-        this.totalCost += Number(tempProdObj[0].dDiscountPrice);
+        this.totalCost += Number(tempProdObj[0].dDiscountPrice) * Number(element.sQuantity);
       }
+      this.totalItem += Number(element.sQuantity);
     });
-    this.totalItem = this.myCart.length;
+
   }
 }

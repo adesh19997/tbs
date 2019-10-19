@@ -20,13 +20,17 @@
                     </a>
                   </div>
                   <div>
-                    <span class="strikethrough" style="color:#666;font-size:14px">{{cart.ProdDetls.dPrice | currency:'INR':'symbol'}}</span>
+                    <span class="strikethrough"
+                      style="color:#666;font-size:14px">{{cart.ProdDetls.dPrice | currency:'INR':'symbol'}}</span>
                     <br>
-                    <span class="orangered" style="font-weight: 600;font-size:14px">{{cart.ProdDetls.dDiscountPrice | currency:'INR':'symbol'}}</span>
+                    <span class="orangered"
+                      style="font-weight: 600;font-size:14px">{{cart.ProdDetls.dDiscountPrice | currency:'INR':'symbol'}}</span>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4">
-                  <input type="number" name="quant-{{ind}}" id="quant-{{ind}}" placeholder="Quantity" style="width:50px;border:1px solid;border-radius: 0px;" min="1" [(ngModel)]="dQuantitiy">
+                  <input type="number" name="quant-{{ind}}" id="quant-{{ind}}" placeholder="Quantity"
+                    (change)="calculateCartTotal()" style="width:50px;border:1px solid;border-radius: 0px;" min="1"
+                    [(ngModel)]="cart.sQuantity">
                 </div>
                 <div class="col-md-1 col-lg-1">
                   <a id='editID' (click)="delete(ind)" title="Edit">
@@ -59,7 +63,8 @@
           <hr>
           <div class="row">
             <div class="col-md-12 text-center">
-              <button matButton type="button" class="darkButton" style="font-size:14px;" (click)="buyAll()"> PROCEED TO CHECKOUT</button>
+              <button matButton type="button" class="darkButton" style="font-size:14px;" (click)="buyAll()"> PROCEED TO
+                CHECKOUT</button>
             </div>
           </div>
         </div>

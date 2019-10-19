@@ -42,6 +42,15 @@ export class OrderComponent implements OnInit {
   dir: any = "";
   private _onDestroy = new Subject<void>();
   ngOnInit() {
+    if (sessionStorage.getItem("payTmReq") && sessionStorage.getItem("currOrder")) {
+      let tempObj = JSON.parse(sessionStorage.getItem("payTmReq"));
+      if (tempObj instanceof Object) {
+        this.data.payTmObj = JSON.parse(sessionStorage.getItem("payTmReq"));
+        this.data.Order = JSON.parse(sessionStorage.getItem("currOrder"));
+        this.tempOrder = this.data.Order;
+        this.data.checkTransStatus();
+      }
+    }
   }
   openPopup(newContents) {
     this.modalRef = this.modalService.open(newContents, { windowClass: 'buss-modal' });
@@ -102,8 +111,6 @@ export class OrderComponent implements OnInit {
         .subscribe(() => {
           let req = {
             "sCategory": this.newOrder.controls["Category"].value,
-            "aSubCategory": this.newOrder.controls["SubCategory"].value,
-            "aBrands": this.newOrder.controls["Brands"].value,
           }
           this.data.getFilteredProducts(req);
         });
@@ -113,9 +120,7 @@ export class OrderComponent implements OnInit {
         .pipe(takeUntil(this._onDestroy))
         .subscribe(() => {
           let req = {
-            "sCategory": this.newOrder.controls["Category"].value,
             "aSubCategory": this.newOrder.controls["SubCategory"].value,
-            "aBrands": this.newOrder.controls["Brands"].value,
           }
           this.data.getFilteredProducts(req);
         });
@@ -125,8 +130,6 @@ export class OrderComponent implements OnInit {
         .pipe(takeUntil(this._onDestroy))
         .subscribe(() => {
           let req = {
-            "sCategory": this.newOrder.controls["Category"].value,
-            "aSubCategory": this.newOrder.controls["SubCategory"].value,
             "aBrands": this.newOrder.controls["Brands"].value,
           }
           this.data.getFilteredProducts(req);
@@ -140,6 +143,7 @@ export class OrderComponent implements OnInit {
 
     let date = new Date();
     let dateStr = this.datepipe.transform(date, 'dd-MM-yyyy');
+    dateStr = dateStr.replace(new RegExp("-", 'g'), "");
     this.tempOrder.dtDate = new Date();
     this.tempOrder.dTotalAmount = 0;
     if (this.data.Users.dTotalOrder >= 0) {
@@ -147,7 +151,8 @@ export class OrderComponent implements OnInit {
     } else {
       this.data.Users.dTotalOrder = 1;
     }
-    this.tempOrder.sOrderNo = dateStr + "-" + this.tempOrder.sCustomerId + '-' + this.data.Users.dTotalOrder.toString();
+    this.data.Users.dTotalOrder = this.data.AllOrders.length + 1;
+    this.tempOrder.sOrderNo = "YMS" + dateStr + this.tempOrder.sCustomerId + this.data.Users.dTotalOrder.toString();
     this.tempOrder.sOrderStatus = "OS2";
     this.tempOrder.aProduct = this.aOrderProducts;
     this.tempOrder.sPaymentMade = "Direct-Cash";
@@ -197,7 +202,15 @@ export class OrderComponent implements OnInit {
     }
    </style> <title></title></head>`
     text += '<body><p>Hi ' + this.userData.sName + ', <br>Your order ' + this.tempOrder.sOrderNo + ' is successfully placed. find the order details below.</p></body></html>' + document.getElementById('print-section').innerHTML;
-    this.data.updateOrderDetails(this.tempOrder, text,false);
+    this.tempOrder.sOrderSource = "Offline";
+    this.data.Order = this.tempOrder;
+
+    if (this.tempOrder.sPaymentMade == "PayTM") {
+      this.data.updateOrderDetails(this.tempOrder, text, true);
+    } else {
+      this.data.updateOrderDetails(this.tempOrder, text, false);
+    }
+
     this.modalRef.close();
   }
 }
