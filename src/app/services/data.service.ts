@@ -126,14 +126,15 @@ export class DataService {
     "TXN_AMOUNT": "1.00",
     "CALLBACK_URL": "https://tecpixels-bs.firebaseapp.com/"
   };
-  Posters: any = [];
+  MainPage: any = {};
   AllOrders: any = [];
   AllStocks: any = [];
   Products: any;
   Master: any;
   loading: any = false;
   onlyProduct: any = false;
-  paytmTransResponse: any = {}
+  paytmTransResponse: any = {};
+  bDisableScreen: boolean
   constructor(private db: AngularFireDatabase,
     public datepipe: DatePipe,
     private http: HttpClient, ) {
@@ -162,6 +163,7 @@ export class DataService {
           }]
         }
       });
+      this.onlyProduct = true;
     });
   }
   getUserDetails(uid) {
@@ -201,6 +203,7 @@ export class DataService {
   getProduct() {
     return JSON.parse(JSON.stringify(this.Product));
   }
+
   getMasterVal(masterName) {
     if (this.Master) {
       return this.Master[masterName];
@@ -223,6 +226,7 @@ export class DataService {
         "sContent": html
       }
     }
+    this.bDisableScreen = true;
     this.sendEmail(request).subscribe(res => {
       if (res.accepted.length > 0) {
         this.db.object("/Orders/" + order.sOrderNo).update(order)
@@ -244,10 +248,14 @@ export class DataService {
         });
         if (transaction) {
           this.initiatePayment();
+        } else {
+          this.bDisableScreen = false;
         }
       } else {
-
+        this.bDisableScreen = false;
       }
+    }, error => {
+      this.bDisableScreen = false;
     })
 
   }
@@ -263,13 +271,14 @@ export class DataService {
   createOrder(products) {
     let date = new Date();
     let dateStr = this.datepipe.transform(date, 'dd-MM-yyyy');
+    dateStr = dateStr.replace(new RegExp("-", 'g'), "");
     if (isNaN(this.Users.dTotalOrder)) {
       this.Users.dTotalOrder = 0;
     }
     this.Order.dtDate = new Date();
     this.Order.dTotalAmount = 0;
-    this.Users.dTotalOrder += 1;
-    this.Order.sOrderNo = dateStr + "-" + this.Users.sPhoneNumber + '-' + this.Users.dTotalOrder.toString();
+    this.Users.dTotalOrder = this.AllOrders.length + 1;
+    this.Order.sOrderNo = "YMS" + dateStr + this.Users.sPhoneNumber + this.Users.dTotalOrder.toString();
     this.Order.sCustomerId = this.Users.sPhoneNumber;
     this.Order.sOrderStatus = "OS1";
     let master = this.getMasterVal("Order_Stage");
@@ -305,14 +314,19 @@ export class DataService {
   getStocks(id) {
     return this.AllStocks.filter(obj => obj.sProductId == id);
   }
-  getPoster() {
-    let temp = this.db.list("/Poster");
+  getMainPage() {
+    let temp = this.db.object("/MainPage");
     this.loading = true;
     temp.valueChanges().subscribe(data => {
       this.loading = false;
-      this.Posters = data;
-      if (this.Posters.length > 0) {
-        this.selectedProd = this.Posters[0];
+      let tempObj: any = {}
+      tempObj = data;
+      if (tempObj instanceof Object) {
+        this.MainPage = tempObj;
+      }
+
+      if (this.MainPage.aPosters.length > 0) {
+        this.selectedProd = this.MainPage.aPosters[0];
       }
     }, error => {
       this.loading = false;
@@ -328,13 +342,20 @@ export class DataService {
       .catch(this.handleErrorObservable)
   }
   getFilteredProducts(req) {
-    this.postDataToServer(req, 'getFilteredProducts').subscribe(response => {
+    let request = {
+      "filterParams": req
+    }
+    this.bDisableScreen = true;
+    this.postDataToServer(request, 'getFilteredProducts').subscribe(response => {
+      this.bDisableScreen = false;
       if (Array.isArray(response)) {
         this.Products = response;
+        this.onlyProduct = true;
       } else {
         alert("error fetching products");
       }
     }, error => {
+      this.bDisableScreen = false;
       alert("error fetching products" + error);
     })
   }
@@ -343,15 +364,17 @@ export class DataService {
       "Params": this.payTmObj
     };
     this.postDataToServer(req, "checksum").subscribe(response => {
+      this.bDisableScreen = false;
       this.payTmObj['CHECKSUMHASH'] = response;
       this.createPaytmForm();
     }, error => {
+      this.bDisableScreen = false;
       alert("Order could not be placed,please try again after some time.");
     })
   }
   createPaytmForm() {
     sessionStorage.setItem("payTmReq", JSON.stringify(this.payTmObj));
-    sessionStorage.setItem("currOrder",JSON.stringify(this.Order));
+    sessionStorage.setItem("currOrder", JSON.stringify(this.Order));
     const my_form: any = document.createElement('form');
     my_form.name = 'paytm_form';
     my_form.method = 'post';

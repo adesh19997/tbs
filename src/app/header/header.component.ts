@@ -15,8 +15,8 @@ export class HeaderComponent implements OnInit {
   }
   userDetls: any
   ngOnInit() {
+    this.data.getMainPage();
     this.userDetls = this.data.Users;
-    this.data.getPoster();
   }
 
   login() {
@@ -38,6 +38,9 @@ export class HeaderComponent implements OnInit {
   }
   home(value) {
     this.data.onlyProduct = value;
+    if(value){
+      this.data.getProducts();
+    }
     this.router.navigate(['/products']);
   }
 }

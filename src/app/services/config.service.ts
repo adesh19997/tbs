@@ -986,4 +986,27 @@ export class ConfigService {
       }
     ]
   }
+  getFilterConfig() {
+    let aFilters = [
+      {
+        "searchValue": "sCategory",
+        "ViewValue": "Category",
+        "masterName": "Category",
+        "aOptions": this.data.getMasterVal("Category")
+      },
+      {
+        "searchValue": "aBrands",
+        "ViewValue": "Brands",
+        "masterName": "Brands",
+        "aOptions": this.data.getMasterVal("Brands")
+      }
+    ];
+    aFilters.forEach(element => {
+      element.aOptions = this.data.getMasterVal(element.masterName);
+      element.aOptions.forEach(opt => {
+        opt.checked = false;
+      });
+    });
+    return aFilters;
+  }
 }

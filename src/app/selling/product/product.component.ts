@@ -4,6 +4,8 @@ import { StorageService } from '../../services/storage.service';
 import { AuthenticateService } from '../../services/authenticate.service';
 import { Router } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
+import { ConfigService } from '../../services/config.service';
+
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
@@ -11,8 +13,12 @@ import { CurrencyPipe } from '@angular/common';
   providers: [CurrencyPipe]
 })
 export class ProductComponent implements OnInit {
+  aFilter: any = [];
+  selectedFilter: any = -1;
+  filterParams: any = [];
   constructor(public data: DataService,
     public storage: StorageService,
+    private config: ConfigService,
     public user: AuthenticateService,
     private router: Router) {
     if (sessionStorage.getItem("payTmReq") && sessionStorage.getItem("currOrder")) {
@@ -26,7 +32,8 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.data.selectedProd = this.data.Posters[0];
+    this.data.selectedProd = this.data.MainPage.aPosters[0];
+    this.aFilter = this.config.getFilterConfig();
   }
 
   gotoView(ind) {
@@ -49,9 +56,61 @@ export class ProductComponent implements OnInit {
   }
   poster(type) {
     if (type == 'prev' && this.data.selectedProd.index != 0) {
-      this.data.selectedProd = this.data.Posters[(this.data.selectedProd.index - 1)];
-    } else if (this.data.selectedProd.index != this.data.Posters.length - 1) {
-      this.data.selectedProd = this.data.Posters[(this.data.selectedProd.index + 1)];
+      this.data.selectedProd = this.data.MainPage.aPosters[(this.data.selectedProd.index - 1)];
+    } else if (this.data.selectedProd.index != this.data.MainPage.aPosters.length - 1) {
+      this.data.selectedProd = this.data.MainPage.aPosters[(this.data.selectedProd.index + 1)];
     }
+  }
+  gotoProd(type, value) {
+    this.aFilter = this.config.getFilterConfig();
+    if (type == "All") {
+      this.data.getProducts()
+    } else {
+      let req: any = {};
+      Object.assign(req, { [type]: value });
+      let filtObj: any = {};
+      this.aFilter.forEach(element => {
+        if (element.searchValue == type) {
+          element.aOptions.forEach(opt => {
+            if (opt.value == value) {
+              opt.checked = true;
+            }
+          });
+        }
+      });
+      Object.assign(filtObj, { "searchParam": type, "searchVal": value });
+      this.filterParams.push(filtObj);
+      this.data.getFilteredProducts(req);
+    }
+  }
+  changeselectedFilter(ind) {
+    if (this.selectedFilter == ind) {
+      this.selectedFilter = -1;
+    } else {
+      this.selectedFilter = ind;
+    }
+  }
+  changeFilter(checked, value, ind) {
+    let bPresent = false;
+    let presentInd = 0;
+    this.filterParams.forEach((element, i) => {
+      if (element.searchVal == value) {
+        bPresent = true;
+        presentInd = i;
+      }
+    });
+
+    if (checked && !bPresent) {
+      let filtObj: any = {};
+      Object.assign(filtObj, { "searchParam": this.aFilter[ind].searchValue, "searchVal": value });
+      this.filterParams.push(filtObj);
+    } else if (!checked && bPresent) {
+      this.filterParams.splice(presentInd, 1);
+    }
+    let req = {}
+    this.filterParams.forEach((element, i) => {
+      Object.assign(req, { [element.searchParam]: element.searchVal });
+    });
+    this.data.getFilteredProducts(req);
   }
 }

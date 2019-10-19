@@ -1,4 +1,4 @@
-<section style="margin-top:20px;">
+<section style="padding:25px;">
   <div class="row">
     <div class="col-md-6 col-sm-6 col-lg-6 card">
       <div class="left-center">
@@ -33,7 +33,8 @@
           <input type="number" style="width:50px;" min="1" [(ngModel)]="dQuantitiy">
         </div>
         <div class="col-md-6" style="margin-bottom:10px;">
-          <button matButton type="button" class="darkButton example-full-width" (click)="addToCart()"> Add to Cart</button>
+          <button matButton type="button" class="darkButton example-full-width" (click)="addToCart()"> Add to
+            Cart</button>
         </div>
         <div class="col-md-6" style="margin-bottom:10px;">
           <button matButton type="button" class="darkButton example-full-width" (click)="buy()"> Buy</button>
@@ -59,7 +60,7 @@
   <hr>
   <div class="row" style="margin-top:10px;" *ngFor="let review of product.aReviews">
     <div class="col-md-12 col-sm-12 col-lg-12 text-left">
-        <h6>{{review.sUserName}}</h6><span>{{review.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</span><br>
+      <h6>{{review.sUserName}}</h6><span>{{review.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</span><br>
       <span (click)="review.dRating=1" [ngClass]="dRating>=1 ? 'fa fa-star rating':'fa fa-star'"></span>
       <span (click)="review.dRating=2" [ngClass]="dRating>=2 ? 'fa fa-star rating':'fa fa-star'"></span>
       <span (click)="review.dRating=3" [ngClass]="dRating>=3 ? 'fa fa-star rating':'fa fa-star'"></span>
@@ -83,7 +84,8 @@
     </div>
     <div class="col-md-12 col-sm-12 col-lg-12 ">
       <mat-form-field class="remarks-area example-full-width">
-        <textarea matInput matTextareaAutosize name="Remarks" placeholder="Write your review here" [(ngModel)]="reviewDesc"></textarea>
+        <textarea matInput matTextareaAutosize name="Remarks" placeholder="Write your review here"
+          [(ngModel)]="reviewDesc"></textarea>
       </mat-form-field>
     </div>
     <div class="col-md-12 col-sm-12 col-lg-12 text-right" style="margin-bottom:10px;">

@@ -1,4 +1,4 @@
-<section style="margin-top:10px;">
+<section style="padding:25px;">
   <div class="row">
     <div class="col-md-9 right-border">
       <mat-horizontal-stepper [linear]="isLinear" #buyStepper>
@@ -26,7 +26,7 @@
             <hr>
             <div class="row">
               <div class="col-md-4 " *ngFor="let addr of userData.aAddress;let j=index;">
-                <div class="row card">
+                <div class="row card" style="padding: 25px;">
                   <h4>{{addr.sType}}</h4>
                   <h6>{{addr.sAddrContact}}</h6>
                   <span>{{addr.sLine1}}, {{addr.sLine2}}.</span>

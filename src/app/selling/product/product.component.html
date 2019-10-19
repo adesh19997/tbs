@@ -2,68 +2,102 @@
   <div class="row" *ngIf="!data.onlyProduct">
     <div class="col-md-12" style="padding:25px;">
       <img class="posterImg" [src]="data.selectedProd.sUrl">
-      <div class="bottom-left">
+      <div class="left-center">
         <a (click)="poster('prev')"><i class="fa fa-chevron-left arrow"></i> </a>
+      </div>
+      <div class="right-center">
         <a (click)="poster('next')"><i class="fa fa-chevron-right arrow"></i></a>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12 text-center" style="padding:25px;" *ngIf="!data.onlyProduct">
-      <button matButton type="button" class="baseButton"> See All Product</button>
+  <div class="row" *ngIf="!data.onlyProduct" style="margin-top:25px;">
+    <div class="col-md-12 text-center">
+      <h3 class="titleBig"><a>Shop By Category</a></h3>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-3 col-lg-3 col-sm-3 box" *ngFor="let prod of data.Products;let ind=index;">
-      <div class="row">
+    <hr>
+    <div class="col-md-3 col-lg-3 col-sm-3 box" *ngFor="let prod of data.MainPage.aCategory;let ind=index;">
+      <div class="row" (click)="gotoProd('sCategory',prod.sName)">
         <div class="col-md-12 text-center">
-          <img id="prodImg-{{ind}}" name="prodImg-{{ind}}" alt="Avatar" [src]="prod.aImages[0].downloadURL" class="prodImg">
-        </div>
-        <div class="middle">
-          <a (click)="gotoView(ind)"><i class="fa fa fa-search Icon"></i></a>
-          <a (click)="addToCart(ind)"><i class="fa fa-shopping-cart Icon"></i></a>
-        </div>
-        <div class="bottom">
-          <span class="Icon">{{prod.sShortDesc}}</span>
+          <img id="prodImg-{{ind}}" name="prodImg-{{ind}}" alt="Avatar" [src]="prod.sUrl" class="prodImg">
         </div>
       </div>
       <div class="row" style="margin-top:20px;">
         <div class="col-md-12 text-center">
           <h4 class="title"><a>{{prod.sName}}</a></h4>
         </div>
+      </div>
+    </div>
+    <div class="col-md-12 text-center" style="margin-top:25px;">
+      <h3 class="titleBig"><a>Shop By Brands</a></h3>
+    </div>
+    <hr>
+    <div class="col-md-3 col-lg-3 col-sm-3 box" *ngFor="let prod of data.MainPage.aBrand;let ind=index;">
+      <div class="row" (click)="gotoProd('aBrands',prod.sName)">
         <div class="col-md-12 text-center">
-          <span class="strikethrough">{{prod.dPrice | currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span style="color: black;">{{prod.dDiscountPrice |
-            currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span>{{prod.dDiscountPercent}} % off</span>
+          <img id="prodImg-{{ind}}" name="prodImg-{{ind}}" alt="Avatar" [src]="prod.sUrl" class="prodImg">
+        </div>
+      </div>
+      <div class="row" style="margin-top:20px;">
+        <div class="col-md-12 text-center">
+          <h4 class="title"><a>{{prod.sName}}</a></h4>
         </div>
       </div>
     </div>
   </div>
-</section>
-
-
-<!-- 
-  <mat-grid-list cols="3" rowHeight="1:1">
-        <mat-grid-tile *ngFor="let prod of data.Products;let ind=index;">
-          <mat-grid-tile-header>
-            <h4>{{prod.sName}}</h4>
-          </mat-grid-tile-header>
+  <div class="row">
+    <div class="col-md-12 text-center" style="padding:25px;" *ngIf="!data.onlyProduct">
+      <button matButton type="button" (click)="gotoProd('All',null)" class="baseButton"> See All Product</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="data.onlyProduct" style="margin-top:25px;">
+    <div class="col-md-10 text-center right-border">
+      <div class="row">
+        <div class="col-md-3 col-lg-3 col-sm-3 box" *ngFor="let prod of data.Products;let ind=index;">
           <div class="row">
-            <div class="col-md-12">
-              <img style="width: 100%;" [src]="prod.aImages[0].downloadURL">
+            <div class="col-md-12 text-center">
+              <img id="prodImg-{{ind}}" name="prodImg-{{ind}}" alt="Avatar" [src]="prod.aImages[0].downloadURL"
+                class="prodImg1">
+            </div>
+            <div class="middle">
+              <span class="Icon">{{prod.sShortDesc}}</span>
+              <br>
+              <a (click)="gotoView(ind)"><i class="fa fa fa-search Icon"></i></a>
+              <a (click)="addToCart(ind)"><i class="fa fa-shopping-cart Icon"></i></a>
+            </div>
+            <div class="bottom">
+
             </div>
           </div>
-          <mat-grid-tile-footer>
-            <div class="row">
-                <div class="col-md-12">
-              <span class="strikethrough">{{prod.dPrice | currency:'INR':'symbol'}}</span><br /><span>{{prod.dDiscountPrice | currency:'INR':'symbol'}}</span>
-                  </div>
+          <div class="row" style="margin-top:20px;">
+            <div class="col-md-12 text-center">
+              <h4 class="title"><a>{{prod.sName}}</a></h4>
             </div>
-            <div class="row">
-              <div class="col-md-12 col-lg-12 text-right">
-                <button matButton type="button" (click)="gotoView(ind)" class="basicbutton"> View</button>
-              </div>
+            <div class="col-md-12 text-center">
+              <span class="strikethrough">{{prod.dPrice | currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span
+                style="color: black;">{{prod.dDiscountPrice |
+                      currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span>{{prod.dDiscountPercent}} % off</span>
             </div>
-          </mat-grid-tile-footer>
-        </mat-grid-tile>
-      </mat-grid-list>
- -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 text-left">
+      <h4 style="margin-bottom: 10px;color: #ccc; margin-left: 10px;">
+        Show results for
+      </h4>
+      <br>
+      <ul style="margin-left: 10px;">
+        <li *ngFor="let filt of aFilter; let ind=index;" style="margin-bottom: 10px;">
+          <h6 (click)="changeselectedFilter(ind)"><i class="fa  fa-caret-right"></i> {{filt.ViewValue}}</h6>
+          <ul style="margin-left: 20px;" *ngIf="selectedFilter==ind">
+            <li *ngFor="let filtOptions of filt.aOptions; let ind1=index;">
+              <mat-checkbox id="{{filt.ViewValue}}-{{filtOptions}}-{{ind1}}" [(ngModel)]="filtOptions.checked"
+                (change)="changeFilter(filtOptions.checked,filtOptions.value,ind)"> {{filtOptions.viewValue}}
+              </mat-checkbox>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

@@ -49,6 +49,7 @@ export class InventoryComponent implements OnInit {
     this.form = this.config.geSectionForm(this.compData, this.field);
     this.stockField = this.config.setStockFieldForm();
     this.addrField = this.config.setAddrFields();
+    this.data.getProducts();
   }
 
   ngOnInit() {
