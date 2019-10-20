@@ -10,7 +10,7 @@
     </mat-form-field>
     <!-- Numeric field -->
     <mat-form-field class="example-full-width" [ngStyle]="field.style" *ngSwitchCase="'Number'" [ngStyle]="field.style">
-      <input [id]="field.sFieldName" type="number" matInput [placeholder]="field.sPlaceHolder" [disabled]="field.disable" [required]="field.required"
+      <input [id]="field.sFieldName" type="number" matInput [placeholder]="field.sPlaceHolder" [disabled]="field.bDisable" [required]="field.required"
         [name]="field.sFieldName" only-digits [formControlName]="field.sFieldName">
       <mat-error [hidden]="!isValid">
         <span>Please enter correct value of {{field.sPlaceholder}}.</span>
@@ -40,11 +40,11 @@
     <!-- radio button -->
     <div class="row settobottom" *ngSwitchCase="'Radio Button'">
       <div>
-        <span>{{field.sPlaceHolder}}: </span>
+        <span>{{field.sPlaceHolder}}: &nbsp;</span>
       </div>
       <div>
         <mat-radio-group [name]="field.sFieldName" [id]="field.sFieldName" [disabled]="field.bDisable" [required]="field.required" [formControlName]="field.sFieldName">
-          <mat-radio-button *ngFor="let opt of field.optionArray;let i=index;" [value]="opt.value" id="field.sFieldName-{{i}}">{{opt.viewValue}}</mat-radio-button>
+          <mat-radio-button *ngFor="let opt of field.optionArray;let i=index;" [value]="opt.value">&nbsp;{{opt.viewValue}}&nbsp;</mat-radio-button>
         </mat-radio-group>
       </div>
     </div>

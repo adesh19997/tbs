@@ -48,6 +48,54 @@
           </ul>
         </div>
       </div>
+      <hr>
+      <div class="row card">
+        <div class="col-md-12 col-lg-12" style="margin-top: 10px;">
+          <h4>WISH-LIST</h4>
+        </div>
+        <hr>
+        <div class="col-md-12 col-lg-12">
+          <ul>
+            <li *ngFor="let cart of wishList;let ind=index;">
+              <div class="row" *ngIf="cart.sProductId">
+                <div class="col-md-3 col-lg-3 text-left">
+                  <img [src]="cart.ProdDetls.aImages[0].downloadURL" style="width:100%">
+                </div>
+                <div class="col-md-4 col-lg-4">
+                  <div style="margin-bottom: 10px;">
+                    <a class="label">
+                      {{cart.ProdDetls.sName}}
+                    </a>
+                  </div>
+                  <div>
+                    <span class="strikethrough"
+                      style="color:#666;font-size:14px">{{cart.ProdDetls.dPrice | currency:'INR':'symbol'}}</span>
+                    <br>
+                    <span class="orangered"
+                      style="font-weight: 600;font-size:14px">{{cart.ProdDetls.dDiscountPrice | currency:'INR':'symbol'}}</span>
+                  </div>
+                </div>
+                <div class="col-md-4 col-lg-4">
+                  <!-- <input type="number" name="quant-{{ind}}" id="quant-{{ind}}" placeholder="Quantity"
+                    (change)="calculateCartTotal()" style="width:50px;border:1px solid;border-radius: 0px;" min="1"
+                    [(ngModel)]="cart.sQuantity"> -->
+                </div>
+                <div class="col-md-1 col-lg-1">
+                  <a id='editID' (click)="delete(ind)" title="Edit">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="row" *ngIf="cart.sProductId">
+                <div class="col-md-12 text-right">
+                  <button matButton type="button" class="darkButton" (click)="moveToCart(ind)"> Move to Cart</button>
+                </div>
+              </div>
+              <hr>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
     <div class="col-md-4 col-lg-4">
       <div class="row card">

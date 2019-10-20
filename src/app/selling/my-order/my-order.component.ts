@@ -37,4 +37,19 @@ export class MyOrderComponent implements OnInit {
       this.selectedTrack = -1;
     }
   }
+  buy(ind) {
+    let text = ` <html> <head><style type="text/css">
+    .border {
+      border-collapse: collapse;
+      border: 1px solid #000000;
+      text-align: center;
+    }
+    .borderStyle{
+      border: 1px solid #000000;
+    }
+
+   </style> <title></title></head>`
+    text += '<body><p>Hi ' + this.data.Users.sName + ', <br>Retrying Payment for Your order ' + this.orders[ind].sOrderNo + '</p></body></html>';
+    this.data.updateOrderDetails(this.orders[ind], text, true);
+  }
 }

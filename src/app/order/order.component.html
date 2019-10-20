@@ -1,4 +1,4 @@
-<section *ngIf="!data.loading">
+<section style="padding:25px;" *ngIf="!data.loading && data.bShowAdminPage">
   <hr>
   <div class="row" style="margin-top:10px;">
     <div class="col-md-6 col-sm-6 col-lg-6 text-left">
@@ -86,6 +86,53 @@
           <textarea matInput matTextareaAutosize name="Remarks" placeholder="Description"
             [(ngModel)]="orderTrack.sRemarks"></textarea>
         </mat-form-field>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-12" *ngIf="this.data.AllOrders[this.selectedOrder].sPaymentMade=='Cheque'">
+        <table class="table">
+          <tbody>
+            <tr class="borderStyle">
+              <th class="borderStyle">Sr No.</th>
+              <th class="borderStyle">Bank Name </th>
+              <th class="borderStyle">Cheque No</th>
+              <th class="borderStyle"> Amount</th>
+              <th>
+                <a id='addID' (click)="addCheque(this.data.AllOrders[this.selectedOrder])" title="Edit">
+                  <i class="fa fa-plus"></i> Add
+                </a>
+              </th>
+            </tr>
+            <tr class="borderStyle"
+              *ngFor="let cheque of this.data.AllOrders[this.selectedOrder].aChequeDetails;let ind=index">
+              <td>{{ind +1}}</td>
+              <td>{{cheque.sBankName}}</td>
+              <td>{{cheque.sChequeNo}}</td>
+              <td>{{cheque.dAmount}}</td>
+              <td>
+                <a id='editID' (click)="editCheque(this.data.AllOrders[this.selectedOrder],ind)" title="Edit">
+                  <i class="fa fa-edit"></i>
+                </a>
+                <a id="cancelEditId" (click)="deleteCheque(this.data.AllOrders[this.selectedOrder],ind)" title="Delete">
+                  <i class="fa fa-remove fa-lg"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <hr>
+    <div class="row " *ngIf="editChq">
+      <div class="col-md-12 col-sm-12 col-lg-12">
+        <h4>Cheque Details</h4>
+      </div>
+      <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of chequeFields">
+        <app-field [field]="fi" [form]="chequeForm"></app-field>
+      </div>
+      <div class="col-md-12 col-sm-12 col-lg-12 text-right">
+        <button matButton type="button" class="basicbutton" (click)="setChqData()"> save</button>
       </div>
     </div>
   </div>
@@ -238,8 +285,54 @@
           <mat-radio-group name="paymentOptiom" id="paymentOptiom" [(ngModel)]="tempOrder.sPaymentMade">
             <mat-radio-button value="Direct-Cash" id="paymentOptiom-{{1}}">Cash</mat-radio-button>
             <mat-radio-button value="PayTM" id="paymentOptiom-{{2}}">Online</mat-radio-button>
+            <mat-radio-button value="Cheque" id="paymentOptiom-{{3}}">Cheque</mat-radio-button>
           </mat-radio-group>
         </div>
+      </div>
+    </div>
+    <div class="row " *ngIf="tempOrder.sPaymentMade=='Cheque'">
+      <div class="col-md-12">
+        <table class="table">
+          <tbody>
+            <tr class="borderStyle">
+              <th class="borderStyle">Sr No.</th>
+              <th class="borderStyle">Bank Name </th>
+              <th class="borderStyle">Cheque No</th>
+              <th class="borderStyle"> Amount</th>
+              <th>
+                <a id='addID' (click)="addCheque(tempOrder)" title="Edit">
+                  <i class="fa fa-plus"></i> Add
+                </a>
+              </th>
+            </tr>
+            <tr class="borderStyle" *ngFor="let cheque of tempOrder.aChequeDetails;let ind=index">
+              <td>{{ind +1}}</td>
+              <td>{{cheque.sBankName}}</td>
+              <td>{{cheque.sChequeNo}}</td>
+              <td>{{cheque.dAmount}}</td>
+              <td>
+                <a id='editID' (click)="editCheque(tempOrder,ind)" title="Edit">
+                  <i class="fa fa-edit"></i>
+                </a>
+                <a id="cancelEditId" (click)="deleteCheque(tempOrder,ind)" title="Delete">
+                  <i class="fa fa-remove fa-lg"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <hr>
+    <div class="row " *ngIf="editChq">
+      <div class="col-md-12 col-sm-12 col-lg-12">
+        <h4>Cheque Details</h4>
+      </div>
+      <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of chequeFields">
+        <app-field [field]="fi" [form]="chequeForm"></app-field>
+      </div>
+      <div class="col-md-12 col-sm-12 col-lg-12 text-right">
+        <button matButton type="button" class="basicbutton" (click)="setChqData()"> save</button>
       </div>
     </div>
   </div>

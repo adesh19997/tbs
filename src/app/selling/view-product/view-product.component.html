@@ -33,10 +33,14 @@
           <input type="number" style="width:50px;" min="1" [(ngModel)]="dQuantitiy">
         </div>
         <div class="col-md-6" style="margin-bottom:10px;">
-          <button matButton type="button" class="darkButton example-full-width" (click)="addToCart()"> Add to
-            Cart</button>
+          <button matButton type="button" class="darkButton example-full-width" (click)="addToCart('wishlist')"> Add to
+            WishList</button>
         </div>
         <div class="col-md-6" style="margin-bottom:10px;">
+          <button matButton type="button" class="darkButton example-full-width" *ngIf="product.dStockAvailable>12" (click)="addToCart('cart')"> Add to
+            Cart</button>
+        </div>
+        <div class="col-md-12 text-right" style="margin-bottom:10px;">
           <button matButton type="button" class="darkButton example-full-width" (click)="buy()"> Buy</button>
         </div>
       </div>

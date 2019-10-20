@@ -39,6 +39,7 @@ export class InventoryComponent implements OnInit {
     selectedCat: "",
     selectedSubCat: ""
   };
+  aSizes = this.data.getMasterVal("Size");
   dir: any = "";
   constructor(private config: ConfigService,
     public data: DataService,
@@ -58,9 +59,12 @@ export class InventoryComponent implements OnInit {
     this.data.getAllStocks();
   }
   addProduct() {
-    if (this.currUser.verified) {
+    if (this.currUser.sPhoneNumber != "" && this.currUser.sPhoneNumber != null) {
       this.Stocks = [];
       this.Product = JSON.parse(JSON.stringify(this.data.getProduct()));
+      if (!Array.isArray(this.Product.aSizeList)) {
+        this.Product.aSizeList = [];
+      }
       this.addField = this.config.setAddFieldForm();
       this.addform = this.config.geSectionForm(this.Product, this.addField);
       this.isEdit = false;
@@ -74,14 +78,11 @@ export class InventoryComponent implements OnInit {
   editProduct(i) {
     this.Product = JSON.parse(JSON.stringify(this.data.Products[i]));
     this.Stocks = this.data.getStocks(this.Product.sUid);
-    this.Product.dStockSold = 0;
-    this.Stocks.forEach(element => {
-      if (element.sAction == "Sold") {
-        this.Product.dStockSold += Number(element.dQuantity);
-      }
-    });
     this.addProd = true;
     this.addImg = true;
+    if (!Array.isArray(this.Product.aSizeList)) {
+      this.Product.aSizeList = [];
+    }
     this.addField = this.config.setAddFieldForm();
     this.addform = this.config.geSectionForm(this.Product, this.addField);
     this.isEdit = true;
@@ -91,7 +92,7 @@ export class InventoryComponent implements OnInit {
     if (this.data.Users.uid != null && this.data.Users.uid != undefined && this.data.Users.uid != "") {
       this.addProd = false;
       this.config.setData(this.addField, this.Product, this.addform.value);
-      this.Product.dDiscountPercent = (((Number(this.Product.dPrice) -Number(this.Product.dDiscountPrice))/Number(this.Product.dPrice))*100).toFixed(2);
+      this.Product.dDiscountPercent = (((Number(this.Product.dPrice) - Number(this.Product.dDiscountPrice)) / Number(this.Product.dPrice)) * 100).toFixed(2);
       if (Array.isArray(this.data.Products) && !this.isEdit) {
         this.data.Products.push(JSON.parse(JSON.stringify(this.Product)));
       } else if (Array.isArray(this.data.Products) && this.selectedProduct >= 0 && this.data.Products[this.selectedProduct]) {
@@ -204,7 +205,7 @@ export class InventoryComponent implements OnInit {
         this.data.Products = _.sortBy(this.data.Products, key);
         this.dir = 'asc'
       }
-    } else if(dataTable == 'Stock'){
+    } else if (dataTable == 'Stock') {
       if (this.dir == 'asc') {
         this.Stocks = _.sortBy(this.Stocks, key).reverse();
         this.dir = 'dsc'
@@ -214,4 +215,11 @@ export class InventoryComponent implements OnInit {
       }
     }
   }
+  addSize() {
+    this.Product.aSizeList.push(JSON.parse(JSON.stringify(this.data.sizeListObj)));
+  }
+  deleteSize(ind) {
+    this.Product.aSizeList.splice(ind, 1);
+  }
+  
 }

@@ -70,7 +70,8 @@ export class BuyComponent implements OnInit {
    </style> <title></title></head>`
     text += '<body><p>Hi ' + this.userData.sName + ', <br>Your order ' + this.Order.sOrderNo + ' is successfully placed. find the order details below.</p></body></html>' + document.getElementById('print-section').innerHTML;
     this.Order.sPaymentMade = "PayTM";
-    this.Order.sOrderSource = "website"
+    this.Order.sOrderSource = "website";
+    this.data.updateUserDetls(this.data.Users);
     this.data.updateOrderDetails(this.Order, text, true);
   }
   setAddr(j) {

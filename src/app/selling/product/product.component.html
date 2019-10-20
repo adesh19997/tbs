@@ -62,7 +62,8 @@
               <span class="Icon">{{prod.sShortDesc}}</span>
               <br>
               <a (click)="gotoView(ind)"><i class="fa fa fa-search Icon"></i></a>
-              <a (click)="addToCart(ind)"><i class="fa fa-shopping-cart Icon"></i></a>
+              <a (click)="addToCart(ind,'cart')" *ngIf="prod.dStockAvailable>12"><i class="fa fa-shopping-cart Icon"></i></a>
+              <a (click)="addToCart(ind,'wishlist')"><i class="fa fa-heart-o Icon"></i></a>
             </div>
             <div class="bottom">
 
@@ -76,6 +77,9 @@
               <span class="strikethrough">{{prod.dPrice | currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span
                 style="color: black;">{{prod.dDiscountPrice |
                       currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span>{{prod.dDiscountPercent}} % off</span>
+                      <br>
+                      <span class="red" *ngIf="prod.dStockAvailable<=12 &&  prod.dStockAvailable>4">Only a 4 Items left in Stock</span>
+                      <span class="red" *ngIf="prod.dStockAvailable<=6">Out of Stock</span>
             </div>
           </div>
         </div>

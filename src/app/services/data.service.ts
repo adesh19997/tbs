@@ -23,6 +23,8 @@ export class DataService {
     sUserImg: "",
     aCart: [],
     dTotalOrder: 0,
+    dtDOB: null,
+    sGender: "",
     aAddress: [{
       sType: "",
       sLine1: "",
@@ -52,11 +54,16 @@ export class DataService {
     dDiscountPrice: null,
     dStockAvailable: null,
     dStockSold: null,
+    dStockDemand: null,
     dInCart: null,
     aVariants: [],
     aBrands: [],
     dAvgRating: null,
-    sProductDesc: ""
+    sProductDesc: "",
+    sMultipleSize: "No",
+    sProductType: "",
+    sVariety: "",
+    aSizeList: []
   };
   Order = {
     sOrderNo: "",
@@ -71,7 +78,9 @@ export class DataService {
     sPaymentMade: "",
     aOrderTrack: [],
     transResponse: null,
-    sOrderSource: "website"
+    sOrderSource: "website",
+    aChequeDetails: [],
+    sCourierNumber: ""
   };
   Stock = {
     sAction: "",
@@ -98,8 +107,20 @@ export class DataService {
     sProductId: "",
     dAmount: 0,
     dtAddedDate: null,
-    sStatus: ""
+    sStatus: "",
+    sCartType: "cart"
   };
+  chequeObj = {
+    sBankName: "",
+    sChequeNo: "",
+    dtChDate: "",
+    dAmount: "",
+    sStatus: "Received"
+  };
+  sizeListObj = {
+    sSize: "",
+    dAmount: ""
+  }
   selectedProd = {
     index: 0,
     sUrl: ""
@@ -133,10 +154,12 @@ export class DataService {
   AllStocks: any = [];
   Products: any;
   Master: any;
+  ConfigData: any = {};
   loading: any = false;
   onlyProduct: any = false;
   paytmTransResponse: any = {};
-  bDisableScreen: boolean
+  bDisableScreen: boolean = false;
+  bShowAdminPage: boolean = false;
   constructor(private db: AngularFireDatabase,
     public datepipe: DatePipe,
     private http: HttpClient, ) {
@@ -172,6 +195,9 @@ export class DataService {
     this.db.database.ref('/Users/' + uid).once('value').then(function (snapshot) {
       if (snapshot.val() && snapshot.val() instanceof Object) {
         this.Users = snapshot.val();
+        if (this.ConfigadminUser.includes(this.Users.sEmail)) {
+          this.bShowAdminPage = true;
+        }
       }
     })
       .catch(function (erroe) {
@@ -187,6 +213,9 @@ export class DataService {
         tempArr.forEach(element => {
           if (element.sEmail == uid) {
             this.Users = element;
+            if (this.ConfigData.adminUser.includes(this.Users.sEmail)) {
+              this.bShowAdminPage = true;
+            }
             return false;
           }
         });
@@ -224,7 +253,7 @@ export class DataService {
     let request = {
       "mailDetails": {
         "sEmail": this.Users.sEmail,
-        "sSubject": "TechPixels: Order Placed",
+        "sSubject": "TechPixels: Order Details",
         "sContent": html
       }
     }
@@ -280,8 +309,8 @@ export class DataService {
     this.Order.dtDate = new Date();
     this.Order.dTotalAmount = 0;
     this.Order.dTotalQuantity = 0;
-    this.Users.dTotalOrder = this.AllOrders.length + 1;
-    this.Order.sOrderNo = "YMS" + dateStr + this.Users.sPhoneNumber + this.Users.dTotalOrder.toString();
+    this.Users.dTotalOrder += 1;
+    this.Order.sOrderNo = "YMS" + dateStr + this.Users.sPhoneNumber + (this.AllOrders.length + 1).toString();
     this.Order.sCustomerId = this.Users.sPhoneNumber;
     this.Order.sOrderStatus = "OS1";
     let master = this.getMasterVal("Order_Stage");
@@ -313,7 +342,25 @@ export class DataService {
     let temp = this.db.list("/Stocks");
     temp.valueChanges().subscribe(data => {
       this.AllStocks = data;
+      this.calculateAvailableStock();
     });
+  }
+  calculateAvailableStock() {
+    this.Products.forEach(element => {
+      element.dStockAvailable = 0;
+      let Stocks = this.getStocks(element.sUid);
+      element.dStockSold = 0;
+      Stocks.forEach(stockElem => {
+        if (stockElem.sAction == "Sold") {
+          element.dStockSold += Number(stockElem.dQuantity);
+        } else if (stockElem.sAction == "Add") {
+          element.dStockAvailable += Number(stockElem.dQuantity);
+        }
+      });
+      element.dStockAvailable = Number(element.dStockAvailable) - element.dStockSold;
+      this.updateProductDetails(element);
+    });
+
   }
   getStocks(id) {
     return this.AllStocks.filter(obj => obj.sProductId == id);
@@ -336,6 +383,18 @@ export class DataService {
       this.loading = false;
     });
   }
+  getConfig() {
+    let temp = this.db.object("/ConfigDetails");
+    this.loading = true;
+    temp.valueChanges().subscribe(data => {
+      this.loading = false;
+      this.ConfigData = data;
+      this.getMainPage();
+    }, error => {
+      alert("No data found.");
+    });
+  }
+
   generateTempImageId() {
     let id = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
     return id.toUpperCase();

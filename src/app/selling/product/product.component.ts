@@ -40,19 +40,35 @@ export class ProductComponent implements OnInit {
     this.data.Product = this.data.Products[ind];
     this.router.navigate(['products/view']);
   }
-  addToCart(ind) {
+  addToCart(ind, type) {
     let cart = JSON.parse(JSON.stringify(this.data.cartObj));
     cart.sStatus = "new";
     cart.dtAddedDate = new Date();
     cart.sProductId = this.data.Products[ind].sUid;
     cart.dAmount = this.data.Products[ind].dDiscountPrice;
     cart.sQuantity = "1";
+    cart.sCartType = type;
+    if (type == "cart") {
+      if (isNaN(this.data.Products[ind].dInCart)) {
+        this.data.Products[ind].dInCart = 1;
+      } else {
+        this.data.Products[ind].dInCart = Number(this.data.Products[ind].dInCart) + 1;
+      }
+    }
+    if (type == "wishlist") {
+      if (isNaN(this.data.Products[ind].dStockDemand)) {
+        this.data.Products[ind].dStockDemand = 1;
+      } else {
+        this.data.Products[ind].dStockDemand = Number(this.data.Products[ind].dStockDemand) + 1;
+      }
+    }
     if (Array.isArray(this.data.Users.aCart)) {
       this.data.Users.aCart.push(cart);
     } else {
       this.data.Users.aCart = [cart];
     }
     this.data.updateUserDetls(this.data.Users);
+    this.data.updateProductDetails(this.data.Products[ind]);
   }
   poster(type) {
     if (type == 'prev' && this.data.selectedProd.index != 0) {

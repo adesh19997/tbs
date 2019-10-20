@@ -39,13 +39,27 @@ export class ViewProductComponent implements OnInit {
   setForm() {
     this.form = this.config.geSectionForm(this.cart, this.addtoCartFields);
   }
-  addToCart() {
+  addToCart(type) {
     this.config.setData(this.addtoCartFields, this.cart, this.form.value);
     this.cart.sStatus = "new";
     this.cart.sQuantity = this.dQuantitiy;
     this.cart.dtAddedDate = new Date();
     this.cart.sProductId = this.product.sUid;
     this.cart.dAmount = this.product.dDiscountPrice;
+    if (type == "cart") {
+      if (isNaN(this.product.dInCart)) {
+        this.product.dInCart = 1;
+      } else {
+        this.product.dInCart = Number(this.product.dInCart) + 1;
+      }
+    }
+    if (type == "wishlist") {
+      if (isNaN(this.product.dStockDemand)) {
+        this.product.dStockDemand = 1;
+      } else {
+        this.product.dStockDemand = Number(this.product.dStockDemand) + 1;
+      }
+    }
     if (Array.isArray(this.data.Users.aCart)) {
       this.data.Users.aCart.push(this.cart);
     } else {

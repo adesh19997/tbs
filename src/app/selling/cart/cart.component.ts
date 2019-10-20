@@ -12,24 +12,33 @@ import { Router } from '@angular/router';
 })
 export class CartComponent implements OnInit {
   myCart: any = [];
+  wishList: any = [];
   totalItem: any = 0;
   totalCost: any = 0;
   constructor(public data: DataService,
     private config: ConfigService,
     private router: Router) {
-    this.myCart = JSON.parse(JSON.stringify(this.data.Users.aCart));
+    this.myCart = this.data.Users.aCart.filter(obj => obj.sCartType == "cart");
+    this.wishList = this.data.Users.aCart.filter(obj => obj.sCartType == "wishlist");
     this.getProduct();
   }
 
   ngOnInit() {
   }
   getProduct() {
+    this.totalCost = 0;
     if (Array.isArray(this.myCart)) {
       this.myCart.forEach(element => {
         let tempProdObj = this.data.Products.filter(obj => obj.sUid === element.sProductId);
         if (tempProdObj.length > 0) {
           Object.assign(element, { "ProdDetls": tempProdObj[0] });
           this.totalCost += Number(tempProdObj[0].dDiscountPrice);
+        }
+      });
+      this.wishList.forEach(element => {
+        let tempProdObj = this.data.Products.filter(obj => obj.sUid === element.sProductId);
+        if (tempProdObj.length > 0) {
+          Object.assign(element, { "ProdDetls": tempProdObj[0] });
         }
       });
       this.totalItem = this.myCart.length;
@@ -75,5 +84,12 @@ export class CartComponent implements OnInit {
       this.totalItem += Number(element.sQuantity);
     });
 
+  }
+  moveToCart(ind) {
+    this.wishList[ind].sCartType = "cart"
+    this.myCart = this.data.Users.aCart.filter(obj => obj.sCartType == "cart");
+    this.wishList = this.data.Users.aCart.filter(obj => obj.sCartType == "wishlist");
+    this.getProduct();
+    this.data.updateUserDetls(this.data.Users);
   }
 }

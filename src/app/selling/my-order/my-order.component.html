@@ -19,15 +19,16 @@
                 <span>{{order.oDeliveryAddr.sAddrContact}} ({{order.oDeliveryAddr.sPhoneNumber}})</span>
                 <span>{{order.oDeliveryAddr.sLine1}}, {{order.oDeliveryAddr.sLine2}}.</span>
                 <span>{{order.oDeliveryAddr.sLine2}}.</span>
-                <span>{{order.oDeliveryAddr.sLandMark}}, {{order.oDeliveryAddr.sCity}}, {{order.oDeliveryAddr.sState}},</span>
+                <span>{{order.oDeliveryAddr.sLandMark}}, {{order.oDeliveryAddr.sCity}},
+                  {{order.oDeliveryAddr.sState}},</span>
                 <span>{{order.oDeliveryAddr.sCountry}}.</span>
                 <br />
               </div>
             </div>
             <div class="col-md-6 col-lg-6 text-center">
-                <h4>
-                    &nbsp;
-                  </h4>
+              <h4>
+                &nbsp;
+              </h4>
               <div class="card">
                 <table class="table">
                   <tbody>
@@ -39,11 +40,6 @@
                       <th class="text-left">Total Amount</th>
                       <td class="text-right">{{order.dTotalAmount | currency:'INR':'symbol'}}</td>
                     </tr>
-                    <!--  <tr>
-                    <th colspan="2">
-                      Promo Codes
-                    </th>
-                  </tr> -->
                   </tbody>
                 </table>
               </div>
@@ -65,7 +61,8 @@
                         <span class="orangered" style="font-weight: 600;font-size:14px">Status: {{track.status}}</span>
                       </div>
                       <div class="col-md-6 text-right">
-                        <p style="font-weight: 600;font-size:14px">OnDate: {{order.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</p>
+                        <p style="font-weight: 600;font-size:14px">OnDate: {{order.dtDate | date: 'dd/MM/yyyy, h:mm a'}}
+                        </p>
                       </div>
                     </div>
                     <hr>
@@ -80,10 +77,15 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-10 text-right">
-              <button matButton type="button" class="darkButton" (click)="track(ind)"> TRACK ORDER</button>
+            <div class="col-md-8 text-right">
+              <button matButton type="button" class="darkButton" (click)="buy(ind)"
+                *ngIf="order.sOrderStatus == 'OS00'"> Retry Paymnet</button>
             </div>
-            <div class="col-md-2 text-right">
+            <div class="col-md-2 text-center">
+              <button matButton type="button" class="darkButton" (click)="track(ind)"
+                *ngIf="order.sOrderStatus != 'OS00'"> TRACK ORDER</button>
+            </div>
+            <div class="col-md-2 text-center">
               <button matButton type="button" class="darkButton" (click)="cancel(ind)"> CANCEL ORDER</button>
             </div>
           </div>

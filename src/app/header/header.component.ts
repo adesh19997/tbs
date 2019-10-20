@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
   }
   userDetls: any
   ngOnInit() {
-    this.data.getMainPage();
+    this.data.getConfig();
     this.userDetls = this.data.Users;
   }
 

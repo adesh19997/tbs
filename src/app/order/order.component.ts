@@ -21,16 +21,20 @@ export class OrderComponent implements OnInit {
   userData: any = {};
   orderField: any = [];
   newOrderField: any = [];
+  chequeFields: any = [];
   addrField: any = [];
   orderform: FormGroup;
   newOrder: FormGroup;
   addrForm: FormGroup;
+  chequeForm: FormGroup;
   selectedOrder: any = -1;
   orderTrack: any;
   orderObj: any = {};
   aOrderProducts: any = [];
   deliverAddr = this.data.addrObj;
   tempOrder: any = this.data.Order;
+  tempChqObj: any = {};
+  editChq: boolean = false;
   constructor(public data: DataService,
     private modalService: NgbModal,
     public datepipe: DatePipe,
@@ -38,6 +42,7 @@ export class OrderComponent implements OnInit {
     this.data.getOrder();
     this.userData = this.data.Users;
     this.orderField = this.config.setOrderTrackField();
+    this.chequeFields = this.config.setChequeFields();
   }
   dir: any = "";
   private _onDestroy = new Subject<void>();
@@ -57,6 +62,9 @@ export class OrderComponent implements OnInit {
   }
   editOrderDetl(ind, editOrder) {
     this.selectedOrder = ind;
+    if(!Array.isArray(this.data.AllOrders[this.selectedOrder].aChequeDetails)){
+      this.data.AllOrders[this.selectedOrder].aChequeDetails = [];
+    }
     this.orderTrack = JSON.parse(JSON.stringify(this.data.orderTrack));
     this.orderform = this.config.geSectionForm(this.orderTrack, this.orderField);
     this.openPopup(editOrder);
@@ -71,6 +79,26 @@ export class OrderComponent implements OnInit {
   viewOrderTrack(ind, viewTrack) {
     this.selectedOrder = ind;
     this.openPopup(viewTrack);
+  }
+  addCheque(order) {
+    order.aChequeDetails.push(JSON.parse(JSON.stringify(this.data.chequeObj)));
+    this.tempChqObj = order.aChequeDetails[order.aChequeDetails.length - 1];
+    this.getChqDetls(this.tempChqObj);
+  }
+  deleteCheque(order, ind) {
+    order.aChequeDetails.sple(ind, 1);
+  }
+  editCheque(tempOrder, ind) {
+    this.tempChqObj = tempOrder.aChequeDetails[ind]
+    this.getChqDetls(tempOrder.aChequeDetails[ind]);
+  }
+  getChqDetls(data) {
+    this.chequeForm = this.config.geSectionForm(data, this.chequeFields);
+    this.editChq = true;
+  }
+  setChqData() {
+    this.config.setData(this.chequeFields, this.tempChqObj, this.chequeForm.value);
+    this.editChq = false;
   }
   downloadMaster() {
     /* generate worksheet */
@@ -151,12 +179,12 @@ export class OrderComponent implements OnInit {
     } else {
       this.data.Users.dTotalOrder = 1;
     }
-    this.data.Users.dTotalOrder = this.data.AllOrders.length + 1;
-    this.tempOrder.sOrderNo = "YMS" + dateStr + this.tempOrder.sCustomerId + this.data.Users.dTotalOrder.toString();
+    this.tempOrder.sOrderNo = "YMS" + dateStr + this.tempOrder.sCustomerId + (this.data.AllOrders.length + 1).toString();
     this.tempOrder.sOrderStatus = "OS2";
     this.tempOrder.aProduct = this.aOrderProducts;
     this.tempOrder.sPaymentMade = "Direct-Cash";
     this.tempOrder.oDeliveryAddr = this.deliverAddr;
+    this.data.updateUserDetls(this.data.Users);
     this.calculateTotal();
     this.modalRef.close();
     this.openPopup(content)

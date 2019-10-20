@@ -338,6 +338,84 @@ export class ConfigService {
         "mapping": "dInCart",
         "mutliple": false,
         "bDisable": true
+      },
+      {
+        "sFieldName": "dStockDemand",
+        "sPlaceHolder": "Stock Needed",
+        "fieldType": "Number",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "dStockDemand",
+        "mutliple": false,
+        "bDisable": true
+      },
+      {
+        "sFieldName": "sVariety",
+        "sPlaceHolder": "Variety",
+        "fieldType": "DropDown",
+        "optionArray": this.data.getMasterVal("Variety"),
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sVariety",
+        "mutliple": false,
+        "bDisable": false
+      },
+      {
+        "sFieldName": "sProductType",
+        "sPlaceHolder": "Product Type",
+        "fieldType": "Radio Button",
+        "optionArray": this.data.getMasterVal("Product_Type"),
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sProductType",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "sMultipleSize",
+        "sPlaceHolder": "Multiple Sizes",
+        "fieldType": "Radio Button",
+        "optionArray": this.data.getMasterVal("Option"),
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sMultipleSize",
+        "bDisable": false
       }]
   }
   setStockFieldForm() {
@@ -500,6 +578,44 @@ export class ConfigService {
       "condition": "",
       "disable": "",
       "mapping": "sPhoneNumber",
+      "bDisable": false
+    },
+    {
+      "sFieldName": "dtDOB",
+      "sPlaceHolder": "Date of Birth",
+      "fieldType": "Date",
+      "optionArray": "",
+      "maxlength": "",
+      "minlength": "",
+      "pattern": "",
+      "required": "",
+      "maxDate": "",
+      "minDate": "",
+      "click": "",
+      "change": "",
+      "style": "",
+      "condition": "",
+      "disable": "",
+      "mapping": "dtDOB",
+      "bDisable": false
+    },
+    {
+      "sFieldName": "sGender",
+      "sPlaceHolder": "Gender",
+      "fieldType": "Radio Button",
+      "optionArray": this.data.getMasterVal("Gender"),
+      "maxlength": "",
+      "minlength": "",
+      "pattern": "",
+      "required": "",
+      "maxDate": "",
+      "minDate": "",
+      "click": "",
+      "change": "",
+      "style": "",
+      "condition": "",
+      "disable": "",
+      "mapping": "sGender",
       "bDisable": false
     }]
   }
@@ -986,6 +1102,86 @@ export class ConfigService {
       }
     ]
   }
+  setChequeFields() {
+    return [
+      {
+        "sFieldName": "sBankName",
+        "sPlaceHolder": "Bank Name",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sBankName",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "sChequeNo",
+        "sPlaceHolder": "Cheque Number",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sChequeNo",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "dAmount",
+        "sPlaceHolder": "Cheque Amount",
+        "fieldType": "Number",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "dAmount",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "dtChDate",
+        "sPlaceHolder": "Date Received",
+        "fieldType": "Date",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "dtChDate",
+        "bDisable": false
+      }
+    ]
+  }
   getFilterConfig() {
     let aFilters = [
       {
@@ -999,6 +1195,18 @@ export class ConfigService {
         "ViewValue": "Brands",
         "masterName": "Brands",
         "aOptions": this.data.getMasterVal("Brands")
+      },
+      {
+        "searchValue": "sVariety",
+        "ViewValue": "Variety",
+        "masterName": "Variety",
+        "aOptions": this.data.getMasterVal("Variety")
+      },
+      {
+        "searchValue": "sSize",
+        "ViewValue": "Size",
+        "masterName": "Size",
+        "aOptions": this.data.getMasterVal("Size")
       }
     ];
     aFilters.forEach(element => {
