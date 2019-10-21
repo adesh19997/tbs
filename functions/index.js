@@ -42,16 +42,85 @@ app.post('/sendEmail', function (req, res) {
 });
 
 app.post('/checksum', function (req, res) {
-	checksum_lib.genchecksum(req.body.Params, "BzCxdUD6wWkUbeSm", function(err, checksum){
-		if(checksum){
+	checksum_lib.genchecksum(req.body.Params, "BzCxdUD6wWkUbeSm", function (err, checksum) {
+		if (checksum) {
 			res.end(JSON.stringify(checksum));
 		} else {
 			res.end(JSON.stringify(err));
 		}
 	})
-	
+
 });
 
+app.post('/myorders', function (req, res) {
+	let myOrders = [];
+	firebase.database().ref('/Orders').once('value', function (snapshot) {
+		Orders = snapshot.val();
+		let orderKeys = Object.keys(Orders);
+		for (var j = 0; j < orderKeys.length; j++) {
+			if (Orders[orderKeys[j]].sCustomerId == req.body.sPhoneNumber) {
+				myOrders.push(Orders[orderKeys[j]]);
+			}
+		}
+		res.end(JSON.stringify(myOrders));
+	})
+		.catch(function (error) {
+			res.end(JSON.stringify(error));
+		})
+});
+
+app.post('/getpromocodes', function (req, res) {
+	let response = [];
+	firebase.database().ref('/Promocodes').once('value', function (snapshot) {
+		Promocodes = snapshot.val();
+		let today = new Date()
+		for (var j = 0; j < Promocodes.length; j++) {
+			console.log(today)
+			Promocodes[j].dStartDate = new Date(Promocodes[j].dStartDate);
+			Promocodes[j].dEndDate = new Date(Promocodes[j].dEndDate);
+			console.log(Promocodes[j].dStartDate)
+			console.log(Promocodes[j].dStartDate)
+			if (Promocodes[j].dStartDate <= today <= Promocodes[j].dEndDate) {
+				console.log(j)
+				if (Promocodes[j].dMinAmount <= req.body.dOrderAmount || Promocodes[j].dMinAmount == -1) {
+					console.log("MinAmt")
+					if (Promocodes[j].dMaxOrder >= req.body.OrderNo || Promocodes[j].dMaxOrder == -1) {
+						console.log("MaxOrder")
+						if (Promocodes[j].dMinOrder <= req.body.OrderNo || Promocodes[j].dMinOrder == -1) {
+							console.log("MinOrder")
+							if (Promocodes[j].sUnit == "PERCENT") {
+								let subtractAmt = Math.floor(req.body.dOrderAmount * (Promocodes[j].dAmount / 100));
+								let promAmount = req.body.dOrderAmount - subtractAmt;
+								if (promAmount > Promocodes[j].dMaxLimit) {
+									promAmount = Promocodes[j].dMaxLimit
+								}
+								response.push({
+									"sName": Promocodes[j].sName,
+									"sDescription": Promocodes[j].sDescription,
+									"dPromotionAmount": promAmount
+								})
+							} else if (Promocodes[j].sUnit == "AMOUNT") {
+								let promAmount = req.body.dOrderAmount - Promocodes[j].dAmount;
+								if (promAmount > Promocodes[j].dMaxLimit) {
+									promAmount = Promocodes[j].dMaxLimit
+								}
+								response.push({
+									"sName": Promocodes[j].sName,
+									"sDescription": Promocodes[j].sDescription,
+									"dPromotionAmount": promAmount
+								})
+							}
+						}
+					}
+				}
+			}
+		}
+		res.end(JSON.stringify(response));
+	})
+		.catch(function (error) {
+			res.end(JSON.stringify(error));
+		})
+});
 
 app.post('/getFilteredProducts', function (req, res) {
 	firebase.database().ref('/Products').once('value', function (snapshot) {

@@ -123,6 +123,25 @@ export class ConfigService {
   setAddFieldForm() {
     return [
       {
+        "sFieldName": "sProductType",
+        "sPlaceHolder": "Product Type",
+        "fieldType": "Radio Button",
+        "optionArray": this.data.getMasterVal("Product_Type"),
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sProductType",
+        "bDisable": false
+      },
+      {
         "sFieldName": "ProdCode",
         "sPlaceHolder": "Product Code",
         "fieldType": "Text",
@@ -220,6 +239,26 @@ export class ConfigService {
         "bDisable": false
       },
       {
+        "sFieldName": "sVariety",
+        "sPlaceHolder": "Variety",
+        "fieldType": "DropDown",
+        "optionArray": this.data.getMasterVal("Variety"),
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sVariety",
+        "mutliple": false,
+        "bDisable": false
+      },
+      {
         "sFieldName": "Price",
         "sPlaceHolder": "Price",
         "fieldType": "Number",
@@ -260,9 +299,9 @@ export class ConfigService {
         "bDisable": false
       },
       {
-        "sFieldName": "sShortDesc",
-        "sPlaceHolder": "Short Description",
-        "fieldType": "Text",
+        "sFieldName": "dTaxPercent",
+        "sPlaceHolder": "Tax Percent",
+        "fieldType": "Number",
         "optionArray": "",
         "maxlength": "",
         "minlength": "",
@@ -275,7 +314,27 @@ export class ConfigService {
         "style": "",
         "condition": "",
         "disable": "",
-        "mapping": "sShortDesc",
+        "mapping": "dTaxPercent",
+        "mutliple": false,
+        "bDisable": false
+      },
+      {
+        "sFieldName": "dTaxAmount",
+        "sPlaceHolder": "Tax Amount",
+        "fieldType": "Number",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "dTaxAmount",
         "mutliple": false,
         "bDisable": false
       },
@@ -360,10 +419,10 @@ export class ConfigService {
         "bDisable": true
       },
       {
-        "sFieldName": "sVariety",
-        "sPlaceHolder": "Variety",
-        "fieldType": "DropDown",
-        "optionArray": this.data.getMasterVal("Variety"),
+        "sFieldName": "dFewLeftLimit",
+        "sPlaceHolder": "Few Left in Stock Limit",
+        "fieldType": "Number",
+        "optionArray": "",
         "maxlength": "",
         "minlength": "",
         "pattern": "",
@@ -375,15 +434,15 @@ export class ConfigService {
         "style": "",
         "condition": "",
         "disable": "",
-        "mapping": "sVariety",
+        "mapping": "dFewLeftLimit",
         "mutliple": false,
         "bDisable": false
       },
       {
-        "sFieldName": "sProductType",
-        "sPlaceHolder": "Product Type",
-        "fieldType": "Radio Button",
-        "optionArray": this.data.getMasterVal("Product_Type"),
+        "sFieldName": "dOutofStockLimit",
+        "sPlaceHolder": "Out of Stock Limit",
+        "fieldType": "Number",
+        "optionArray": "",
         "maxlength": "",
         "minlength": "",
         "pattern": "",
@@ -395,7 +454,8 @@ export class ConfigService {
         "style": "",
         "condition": "",
         "disable": "",
-        "mapping": "sProductType",
+        "mapping": "dOutofStockLimit",
+        "mutliple": false,
         "bDisable": false
       },
       {
@@ -415,6 +475,26 @@ export class ConfigService {
         "condition": "",
         "disable": "",
         "mapping": "sMultipleSize",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "sShortDesc",
+        "sPlaceHolder": "Short Description",
+        "fieldType": "Text",
+        "optionArray": "",
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": "",
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sShortDesc",
+        "mutliple": false,
         "bDisable": false
       }]
   }

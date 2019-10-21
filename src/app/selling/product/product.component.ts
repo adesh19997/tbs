@@ -46,6 +46,8 @@ export class ProductComponent implements OnInit {
     cart.dtAddedDate = new Date();
     cart.sProductId = this.data.Products[ind].sUid;
     cart.dAmount = this.data.Products[ind].dDiscountPrice;
+    cart.dActualPrice = Number(this.data.Products[ind].dPrice);
+    cart.dTaxAmount = Number(this.data.Products[ind].dTaxAmount);
     cart.sQuantity = "1";
     cart.sCartType = type;
     if (type == "cart") {

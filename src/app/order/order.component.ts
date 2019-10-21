@@ -179,6 +179,7 @@ export class OrderComponent implements OnInit {
     } else {
       this.data.Users.dTotalOrder = 1;
     }
+    this.tempOrder.dtDate = new Date();
     this.tempOrder.sOrderNo = "YMS" + dateStr + this.tempOrder.sCustomerId + (this.data.AllOrders.length + 1).toString();
     this.tempOrder.sOrderStatus = "OS2";
     this.tempOrder.aProduct = this.aOrderProducts;

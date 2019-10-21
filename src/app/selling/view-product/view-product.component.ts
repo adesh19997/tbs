@@ -20,6 +20,7 @@ export class ViewProductComponent implements OnInit {
   selectedImgUrl: any = "";
   dRating: any = 0;
   reviewDesc: any = "";
+  selectedSize: any = -1;
   constructor(public data: DataService,
     private config: ConfigService,
     private router: Router) {
@@ -46,6 +47,8 @@ export class ViewProductComponent implements OnInit {
     this.cart.dtAddedDate = new Date();
     this.cart.sProductId = this.product.sUid;
     this.cart.dAmount = this.product.dDiscountPrice;
+    this.cart.dActualPrice = Number(this.product.dPrice);
+    this.cart.dTaxAmount = Number(this.product.dTaxAmount);
     if (type == "cart") {
       if (isNaN(this.product.dInCart)) {
         this.product.dInCart = 1;
@@ -74,7 +77,9 @@ export class ViewProductComponent implements OnInit {
         sProductId: this.product.sUid,
         sProductName: this.product.sName,
         sQuantity: this.dQuantitiy,
-        dAmount: Number(this.product.dDiscountPrice)
+        dAmount: Number(this.product.dDiscountPrice),
+        dActualPrice: Number(this.product.dPrice),
+        dTaxAmount : Number(this.product.dTaxAmount)
       }]
       this.data.createOrder(temp);
       this.router.navigate(['products/buy']);
@@ -110,5 +115,10 @@ export class ViewProductComponent implements OnInit {
   }
   setRating(rating) {
     this.dRating = rating;
+  }
+  selectSize(amount, i) {
+    this.selectedSize = i;
+    this.product.dDiscountPrice = Number(amount);
+    this.product.dDiscountPercent = ((1 - Number(amount) / Number(this.product.dPrice)) * 100).toFixed(2);
   }
 }

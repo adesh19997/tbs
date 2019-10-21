@@ -20,6 +20,7 @@ export class BuyComponent implements OnInit {
   thirdFormGroup: FormGroup;
   addrFields: any = [];
   basicFields: any = [];
+  promocodes: any = [];
   constructor(public data: DataService,
     private config: ConfigService,
     private router: Router,
@@ -48,7 +49,8 @@ export class BuyComponent implements OnInit {
     this.thirdFormGroup = this._formBuilder.group({
       thirdCtrl: ['', Validators.required]
     });
-    this.calculateTotal()
+    this.calculateTotal();
+    this.getPromotions()
   }
   buy() {
     this.config.setData(this.addrFields, this.Order.oDeliveryAddr, this.form.value);
@@ -87,5 +89,20 @@ export class BuyComponent implements OnInit {
       this.Order.dTotalAmount += Number(element.dAmount) * Number(element.sQuantity);
       this.Order.dTotalQuantity += Number(element.sQuantity);
     });
+  }
+  getPromotions() {
+    let req = {
+      "dOrderAmount": Number(this.Order.dTotalAmount),
+      "OrderNo": Number(this.data.Users.dTotalOrder)
+    }
+    this.data.postDataToServer(req, 'getpromocodes').subscribe(response => {
+      this.promocodes = response;
+    }, error => {
+
+    })
+  }
+  selectPromocode(i) {
+    this.Order.dPromotionPrice = this.promocodes[i].dPromotionAmount
+    this.Order.dTotalAmount = Number(this.Order.dTotalAmount) - this.Order.dPromotionPrice;
   }
 }

@@ -56,6 +56,8 @@ export class DataService {
     dStockSold: null,
     dStockDemand: null,
     dInCart: null,
+    dFewLeftLimit: 12,
+    dOutofStockLimit: 6,
     aVariants: [],
     aBrands: [],
     dAvgRating: null,
@@ -63,7 +65,9 @@ export class DataService {
     sMultipleSize: "No",
     sProductType: "",
     sVariety: "",
-    aSizeList: []
+    aSizeList: [],
+    dTaxPercent: 0,
+    dTaxAmount: 0
   };
   Order = {
     sOrderNo: "",
@@ -80,7 +84,12 @@ export class DataService {
     transResponse: null,
     sOrderSource: "website",
     aChequeDetails: [],
-    sCourierNumber: ""
+    sCourierNumber: "",
+    sEmail: "",
+    dPromotionPrice: 0,
+    dDiscountPrice: 0,
+    dActualPrice: 0,
+    dTaxAmount: 0
   };
   Stock = {
     sAction: "",
@@ -148,6 +157,110 @@ export class DataService {
     "EMAIL": "xxxx",
     "TXN_AMOUNT": "1.00",
     "CALLBACK_URL": "https://tecpixels-bs.firebaseapp.com/"
+  };
+  BasicStockChartOptions = {
+    chart: {
+      type: "bar"
+    },
+    title: {
+      text: "Product-wise Stock Analysis"
+    },
+    subtitle: {
+      text: "Product vs Stocks"
+    },
+    xAxis: {
+      categories: []
+    },
+    yAxis: {
+      title: {
+        text: "Product Name"
+      },
+      labels: {
+        overflow: 'justify'
+      }
+    },
+    tooltip: {
+      valueSuffix: " Units"
+    },
+    series: [
+      {
+        name: 'Stock Available',
+        data: []
+      },
+      {
+        name: 'Stock Sold',
+        data: []
+      },
+      {
+        name: 'Added In Cart',
+        data: []
+      },
+      {
+        name: 'Stock Demanded',
+        data: []
+      }
+    ]
+  };
+  BasicOrderChartOptions = {
+    chart: {
+      type: "spline"
+    },
+    title: {
+      text: "Order Analysis"
+    },
+    subtitle: {
+      text: "Day vs Order Details"
+    },
+    xAxis: {
+      title: {
+        text: "Day"
+      },
+      labels: {
+        overflow: 'justify'
+      },
+      categories: []
+    },
+    yAxis: {
+      title: {
+        text: "Orders Placed"
+      },
+      labels: {
+        overflow: 'justify'
+      },
+    },
+    tooltip: {
+      valueSuffix: " Units"
+    },
+    series: [
+      {
+        name: 'Orders Received',
+        data: []
+      },
+      {
+        name: 'Orders Delivered',
+        data: []
+      },
+      {
+        name: 'Orders shipped',
+        data: []
+      },
+      {
+        name: 'Orders on Way',
+        data: []
+      },
+      {
+        name: 'Orders Cancelled',
+        data: []
+      },
+      {
+        name: 'Orders Payment Done',
+        data: []
+      },
+      {
+        name: 'Orders Payment Failed',
+        data: []
+      }
+    ]
   };
   MainPage: any = {};
   AllOrders: any = [];
@@ -252,7 +365,7 @@ export class DataService {
   updateOrderDetails(order, html, transaction) {
     let request = {
       "mailDetails": {
-        "sEmail": this.Users.sEmail,
+        "sEmail": order.sEmail,
         "sSubject": "TechPixels: Order Details",
         "sContent": html
       }
@@ -262,10 +375,14 @@ export class DataService {
       if (res.accepted.length > 0) {
         this.db.object("/Orders/" + order.sOrderNo).update(order)
           .then(function () {
-
+            if (order.sOrderSource = "Offline" && order.sPaymentMade != "PayTM") {
+              alert("Order placed successfully")
+            }
           })
           .catch(function (error) {
-
+            if (order.sOrderSource = "Offline" && order.sPaymentMade != "PayTM") {
+              alert("Could not place order.")
+            }
           });
         order.aProduct.forEach(element => {
           let tempObj = JSON.parse(JSON.stringify(this.Stock));
@@ -297,6 +414,75 @@ export class DataService {
     let temp = this.db.list("/Orders");
     temp.valueChanges().subscribe(data => {
       this.AllOrders = data;
+      this.calculateOrderAnalysis();
+    });
+  }
+  calculateOrderAnalysis() {
+    this.AllOrders = _.sortBy(this.AllOrders, 'dtDate').reverse();
+    let currDate = this.AllOrders[0].dtDate;
+    let OrderReceived = 0;
+    let OrderOnWay = 0;
+    let OrderShipped = 0;
+    let OrderPaymentDone = 0;
+    let OrderCancelled = 0;
+    let OrderDelivered = 0;
+    let OrderPaymentFailed = 0;
+    this.BasicOrderChartOptions.xAxis.categories.push(currDate.toString());
+
+    this.AllOrders.forEach(element => {
+      if (element.dtDate < currDate) {
+        let existInd = this.BasicOrderChartOptions.xAxis.categories.indexOf(element.dtDate);
+        if (existInd >= 0) {
+
+          currDate = new Date(this.BasicOrderChartOptions.xAxis.categories[existInd]);
+          this.BasicOrderChartOptions.xAxis.categories.push(currDate.toString());
+
+          OrderReceived = this.BasicOrderChartOptions.series[0].data[existInd];
+          OrderDelivered = this.BasicOrderChartOptions.series[1].data[existInd];
+          OrderShipped = this.BasicOrderChartOptions.series[2].data[existInd];
+          OrderOnWay = this.BasicOrderChartOptions.series[3].data[existInd];
+          OrderCancelled = this.BasicOrderChartOptions.series[4].data[existInd];
+          OrderPaymentDone = this.BasicOrderChartOptions.series[5].data[existInd];
+          OrderPaymentFailed = this.BasicOrderChartOptions.series[6].data[existInd];
+        } else {
+
+          this.BasicOrderChartOptions.series[0].data.push(OrderReceived);
+          this.BasicOrderChartOptions.series[1].data.push(OrderDelivered);
+          this.BasicOrderChartOptions.series[2].data.push(OrderShipped);
+          this.BasicOrderChartOptions.series[3].data.push(OrderOnWay);
+          this.BasicOrderChartOptions.series[4].data.push(OrderCancelled);
+          this.BasicOrderChartOptions.series[5].data.push(OrderPaymentDone);
+          this.BasicOrderChartOptions.series[6].data.push(OrderPaymentFailed);
+
+          OrderReceived = 0;
+          OrderOnWay = 0;
+          OrderShipped = 0;
+          OrderPaymentDone = 0;
+          OrderCancelled = 0;
+          OrderDelivered = 0;
+          OrderPaymentFailed = 0;
+
+          currDate = element.dtDate;
+          this.BasicOrderChartOptions.xAxis.categories.push(currDate.toString());
+        }
+
+      }
+      if (element.sOrderStatus == "OS1") {
+        OrderReceived += 1;
+      } else if (element.sOrderStatus == "OS3") {
+        OrderShipped += 1;
+      } else if (element.sOrderStatus == "OS4") {
+        OrderOnWay += 1;
+      } else if (element.sOrderStatus == "OS2") {
+        OrderPaymentDone += 1;
+      } else if (element.sOrderStatus == "OS7") {
+        OrderCancelled += 1;
+      } else if (element.sOrderStatus == "OS6") {
+        OrderDelivered += 1;
+      } else if (element.sOrderStatus == "OS00") {
+        OrderPaymentFailed += 1;
+      }
+
     });
   }
   createOrder(products) {
@@ -312,6 +498,7 @@ export class DataService {
     this.Users.dTotalOrder += 1;
     this.Order.sOrderNo = "YMS" + dateStr + this.Users.sPhoneNumber + (this.AllOrders.length + 1).toString();
     this.Order.sCustomerId = this.Users.sPhoneNumber;
+    this.Order.sEmail = this.Users.sEmail;
     this.Order.sOrderStatus = "OS1";
     let master = this.getMasterVal("Order_Stage");
     let masterOBJ = _.findWhere(master, { "value": "OS1" });
@@ -319,6 +506,8 @@ export class DataService {
       this.Order.sOrderViewStatus = masterOBJ.viewValue;
     }
     this.Order.aProduct = [];
+    this.Order.dDiscountPrice = 0;
+    this.Order.dTaxAmount = 0;
     if (Array.isArray(products)) {
       products.forEach(element => {
         let temp = {
@@ -329,9 +518,12 @@ export class DataService {
         };
         this.Order.aProduct.push(temp);
         this.Order.dTotalAmount += Number(element.dAmount) * Number(element.sQuantity);
+        this.Order.dDiscountPrice += Number(element.dActualPrice) - Number(element.dAmount);
         this.Order.dTotalQuantity += Number(element.sQuantity);
+        this.Order.dTaxAmount += Number(element.dTaxAmount);
       });
     }
+    this.Order.dActualPrice = this.Order.dTotalAmount + this.Order.dDiscountPrice;
     this.Order.oDeliveryAddr = this.Users.aAddress[0];
   }
   updateStockDetails(stock) {
@@ -358,6 +550,11 @@ export class DataService {
         }
       });
       element.dStockAvailable = Number(element.dStockAvailable) - element.dStockSold;
+      this.BasicStockChartOptions.xAxis.categories.push(element.sName);
+      this.BasicStockChartOptions.series[0].data.push(element.dStockAvailable);
+      this.BasicStockChartOptions.series[1].data.push(element.dStockSold);
+      this.BasicStockChartOptions.series[2].data.push(element.dInCart);
+      this.BasicStockChartOptions.series[3].data.push(element.dStockDemand);
       this.updateProductDetails(element);
     });
 
@@ -506,7 +703,6 @@ export class DataService {
         </style> <title></title></head>`
       if (response.STATUS == "TXN_SUCCESS") {
         this.Order.sOrderStatus = "OS2";
-
         let masterOBJ = _.findWhere(master, { "value": "OS2" });
         if (masterOBJ) {
           this.Order.sOrderViewStatus = masterOBJ.viewValue;
@@ -514,6 +710,7 @@ export class DataService {
         text += '<body><p>Hi ' + this.Users.sName + ', <br>Payment for your order ' + this.Order.sOrderNo + ' is successfully done. Your payment transaction ID is: ' + response.TXNID;
         alertMsg = "Congragulations payment done successfully!";
       } else if (response.STATUS == "TXN_FAILURE") {
+        this.Order.sOrderStatus = "OS00";
         let masterOBJ = _.findWhere(master, { "value": "OS00" });
         if (masterOBJ) {
           this.Order.sOrderViewStatus = masterOBJ.viewValue;
@@ -521,6 +718,7 @@ export class DataService {
         text += '<body><p>Hi ' + this.Users.sName + ', <br>Payment for your order ' + this.Order.sOrderNo + ' has failed. Your payment transaction ID is: ' + response.TXNID;
         alertMsg = response.RESPMSG;
       } else {
+        this.Order.sOrderStatus = "OS99";
         let masterOBJ = _.findWhere(master, { "value": "OS99" });
         if (masterOBJ) {
           this.Order.sOrderViewStatus = masterOBJ.viewValue;

@@ -54,7 +54,8 @@
                 <button mat-button class="basicbutton" matStepperPrevious>Back</button>
               </div>
               <div class="col-md-6 text-right">
-                <button mat-button class="basicbutton" matStepperNext>Next</button>
+                <button mat-button class="basicbutton" matStepperNext
+                  (click)="data.updateUserDetls(data.Users)">Next</button>
               </div>
             </div>
           </form>
@@ -86,12 +87,33 @@
                 </table>
               </div>
             </div>
+            <hr>
+            <div class="row card">
+              <div class="col-md-12" style="margin-top: 10px;">
+                <h6>Offers</h6>
+              </div>
+              <hr>
+              <div class="col-md-12" style="padding: 20px;" *ngFor="let promo of promocodes;let promoI=index;">
+                <hr *ngIf="promoI!=0">
+                <div class="row">
+                  <div class="col-md-6 text-left">
+                    <h4 class="text-left" style="color: orange;">{{promo.sName}}</h4>
+                  </div>
+                  <div class="col-md-6 text-right">
+                    <button mat-button class="basicbutton" (click)="selectPromocode(promoI)"> Select</button>
+                  </div>
+                  <div class="col-md-12">
+                    <p>{{promo.sDescription}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="row">
               <div class="col-md-6 text-left">
                 <button mat-button class="basicbutton" matStepperPrevious>Back</button>
               </div>
               <div class="col-md-6 text-right">
-                <button mat-button class="darkButton" (click)="buy()">Place Order</button>
+                <button mat-button class="basicbutton" (click)="buy()">Place Order</button>
               </div>
             </div>
           </form>
@@ -108,25 +130,40 @@
                 <td class="text-right">{{Order.dTotalQuantity}}</td>
               </tr>
               <tr>
-                <th class="text-left">Total Amount</th>
-                <td class="text-right">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
+                <th class="text-left">Total Amount (Inclusive of taxes.)</th>
+                <td class="text-right">{{Order.dActualPrice}}</td>
               </tr>
               <tr>
-                <th colspan="2">
-                  Promo Codes
-                </th>
+                <th class="text-left">Total Tax</th>
+                <td class="text-right">{{Order.dTaxAmount}}</td>
               </tr>
+              <tr>
+                <th class="text-left">Delivery Charges</th>
+                <td class="text-right"></td>
+              </tr>
+              <tr>
+                <th class="text-left">Total Discount</th>
+                <td class="text-right" style="color: greenyellow;font-weight: 700">-
+                  {{Order.dDiscountPrice | currency:'INR':'symbol'}}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-left">Promotion applied</th>
+                <td class="text-right" style="color: orange;font-weight: 700;">-
+                  {{Order.dPromotionPrice | currency:'INR':'symbol'}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Final Amount Payable</th>
+                <td class="text-right" style="font-weight: 700">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
+              </tr>
+
             </tbody>
           </table>
         </div>
       </div>
       <hr>
       <div class="row" style="margin-top:10px;">
-        <div class="col-md-6 text-center">
-          <button matButton type="button" class="darkButton" style="min-width:0px !important;" (click)="buy()">
-            BUY</button>
-        </div>
-        <div class="col-md-6 text-center">
+        <div class="col-md-12 text-center">
           <button matButton type="button" style="min-width:0px !important;" class="darkButton" (click)="goto()">
             CANCEL</button>
         </div>

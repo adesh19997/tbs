@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../services/config.service';
 import { DataService } from '../services/data.service';
-
+import * as Highcharts from 'highcharts';
 @Component({
   selector: 'app-analytics',
   templateUrl: './analytics.component.html',
@@ -11,9 +11,14 @@ export class AnalyticsComponent implements OnInit {
   analysisData: any = {}
   Stock = this.config.setAnalyticStockField();
   Order = this.config.setAnalyticOrderField();
+  highcharts = Highcharts;
   constructor(
     private config: ConfigService,
-    public data: DataService) { }
+    public data: DataService) { 
+      this.data.getProducts();
+      this.data.getAllStocks();
+      this.data.getOrder();
+    }
 
   ngOnInit() {
     this.getAnalysis();
@@ -27,6 +32,7 @@ export class AnalyticsComponent implements OnInit {
         this.Stock.forEach(element => {
           this.config.getDataValue(element, element.mapping, response);
         });
+        
       }
     }, error => {
       alert("error fetching analysis" + error);

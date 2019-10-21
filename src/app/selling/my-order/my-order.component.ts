@@ -3,7 +3,7 @@ import { CurrencyPipe } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { ConfigService } from '../../services/config.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-my-order',
   templateUrl: './my-order.component.html',
@@ -18,7 +18,7 @@ export class MyOrderComponent implements OnInit {
     public data: DataService,
     private config: ConfigService,
     private _formBuilder: FormBuilder
-  ) { 
+  ) {
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
@@ -28,7 +28,14 @@ export class MyOrderComponent implements OnInit {
     this.getMyOrders();
   }
   getMyOrders() {
-    this.orders = this.data.AllOrders.filter(obj => obj.sCustomerId == this.data.Users.sPhoneNumber);
+    let req = {
+      "sPhoneNumber": this.data.Users.sPhoneNumber
+    }
+    this.data.postDataToServer(req, 'myorders').subscribe(response => {
+      this.orders = response;
+    }, error => {
+      alert("error fetching your orders" + error);
+    })
   }
   track(ind) {
     if (this.selectedTrack != ind) {

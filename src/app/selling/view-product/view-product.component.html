@@ -15,6 +15,9 @@
           <h4>{{product.sName}}</h4>
         </div>
         <div class="col-md-12" style="margin-bottom:10px;">
+          <span class="control-label">{{product.sShortDesc}}</span>
+        </div>
+        <div class="col-md-12" style="margin-bottom:10px;">
           <span [ngClass]="product.dAvgRating>=1 ? 'fa fa-star rating':'fa fa-star'"></span>
           <span [ngClass]="product.dAvgRating>=2 ? 'fa fa-star rating':'fa fa-star'"></span>
           <span [ngClass]="product.dAvgRating>=3 ? 'fa fa-star rating':'fa fa-star'"></span>
@@ -22,26 +25,42 @@
           <span [ngClass]="product.dAvgRating>=5 ? 'fa fa-star rating':'fa fa-star'"></span>
         </div>
         <div class="col-md-12" style="margin-bottom:10px;">
-          <span class="strikethrough">{{product.dPrice | currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<h4>{{product.dDiscountPrice
-            | currency:'INR':'symbol'}}</h4>&nbsp;&nbsp;<span>{{product.dDiscountPercent}} % off</span>
+          <span class="red"
+            *ngIf="product.dStockAvailable<=product.dFewLeftLimit &&  product.dStockAvailable>prod.dOutofStockLimit">Only
+            a 4 Items left in Stock</span>
+          <span class="red" *ngIf="product.dStockAvailable<=product.dOutofStockLimit">Out of Stock</span>
         </div>
         <div class="col-md-12" style="margin-bottom:10px;">
-          <span class="control-label">{{product.sShortDesc}}</span>
+          <span class="strikethrough">{{product.dPrice | currency:'INR':'symbol'}}</span>
+          <h4>{{product.dDiscountPrice
+            | currency:'INR':'symbol'}}</h4> <span>{{product.dDiscountPercent}} % off</span>
         </div>
+        <div class="col-md-12" *ngIf="product.sMultipleSize=='Yes'">
+          <h4>Size Chart</h4>
+        </div>
+        <div class="col-md-12" style="margin-bottom:10px;" *ngIf="product.sMultipleSize=='Yes'">
+          <button matButton type="button" [ngClass]="selectedSize == i? 'circle-button-selected':'circle-button'"
+            (click)="selectSize(size.dAmount,i)" *ngFor="let size of product.aSizeList;let i = index"> {{size.sSize}}
+            <br>
+            {{size.dAmount | currency:'INR':'symbol'}} </button>
+        </div>
+
         <div class="col-md-12" style="margin-bottom:10px;">
-          <span class="control-label">QUANTITY</span>
-          <input type="number" style="width:50px;" min="1" [(ngModel)]="dQuantitiy">
+          <h4>QUANTITY</h4>
+          <input type="number" style="width:50px;border:1px solid;border-radius: 0px;" min="1" [(ngModel)]="dQuantitiy">
         </div>
         <div class="col-md-6" style="margin-bottom:10px;">
           <button matButton type="button" class="darkButton example-full-width" (click)="addToCart('wishlist')"> Add to
             WishList</button>
         </div>
         <div class="col-md-6" style="margin-bottom:10px;">
-          <button matButton type="button" class="darkButton example-full-width" *ngIf="product.dStockAvailable>12" (click)="addToCart('cart')"> Add to
+          <button matButton type="button" class="darkButton example-full-width"
+            *ngIf="product.dStockAvailable>product.dOutofStockLimit" (click)="addToCart('cart')"> Add to
             Cart</button>
         </div>
         <div class="col-md-12 text-right" style="margin-bottom:10px;">
-          <button matButton type="button" class="darkButton example-full-width" (click)="buy()"> Buy</button>
+          <button matButton type="button" class="darkButton example-full-width"
+            *ngIf="product.dStockAvailable>product.dOutofStockLimit" (click)="buy()"> Buy</button>
         </div>
       </div>
     </div>
