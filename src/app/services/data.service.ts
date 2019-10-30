@@ -12,8 +12,26 @@ const BASE_URL = environment.BASE_URL;
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
+const weFasthttpOptions = {
+  headers: new HttpHeaders({
+    "Authorization":"X-DV-Auth-Token EFAFD8ABF63D45876D2BF353C562AC1C2B53F564"
+  })
+};
+
 @Injectable()
 export class DataService {
+  addrObj = {
+    sType: "",
+    sLine1: "",
+    sLine2: "",
+    sLandmark: "",
+    sPincode: "",
+    sCity: "",
+    sState: "",
+    sCountry: "",
+    sAddrContact: "",
+    sPhoneNumber: ""
+  };
   Users = {
     uid: "",
     verified: false,
@@ -73,7 +91,7 @@ export class DataService {
     sOrderNo: "",
     aProduct: [],
     sCustomerId: "",
-    oDeliveryAddr: {},
+    oDeliveryAddr: this.addrObj,
     sOrderStatus: "",
     sOrderViewStatus: "",
     dTotalAmount: 0,
@@ -89,7 +107,8 @@ export class DataService {
     dPromotionPrice: 0,
     dDiscountPrice: 0,
     dActualPrice: 0,
-    dTaxAmount: 0
+    dTaxAmount: 0,
+    dDeilveryAmount: null
   };
   Stock = {
     sAction: "",
@@ -99,18 +118,7 @@ export class DataService {
     oDest: {},
     oSource: {}
   };
-  addrObj = {
-    sType: "",
-    sLine1: "",
-    sLine2: "",
-    sLandmark: "",
-    sPincode: "",
-    sCity: "",
-    sState: "",
-    sCountry: "",
-    sAddrContact: "",
-    sPhoneNumber: ""
-  };
+
   cartObj = {
     sQuantity: "",
     sProductId: "",
@@ -156,7 +164,7 @@ export class DataService {
     "MOBILE_NO": "xxxx",
     "EMAIL": "xxxx",
     "TXN_AMOUNT": "1.00",
-    "CALLBACK_URL": "https://tecpixels-bs.firebaseapp.com/"
+    "CALLBACK_URL": environment.CALLBACK_URL
   };
   BasicStockChartOptions = {
     chart: {
@@ -261,6 +269,17 @@ export class DataService {
         data: []
       }
     ]
+  };
+  weFastOrderObj = {
+    "matter": "",
+    "total_weight_kg": 0,
+    "is_client_notification_enabled": true,
+    "is_contact_person_notification_enabled": true,
+    "loaders_count": 0,
+    "points": [{ "address": "" }]
+  };
+  weFastCancelObj = {
+    "order_id": ""
   };
   MainPage: any = {};
   AllOrders: any = [];
@@ -392,7 +411,6 @@ export class DataService {
           tempObj.sAction = "Sold";
           tempObj.sProductId = element.sProductId;
           tempObj.dQuantity = Number(element.sQuantity);
-          this.updateStockDetails(tempObj);
         });
         if (transaction) {
           this.initiatePayment();
@@ -626,9 +644,9 @@ export class DataService {
     this.payTmObj.ORDER_ID = this.Order.sOrderNo;
     this.payTmObj.TXN_AMOUNT = this.Order.dTotalAmount.toString();
     if (this.Order.sOrderSource == "Offline") {
-      this.payTmObj.CALLBACK_URL = "https://tecpixels-bs.firebaseapp.com/#/orders"
+      this.payTmObj.CALLBACK_URL = environment.CALLBACK_URL + "#/orders"
     } else {
-      this.payTmObj.CALLBACK_URL = "https://tecpixels-bs.firebaseapp.com/"
+      this.payTmObj.CALLBACK_URL = environment.CALLBACK_URL
     }
     let req = {
       "Params": this.payTmObj
@@ -648,7 +666,7 @@ export class DataService {
     const my_form: any = document.createElement('form');
     my_form.name = 'paytm_form';
     my_form.method = 'post';
-    my_form.action = 'https://securegw-stage.paytm.in/order/process';
+    my_form.action = environment.PAYTM_URL;
 
     const myParams = Object.keys(this.payTmObj);
     for (let i = 0; i < myParams.length; i++) {
@@ -663,22 +681,6 @@ export class DataService {
     document.body.appendChild(my_form);
     my_form.submit();
   };
-  private returnJsonResponse(res: any) {
-    return res;
-  }
-  private handleErrorObservable(error: any) {
-    return Observable.throw(error);
-  }
-  postDataToServer(requestJson, endpoint): Observable<any> {
-    return this.http.post(BASE_URL + endpoint, requestJson, httpOptions)
-      .map(this.returnJsonResponse)
-      .catch(this.handleErrorObservable)
-  }
-  postDataToPaytm(requestJson): Observable<any> {
-    return this.http.post('https://securegw-stage.paytm.in/order/status', requestJson, httpOptions)
-      .map(this.returnJsonResponse)
-      .catch(this.handleErrorObservable)
-  }
   checkTransStatus() {
     let request = {
       "MID": this.payTmObj.MID,
@@ -734,5 +736,43 @@ export class DataService {
       alert("error fetching products" + error);
     })
   }
+  getDeliveryCharge() {
+    this.weFastOrderObj.matter = "";
+    this.Order.aProduct.forEach(element => {
+      this.weFastOrderObj.matter += element.sName + " ";
+    });
+    this.weFastOrderObj.points[0].address = this.Order.oDeliveryAddr.sLine1 + ", " + this.Order.oDeliveryAddr.sLine2 + ", " + this.Order.oDeliveryAddr.sLandmark + ", " + this.Order.oDeliveryAddr.sCity + ", " + this.Order.oDeliveryAddr.sState + ", " + this.Order.oDeliveryAddr.sCountry + ", Pincode: " + this.Order.oDeliveryAddr.sPincode;
+    this.postDataToServer(this.weFastOrderObj, "calculateDeliveryCharge").subscribe(response => {
+      if (response.is_successful) {
+        this.Order.dDeilveryAmount = Number(response.order.payment_amount);
+      } else {
+        this.Order.dDeilveryAmount = null;
+      }
+    }, error => {
+      this.Order.dDeilveryAmount = null;
+    })
+  }
+  private returnJsonResponse(res: any) {
+    return res;
+  }
+  private handleErrorObservable(error: any) {
+    return Observable.throw(error);
+  }
+  postDataToServer(requestJson, endpoint): Observable<any> {
+    return this.http.post(BASE_URL + endpoint, requestJson, httpOptions)
+      .map(this.returnJsonResponse)
+      .catch(this.handleErrorObservable)
+  }
+  postDataToPaytm(requestJson): Observable<any> {
+    return this.http.post('https://securegw-stage.paytm.in/order/status', requestJson, httpOptions)
+      .map(this.returnJsonResponse)
+      .catch(this.handleErrorObservable)
+  }
+  postDataToWeFast(requestJson, endpoint): Observable<any> {
+    return this.http.post(environment.WEFAST_URL + endpoint, requestJson, weFasthttpOptions)
+      .map(this.returnJsonResponse)
+      .catch(this.handleErrorObservable)
+  }
+
 }
 

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
+
 export class HeaderComponent implements OnInit {
   showList: boolean = false;
   constructor(public data: DataService,
@@ -18,10 +19,12 @@ export class HeaderComponent implements OnInit {
     this.data.getConfig();
     this.userDetls = this.data.Users;
   }
-
-  login() {
-    this.auth.signInWithGoogle();
+  
+  login(){
+    this.auth.signInWithGoogle()
+    //this.router.navigate(['/login']);
   }
+  
   logout() {
     this.open();
     this.auth.logout();

@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
+import * as firebaseui from 'firebaseui';
 import { Observable } from 'rxjs/Observable';
 import { DataService } from './data.service';
+
+
 @Injectable()
 export class AuthenticateService {
+
   public user: Observable<firebase.User>;
   public userDetails: firebase.User = null;
+  public fui_auth: any;
   constructor(private _firebaseAuth: AngularFireAuth,
     private data: DataService) {
     this.user = _firebaseAuth.authState;
+    this.fui_auth = new firebaseui.auth.AuthUI(this._firebaseAuth.auth)
     this.user.subscribe(
       (user) => {
         if (user) {

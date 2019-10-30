@@ -75,19 +75,12 @@ app.post('/getpromocodes', function (req, res) {
 		Promocodes = snapshot.val();
 		let today = new Date()
 		for (var j = 0; j < Promocodes.length; j++) {
-			console.log(today)
 			Promocodes[j].dStartDate = new Date(Promocodes[j].dStartDate);
 			Promocodes[j].dEndDate = new Date(Promocodes[j].dEndDate);
-			console.log(Promocodes[j].dStartDate)
-			console.log(Promocodes[j].dStartDate)
 			if (Promocodes[j].dStartDate <= today <= Promocodes[j].dEndDate) {
-				console.log(j)
 				if (Promocodes[j].dMinAmount <= req.body.dOrderAmount || Promocodes[j].dMinAmount == -1) {
-					console.log("MinAmt")
 					if (Promocodes[j].dMaxOrder >= req.body.OrderNo || Promocodes[j].dMaxOrder == -1) {
-						console.log("MaxOrder")
 						if (Promocodes[j].dMinOrder <= req.body.OrderNo || Promocodes[j].dMinOrder == -1) {
-							console.log("MinOrder")
 							if (Promocodes[j].sUnit == "PERCENT") {
 								let subtractAmt = Math.floor(req.body.dOrderAmount * (Promocodes[j].dAmount / 100));
 								let promAmount = req.body.dOrderAmount - subtractAmt;
@@ -111,6 +104,15 @@ app.post('/getpromocodes', function (req, res) {
 								})
 							}
 						}
+					}
+				}
+				if (Promocodes[j].aProducts) {
+					if (Promocodes[j].aProducts.includes(req.body.sProduct)){
+						response.push({
+							"sName": Promocodes[j].sName,
+							"sDescription": Promocodes[j].sDescription,
+							"dPromotionAmount": promAmount
+						})
 					}
 				}
 			}
@@ -153,6 +155,34 @@ app.post('/getFilteredProducts', function (req, res) {
 		});
 });
 
+app.post('/calculateDeliveryCharge', function (req, res) {
+
+	var request = require("request");
+
+	var options = {
+		method: 'POST',
+		url: 'https://robotapitest.wefast.in/api/business/1.1/calculate-order',
+		headers:
+		{
+			'postman-token': '939efdf4-2af3-ed45-3792-2639c254cb9a',
+			'cache-control': 'no-cache',
+			'content-type': 'application/json',
+			'x-dv-auth-token': 'EFAFD8ABF63D45876D2BF353C562AC1C2B53F564'
+		},
+		body: req.body,
+		json: true
+	};
+
+	request(options, function (error, response, body) {
+		if (error) {
+			res.end(JSON.stringify(error));
+		} else {
+			res.end(JSON.stringify(body));
+		}
+	});
+
+
+});
 app.post('/basicAnalysis', function (req, res) {
 	let Products = [];
 	let Orders = [];
