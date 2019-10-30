@@ -21,13 +21,15 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
+import { CompanyInfoComponent } from './company-info/company-info.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    LoginComponent
+    LoginComponent,
+    CompanyInfoComponent
   ],
   imports: [
     BrowserModule,

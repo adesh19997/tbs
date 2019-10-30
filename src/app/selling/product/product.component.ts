@@ -34,12 +34,12 @@ export class ProductComponent implements OnInit {
   ngOnInit() {
     this.data.selectedProd = this.data.MainPage.aPosters[0];
     this.aFilter = this.config.getFilterConfig();
-   /*  if (this.data.Users.sPhoneNumber != null && this.data.Users.sPhoneNumber != undefined && this.data.Users.sPhoneNumber != "") {
+    if (this.data.Users.sPhoneNumber != null && this.data.Users.sPhoneNumber != undefined && this.data.Users.sPhoneNumber != "") {
       this.data.Users.uid = this.data.Users.sPhoneNumber;
       this.data.getUserDetails(this.data.Users.uid);
     } else {
       this.data.getAllUsers(this.data.Users.sEmail);
-    } */
+    }
   }
 
   gotoView(ind) {

@@ -14,7 +14,7 @@ const httpOptions = {
 };
 const weFasthttpOptions = {
   headers: new HttpHeaders({
-    "Authorization":"X-DV-Auth-Token EFAFD8ABF63D45876D2BF353C562AC1C2B53F564"
+    "Authorization": "X-DV-Auth-Token EFAFD8ABF63D45876D2BF353C562AC1C2B53F564"
   })
 };
 
@@ -276,7 +276,7 @@ export class DataService {
     "is_client_notification_enabled": true,
     "is_contact_person_notification_enabled": true,
     "loaders_count": 0,
-    "points": [{ "address": "" }]
+    "points": [{ "address": "", "contact_person": { "phone": "", "name": "" } }, { "address": "", "contact_person": { "phone": "", "name": "" } }]
   };
   weFastCancelObj = {
     "order_id": ""
@@ -331,10 +331,7 @@ export class DataService {
           this.bShowAdminPage = true;
         }
       }
-    })
-      .catch(function (erroe) {
-
-      });
+    }.bind(this));
   }
   getAllUsers(uid) {
     let temp = this.db.list("/Users");
@@ -742,9 +739,11 @@ export class DataService {
       this.weFastOrderObj.matter += element.sName + " ";
     });
     this.weFastOrderObj.points[0].address = this.Order.oDeliveryAddr.sLine1 + ", " + this.Order.oDeliveryAddr.sLine2 + ", " + this.Order.oDeliveryAddr.sLandmark + ", " + this.Order.oDeliveryAddr.sCity + ", " + this.Order.oDeliveryAddr.sState + ", " + this.Order.oDeliveryAddr.sCountry + ", Pincode: " + this.Order.oDeliveryAddr.sPincode;
+    this.weFastOrderObj.points[0].contact_person.phone = this.Order.sCustomerId;
     this.postDataToServer(this.weFastOrderObj, "calculateDeliveryCharge").subscribe(response => {
       if (response.is_successful) {
         this.Order.dDeilveryAmount = Number(response.order.payment_amount);
+        this.Order.dTotalQuantity += Number(this.Order.dDeilveryAmount);
       } else {
         this.Order.dDeilveryAmount = null;
       }
