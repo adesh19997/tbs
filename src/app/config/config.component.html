@@ -1,0 +1,138 @@
+<section style="padding:25px;" *ngIf="!data.loading && data.bShowAdminPage">
+  <div class="row card">
+    <div class="col-md-12 col-sm-12">
+      <h4> Master Upload</h4>
+    </div>
+    <hr>
+    <div class="col-md-12">
+      <mat-form-field class="example-full-width">
+        <mat-select id="masters" name="masters" placeholder="Masters" [(ngModel)]="selectedMaster">
+          <mat-option *ngFor="let opt of aMasterNames" (click)="getMaster(opt)" [value]="opt">{{
+                    opt }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-md-12 col-sm-12 col-lg-12 text-right" *ngIf="selectedMaster!=''">
+      <button matButton type="button" class="basicbutton" (click)="openPopup(addMaster)"> Upload Master</button>
+      <button matButton type="button" class="basicbutton" (click)="downloadMaster()"> download Master</button>
+    </div>
+    <hr>
+
+    <div class="col-md-12" *ngIf="selectedMaster!=''">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th *ngFor="let key of selMasterkeys">{{key}}</th>
+            <th>
+              <a id='addID' (click)="addMasterData(masterData)" title="Edit">
+                <i class="fa fa-plus"></i> Add
+              </a></th>
+          </tr>
+          <tr *ngFor="let masterRow of selMaster;let ind=index;">
+            <td *ngFor="let key of selMasterkeys">{{masterRow[key]}}</td>
+            <td>
+              <a id='editID' (click)="editMasterDataMethod(ind,masterData)" title="Edit">
+                <i class="fa fa-edit"></i>
+              </a>
+              <a id="cancelEditId" (click)="deleteMasterData(ind)" title="Delete">
+                <i class="fa fa-remove fa-lg"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-12 col-sm-12 col-lg-12 text-right" *ngIf="selectedMaster!=''">
+      <button matButton type="button" class="basicbutton" (click)="saveMaster()"> save Changes</button>
+    </div>
+  </div>
+  <br>
+  <div class="row card">
+    <div class="col-md-12 col-sm-12">
+      <h4> Promo-Codes</h4>
+    </div>
+    <hr>
+    <div class="col-md-12">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th *ngFor="let key of promoField">{{key.sPlaceHolder}}</th>
+            <th>
+              <a id='addID' (click)="addPromocode(promoData)" title="Edit">
+                <i class="fa fa-plus"></i> Add
+              </a></th>
+          </tr>
+          <tr *ngFor="let masterRow of data.Promocodes;let ind=index;">
+            <td *ngFor="let key of promoField">{{masterRow[key.mapping]}}</td>
+            <td>
+              <a id='editID' (click)="editPromocode(ind,promoData)" title="Edit">
+                <i class="fa fa-edit"></i>
+              </a>
+              <a id="cancelEditId" (click)="deletePromocode(ind)" title="Delete">
+                <i class="fa fa-remove fa-lg"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-12 col-sm-12 col-lg-12 text-right">
+      <button matButton type="button" class="basicbutton" (click)="saveMaster()"> save Changes</button>
+    </div>
+  </div>
+</section>
+
+<ng-template #masterData let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4>Master Data</h4>
+    <button id="inv1" type="button" class="close" aria-label="Close" (click)="c('Close click')"
+      style="float:right;padding-top: 0px;">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="row ">
+      <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of masterField">
+        <app-field [field]="fi" [form]="masterForm"></app-field>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button matButton type="button" class="basicbutton" (click)="saveMasterData()"> save</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #addMaster let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4>Master Upload</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row" *ngIf="!isLoading">
+      <div class="col-md-6 col-sm-6 col-lg-6">
+        <label class="btn-bs-file btn btn-md btn-primary">
+          <i class="fa fa-random"></i> Add
+          <input type="file" style="display: none;" class="fileInput" id="importLeads" #fileInput
+            (click)="fileInput.value = null" name="importLeads" (change)="uploadMaster($event,addMaster);">
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button id='control33' mat-button type="button" class="btn btn-primary" (click)="closePopup()">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #promoData let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4>PromoCode Data</h4>
+      <button id="inv1" type="button" class="close" aria-label="Close" (click)="c('Close click')"
+        style="float:right;padding-top: 0px;">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="row ">
+        <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of promoField">
+          <app-field [field]="fi" [form]="promoForm"></app-field>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button matButton type="button" class="basicbutton" (click)="savePromo()"> save</button>
+      </div>
+    </div>
+  </ng-template>

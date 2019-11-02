@@ -21,8 +21,8 @@ export class HeaderComponent implements OnInit {
   }
   
   login(){
-    //this.auth.signInWithGoogle()
-    this.router.navigate(['/login']);
+    this.auth.signInWithGoogle()
+    //this.router.navigate(['/login']);
   }
   
   logout() {

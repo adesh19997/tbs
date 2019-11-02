@@ -284,6 +284,8 @@ export class DataService {
   MainPage: any = {};
   AllOrders: any = [];
   AllStocks: any = [];
+  Promocodes: any = {};
+  promoKeys: any = [];
   Products: any;
   Master: any;
   ConfigData: any = {};
@@ -359,6 +361,21 @@ export class DataService {
     }, error => {
       this.loading = false;
     });
+  }
+  updateMasterDetls(master, name) {
+    this.db.object("/Masters/" + name).set(master);
+  }
+  getPromocode() {
+    let temp = this.db.list("/Promocodes");
+    temp.valueChanges().subscribe(data => {
+      this.Promocodes = data;
+      if (this.Promocodes.length > 0) {
+        this.promoKeys = Object.keys(this.Promocodes[0]);
+      }
+    });
+  }
+  updatePromocodeDetls(master, name) {
+    this.db.object("/Promocodes/" + name).set(master);
   }
   getProduct() {
     return JSON.parse(JSON.stringify(this.Product));
