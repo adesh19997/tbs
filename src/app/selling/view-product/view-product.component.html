@@ -9,56 +9,78 @@
         <a (click)="poster('next')"><i class="fa fa-chevron-right arrow"></i></a>
       </div>
     </div>
-    <div class="col-md-6 col-sm-6 col-lg-6">
+    <div class="col-md-4 col-sm-4 col-lg-4 right-border">
       <div class="row">
-        <div class="col-md-12">
-          <h4>{{product.sName}}</h4>
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-12"> <span style="font-size: 24px;">{{product.sName}}</span><span
+                class="control-label">{{product.sShortDesc}}</span></div>
+            <div class="col-md-12">
+              <span [ngClass]="product.dAvgRating>=1 ? 'fa fa-star rating':'fa fa-star'"></span>
+              <span [ngClass]="product.dAvgRating>=2 ? 'fa fa-star rating':'fa fa-star'"></span>
+              <span [ngClass]="product.dAvgRating>=3 ? 'fa fa-star rating':'fa fa-star'"></span>
+              <span [ngClass]="product.dAvgRating>=4 ? 'fa fa-star rating':'fa fa-star'"></span>
+              <span [ngClass]="product.dAvgRating>=5 ? 'fa fa-star rating':'fa fa-star'"></span>
+            </div>
+          </div>
         </div>
-        <div class="col-md-12" style="margin-bottom:10px;">
-          <span class="control-label">{{product.sShortDesc}}</span>
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-12 text-right">
+              <span class="strikethrough">{{product.dPrice | currency:'INR':'symbol'}}</span>
+              <br>
+              <h4 style="color: black;font-size: 24px;">{{product.dDiscountPrice | currency:'INR':'symbol'}}
+              </h4>
+              <span>{{product.dDiscountPercent}} % off</span>
+            </div>
+          </div>
         </div>
-        <div class="col-md-12" style="margin-bottom:10px;">
-          <span [ngClass]="product.dAvgRating>=1 ? 'fa fa-star rating':'fa fa-star'"></span>
-          <span [ngClass]="product.dAvgRating>=2 ? 'fa fa-star rating':'fa fa-star'"></span>
-          <span [ngClass]="product.dAvgRating>=3 ? 'fa fa-star rating':'fa fa-star'"></span>
-          <span [ngClass]="product.dAvgRating>=4 ? 'fa fa-star rating':'fa fa-star'"></span>
-          <span [ngClass]="product.dAvgRating>=5 ? 'fa fa-star rating':'fa fa-star'"></span>
-        </div>
-        <div class="col-md-12" style="margin-bottom:10px;">
+        <div class="col-md-12 text-center" style="margin-bottom:10px;">
           <span class="red"
-            *ngIf="product.dStockAvailable<=product.dFewLeftLimit &&  product.dStockAvailable>prod.dOutofStockLimit">Only
-            a 4 Items left in Stock</span>
+            *ngIf="product.dStockAvailable<=product.dFewLeftLimit &&  product.dStockAvailable>product.dOutofStockLimit">Only
+            4 Items left in Stock</span>
           <span class="red" *ngIf="product.dStockAvailable<=product.dOutofStockLimit">Out of Stock</span>
         </div>
+      </div>
+      <div class="row card" *ngIf="product.sMultipleSize=='Yes'">
+        <div class="col-md-12" >
+          <h6>Size Chart</h6>
+        </div>
+        <hr>
         <div class="col-md-12" style="margin-bottom:10px;">
-          <span class="strikethrough">{{product.dPrice | currency:'INR':'symbol'}}</span>
-          <h4>{{product.dDiscountPrice
-            | currency:'INR':'symbol'}}</h4> <span>{{product.dDiscountPercent}} % off</span>
-        </div>
-        <div class="col-md-12" *ngIf="product.sMultipleSize=='Yes'">
-          <h4>Size Chart</h4>
-        </div>
-        <div class="col-md-12" style="margin-bottom:10px;" *ngIf="product.sMultipleSize=='Yes'">
           <button matButton type="button" [ngClass]="selectedSize == i? 'circle-button-selected':'circle-button'"
             (click)="selectSize(size.dAmount,i)" *ngFor="let size of product.aSizeList;let i = index"> {{size.sSize}}
             <br>
             {{size.dAmount | currency:'INR':'symbol'}} </button>
         </div>
-
-        <div class="col-md-12" style="margin-bottom:10px;">
-          <h4>QUANTITY</h4>
-          <input type="number" style="width:50px;border:1px solid;border-radius: 0px;" min="1" [(ngModel)]="dQuantitiy">
+      </div>
+      <hr>
+      <div class="row card">
+        <div class="col-md-12" style="padding:20px;">
+          <p class="product-description">{{product.sProductDesc}}</p>
         </div>
-        <div class="col-md-6" style="margin-bottom:10px;">
-          <button matButton type="button" class="darkButton example-full-width" (click)="addToCart('wishlist')"> Add to
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-2 col-lg-2">
+      <div class="row">
+        <div class="col-md-12 text-center" style="margin-bottom:10px;">
+          <h6>QUANTITY</h6>
+          <input type="number" style="width:100px;border:1px solid;border-radius: 0px;" min="1"
+            [(ngModel)]="dQuantitiy">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" style="margin-bottom:10px;">
+          <button matButton type="button" class="darkButton example-full-width" (click)="addToCart('wishlist')"> Add
+            to
             WishList</button>
         </div>
-        <div class="col-md-6" style="margin-bottom:10px;">
+        <div class="col-md-12" style="margin-bottom:10px;">
           <button matButton type="button" class="darkButton example-full-width"
             *ngIf="product.dStockAvailable>product.dOutofStockLimit" (click)="addToCart('cart')"> Add to
             Cart</button>
         </div>
-        <div class="col-md-12 text-right" style="margin-bottom:10px;">
+        <div class="col-md-12 text-center" style="margin-bottom:10px;">
           <button matButton type="button" class="darkButton example-full-width"
             *ngIf="product.dStockAvailable>product.dOutofStockLimit" (click)="buy()"> Buy</button>
         </div>
@@ -67,14 +89,31 @@
   </div>
   <hr>
   <div class="row" style="margin-top:10px;">
-    <div class="col-md-12">
-      <h4>DESCRIPTION</h4>
-    </div>
-    <div class="col-md-12" style="padding:20px;">
-      <p class="product-description">{{product.sProductDesc}}</p>
+    <div class="col-md-6">
+      <div class="row card">
+        <div class="col-md-6">
+          <h4>Write your Product Review</h4>
+        </div>
+        <div class="col-md-6 col-sm-6 col-lg-6 text-left">
+          <span (click)="setRating(1)" [ngClass]="dRating>=1 ? 'fa fa-star rating':'fa fa-star'"></span>
+          <span (click)="setRating(2)" [ngClass]="dRating>=2 ? 'fa fa-star rating':'fa fa-star'"></span>
+          <span (click)="setRating(3)" [ngClass]="dRating>=3 ? 'fa fa-star rating':'fa fa-star'"></span>
+          <span (click)="setRating(4)" [ngClass]="dRating>=4 ? 'fa fa-star rating':'fa fa-star'"></span>
+          <span (click)="setRating(5)" [ngClass]="dRating>=5 ? 'fa fa-star rating':'fa fa-star'"></span>
+        </div>
+        <div class="col-md-12 col-sm-12 col-lg-12 ">
+          <mat-form-field class="remarks-area example-full-width">
+            <textarea matInput matTextareaAutosize name="Remarks" placeholder="Write your review here"
+              [(ngModel)]="reviewDesc"></textarea>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 col-sm-3 col-lg-3 text-right" style="margin-bottom:10px;">
+          <button matButton type="button" class="darkButton example-full-width" (click)="addReview()"> Add
+            Review</button>
+        </div>
+      </div>
     </div>
   </div>
-  <hr>
   <div class="row" style="margin-top:10px;">
     <div class="col-md-12">
       <h4>Product Reviews</h4>
@@ -92,27 +131,6 @@
     </div>
     <div class="col-md-12 col-sm-12 col-lg-12">
       <p class="product-description">{{review.sDescription}}</p>
-    </div>
-  </div>
-  <div class="row card" style="margin-top:10px;">
-    <div class="col-md-12">
-      <h4>Write your Product Review</h4>
-    </div>
-    <div class="col-md-12 col-sm-12 col-lg-12 text-left">
-      <span (click)="setRating(1)" [ngClass]="dRating>=1 ? 'fa fa-star rating':'fa fa-star'"></span>
-      <span (click)="setRating(2)" [ngClass]="dRating>=2 ? 'fa fa-star rating':'fa fa-star'"></span>
-      <span (click)="setRating(3)" [ngClass]="dRating>=3 ? 'fa fa-star rating':'fa fa-star'"></span>
-      <span (click)="setRating(4)" [ngClass]="dRating>=4 ? 'fa fa-star rating':'fa fa-star'"></span>
-      <span (click)="setRating(5)" [ngClass]="dRating>=5 ? 'fa fa-star rating':'fa fa-star'"></span>
-    </div>
-    <div class="col-md-12 col-sm-12 col-lg-12 ">
-      <mat-form-field class="remarks-area example-full-width">
-        <textarea matInput matTextareaAutosize name="Remarks" placeholder="Write your review here"
-          [(ngModel)]="reviewDesc"></textarea>
-      </mat-form-field>
-    </div>
-    <div class="col-md-12 col-sm-12 col-lg-12 text-right" style="margin-bottom:10px;">
-      <button matButton type="button" class="darkButton example-full-width" (click)="addReview()"> Add Review</button>
     </div>
   </div>
 </section>

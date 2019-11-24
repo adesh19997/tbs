@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HighchartsChartComponent } from 'highcharts-angular';
+import { HighchartsChartModule } from 'highcharts-angular';
 import { AnalyticsRoutingModule } from './analytics-routing.module';
 import { AnalyticsComponent } from './analytics.component';
 
@@ -8,9 +8,10 @@ import { DetailsAnalyticsComponent } from './details-analytics/details-analytics
 @NgModule({
   imports: [
     CommonModule,
-    AnalyticsRoutingModule
+    AnalyticsRoutingModule,
+    HighchartsChartModule
   ],
-  declarations: [AnalyticsComponent,HighchartsChartComponent,
+  declarations: [AnalyticsComponent,
     DetailsAnalyticsComponent]
 })
 export class AnalyticsModule { }

@@ -15,7 +15,7 @@ export class AuthenticateService {
   constructor(private _firebaseAuth: AngularFireAuth,
     private data: DataService) {
     this.user = _firebaseAuth.authState;
-    this.fui_auth = new firebaseui.auth.AuthUI(this._firebaseAuth.auth)
+    this.fui_auth = new firebaseui.auth.AuthUI(this._firebaseAuth.auth);
     this.user.subscribe(
       (user) => {
         if (user) {

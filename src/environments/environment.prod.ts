@@ -11,5 +11,6 @@ export const environment = {
   PAYTM_URL:"https://securegw-stage.paytm.in/order/process",
   CALLBACK_URL:"https://tecpixels-bs.firebaseapp.com/",
   WEFAST_URL:"https://robotapitest.wefast.in/api/business/1.1/",
-  PAYTM_MID:"pmePaM98534008405439"
+  PAYTM_MID:"pmePaM98534008405439",
+  version:"YMS 0.0.1"
 };

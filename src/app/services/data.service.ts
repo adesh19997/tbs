@@ -118,7 +118,21 @@ export class DataService {
     oDest: {},
     oSource: {}
   };
-
+  finTransactionObj = {
+    "sSLCode": "",
+    "sGLCode": "",
+    "sTransType": "",
+    "sTransMode": "",
+    "dtTransDate": new Date(),
+    "downloadURL": "",
+    "bFileAdded": false,
+    "sDebtorName": "",
+    "sDebtorContact": "",
+    "sCreditorName": "",
+    "sCreditorContact": "",
+    "dTransAmount": null,
+    "sTransactionID": ""
+  }
   cartObj = {
     sQuantity: "",
     sProductId: "",
@@ -270,20 +284,48 @@ export class DataService {
       }
     ]
   };
-  weFastOrderObj = {
-    "matter": "",
-    "total_weight_kg": 0,
-    "is_client_notification_enabled": true,
-    "is_contact_person_notification_enabled": true,
-    "loaders_count": 0,
-    "points": [{ "address": "", "contact_person": { "phone": "", "name": "" } }, { "address": "", "contact_person": { "phone": "", "name": "" } }]
-  };
-  weFastCancelObj = {
-    "order_id": ""
+  BasicFinanceChartOptions = {
+    chart: {
+      type: "spline"
+    },
+    title: {
+      text: "Finance Track"
+    },
+    subtitle: {
+      text: "Day vs Amount"
+    },
+    xAxis: {
+      title: {
+        text: "Day"
+      },
+      labels: {
+        overflow: 'justify'
+      },
+      categories: []
+    },
+    yAxis: {
+      title: {
+        text: "Amount"
+      },
+      labels: {
+        overflow: 'justify'
+      },
+    },
+    tooltip: {
+      valueSuffix: " Rs."
+    },
+    series: [
+      {
+        name: 'Amount spent',
+        data: []
+      },
+
+    ]
   };
   MainPage: any = {};
   AllOrders: any = [];
   AllStocks: any = [];
+  AllFinances: any = [];
   Promocodes: any = {};
   promoKeys: any = [];
   Products: any;
@@ -310,7 +352,9 @@ export class DataService {
   }
   getProducts() {
     let temp = this.db.list("/Products");
+    this.bDisableScreen = true;
     temp.valueChanges().subscribe(data => {
+      this.bDisableScreen = false;
       this.Products = data;
       this.Products.forEach(element => {
         if (!Array.isArray(element.aImages)) {
@@ -366,8 +410,10 @@ export class DataService {
     this.db.object("/Masters/" + name).set(master);
   }
   getPromocode() {
+    this.bDisableScreen = true;
     let temp = this.db.list("/Promocodes");
     temp.valueChanges().subscribe(data => {
+      this.bDisableScreen = false;
       this.Promocodes = data;
       if (this.Promocodes.length > 0) {
         this.promoKeys = Object.keys(this.Promocodes[0]);
@@ -467,7 +513,6 @@ export class DataService {
         if (existInd >= 0) {
 
           currDate = new Date(this.BasicOrderChartOptions.xAxis.categories[existInd]);
-          this.BasicOrderChartOptions.xAxis.categories.push(currDate.toString());
 
           OrderReceived = this.BasicOrderChartOptions.series[0].data[existInd];
           OrderDelivered = this.BasicOrderChartOptions.series[1].data[existInd];
@@ -562,6 +607,10 @@ export class DataService {
     let id = this.generateTempImageId();
     this.db.object("/Stocks/" + id).update(stock);
   }
+  updateFinanceDetails(obj) {
+    let id = this.generateTempImageId();
+    this.db.object("/Finances/" + id).update(obj);
+  }
   getAllStocks() {
     let temp = this.db.list("/Stocks");
     temp.valueChanges().subscribe(data => {
@@ -623,7 +672,38 @@ export class DataService {
       alert("No data found.");
     });
   }
+  getMonthFinances() {
+    this.bDisableScreen = true;
+    this.postDataToServer({}, 'getFinances').subscribe(response => {
+      this.bDisableScreen = false;
+      this.AllFinances = response;
 
+      if (this.AllFinances.length > 0) {
+        let currDate = this.AllFinances[0].dtTransDate;
+        let OrderReceived = Number(this.AllFinances[0].dTransAmount);
+        this.BasicFinanceChartOptions.xAxis.categories.push(currDate.toString());
+        this.AllFinances.forEach(element => {
+          if (element.dtTransDate != currDate) {
+            let existInd = this.BasicFinanceChartOptions.xAxis.categories.indexOf(element.dtTransDate);
+            if (existInd >= 0) {
+              currDate = new Date(this.BasicFinanceChartOptions.xAxis.categories[existInd]);
+              OrderReceived = this.BasicFinanceChartOptions.series[0].data[existInd];
+            } else {
+              this.BasicFinanceChartOptions.series[0].data.push(OrderReceived);
+              OrderReceived = 0;
+              currDate = element.dtTransDate;
+              this.BasicFinanceChartOptions.xAxis.categories.push(currDate.toString());
+            }
+          } else {
+            OrderReceived += Number(element.dTransAmount);
+          }
+        });
+      }
+    }, error => {
+      this.bDisableScreen = false;
+      alert("Sorry, we could not fetch the requested details.");
+    })
+  }
   generateTempImageId() {
     let id = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
     return id.toUpperCase();
@@ -665,6 +745,7 @@ export class DataService {
     let req = {
       "Params": this.payTmObj
     };
+    this.bDisableScreen = true;
     this.postDataToServer(req, "checksum").subscribe(response => {
       this.bDisableScreen = false;
       this.payTmObj['CHECKSUMHASH'] = response;
@@ -750,24 +831,7 @@ export class DataService {
       alert("error fetching products" + error);
     })
   }
-  getDeliveryCharge() {
-    this.weFastOrderObj.matter = "";
-    this.Order.aProduct.forEach(element => {
-      this.weFastOrderObj.matter += element.sName + " ";
-    });
-    this.weFastOrderObj.points[0].address = this.Order.oDeliveryAddr.sLine1 + ", " + this.Order.oDeliveryAddr.sLine2 + ", " + this.Order.oDeliveryAddr.sLandmark + ", " + this.Order.oDeliveryAddr.sCity + ", " + this.Order.oDeliveryAddr.sState + ", " + this.Order.oDeliveryAddr.sCountry + ", Pincode: " + this.Order.oDeliveryAddr.sPincode;
-    this.weFastOrderObj.points[0].contact_person.phone = this.Order.sCustomerId;
-    this.postDataToServer(this.weFastOrderObj, "calculateDeliveryCharge").subscribe(response => {
-      if (response.is_successful) {
-        this.Order.dDeilveryAmount = Number(response.order.payment_amount);
-        this.Order.dTotalQuantity += Number(this.Order.dDeilveryAmount);
-      } else {
-        this.Order.dDeilveryAmount = null;
-      }
-    }, error => {
-      this.Order.dDeilveryAmount = null;
-    })
-  }
+
   private returnJsonResponse(res: any) {
     return res;
   }

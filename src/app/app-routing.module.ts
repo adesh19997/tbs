@@ -11,7 +11,8 @@ const routes: Routes = [
   { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', data: { title: 'Inventory' } },
   { path: 'orders', loadChildren: './order/order.module#OrderModule', data: { title: 'Orders' } },
   { path: 'dashboard', loadChildren: './analytics/analytics.module#AnalyticsModule', data: { title: 'Orders' } },
-  { path: 'config', loadChildren: './config/config.module#ConfigModule', data: { title: 'System-Admin' } }
+  { path: 'config', loadChildren: './config/config.module#ConfigModule', data: { title: 'System-Admin' } },
+  { path: 'finance', loadChildren: './finance/finance.module#FinanceModule', data: { title: 'System-Admin' } }
 ];
 
 @NgModule({

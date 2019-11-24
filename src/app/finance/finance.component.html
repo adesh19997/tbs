@@ -1,0 +1,100 @@
+<section style="padding:25px;" *ngIf="!data.loading && data.bShowAdminPage">
+    <div class="row">
+        <div class="col-md-12 card">
+            <div class="row">
+                <h4>Finance Analysis of this Month</h4>
+            </div>
+            <hr>
+            <div class="row" *ngIf="data.AllFinances.length>0">
+                <div class="col-md-12">
+                    <highcharts-chart [Highcharts]="highcharts" [options]="data.BasicFinanceChartOptions"
+                        style="width: 100%; height: 400px; display: block;">
+                    </highcharts-chart>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button matButton type="button" class="darkButton" (click)="downoadAll()"> Download
+                        Finances</button>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <table class="table text-left">
+                    <tbody>
+                        <tr>
+                            <th>Sr.No</th>
+                            <th (click)="sortTable(key.mapping)" *ngFor="let key of fields;">{{key.sPlaceHolder}}
+                                <a class="text-left">
+                                    <i class="fa fa-caret-up" *ngIf="dir!='asc'"></i>
+                                    <i class="fa fa-caret-down" *ngIf="dir=='asc'"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a id='addID' (click)="addFinance(addEntry)" title="Edit">
+                                    <i class="fa fa-plus"></i> Add
+                                </a>
+                            </th>
+                        </tr>
+                        <tr *ngFor="let prod of data.AllFinances;let ind=index;">
+                            <td>{{ind +1}}</td>
+                            <td *ngFor="let key of fields;">{{prod[key.mapping]}}</td>
+                            <td (click)="downloadFile(ind)" *ngIf="prod.bFileAdded" class="viewData">Download File</td>
+                            <td (click)="uploadFile(ind,addFile)" *ngIf="!prod.bFileAdded" class="viewData">Upload File</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<ng-template #addEntry let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4>Add New Entry</h4>
+        <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')"
+            style="float:right;padding-top: 0px;">&times;</button>
+    </div>
+    <div class="modal-body">
+        <div class="row ">
+            <div class="col-md-4 col-sm-4 col-lg-4" *ngFor="let fi of fields">
+                <app-field [field]="fi" [form]="form"></app-field>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-6">
+                <label class="btn-bs-file btn btn-md btn-primary">
+                    <i class="fa fa-random"></i> Attach file
+                    <input type="file" style="display: none;" class="fileInput" id="importLeads" #fileInput
+                        (click)="fileInput.value = null" name="file1" (change)="addImage($event);">
+                </label>
+                <label>{{financeObj.state}}</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button matButton type="button" class="basicbutton" (click)="save();c('Close click');"> Add Transaction</button>
+    </div>
+</ng-template>
+<ng-template #addFile let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4>Uplaod File</h4>
+        <button id="order1" type="button" class="close" aria-label="Close" (click)="c('Close click')"
+            style="float:right;padding-top: 0px;">&times;</button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-6">
+                <label class="btn-bs-file btn btn-md btn-primary">
+                    <i class="fa fa-random"></i> Attach file
+                    <input type="file" style="display: none;" class="fileInput" id="importLeads" #fileInput
+                        (click)="fileInput.value = null" name="file1" (change)="addImage($event);">
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button matButton type="button" class="basicbutton" (click)="c('Close click');"> save</button>
+    </div>
+</ng-template>

@@ -6,7 +6,7 @@ import { ScreenConfigComponent } from './screen-config/screen-config.component';
 
 const routes: Routes = [
   { path: '', component: ConfigComponent, data: { title: 'System-Admin' } },
-  { path: 'config', component: ConfigComponent, data: { title: 'Inventory' } },
+  { path: 'config', component: ConfigComponent, data: { title: 'System-Admin' } },
   { path: 'masters', component: MasterUploadComponent, data: { title: 'Master' } },
   { path: 'screens', component: ScreenConfigComponent, data: { title: 'Screen-Config' } }
 ];

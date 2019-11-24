@@ -1,6 +1,6 @@
 <section style="padding:25px;">
   <div class="row">
-    <div class="col-md-8 col-lg-8">
+    <div class="col-md-8 col-lg-8 right-border">
       <div class="row card">
         <div class="col-md-12 col-lg-12" style="margin-top: 10px;">
           <h4>SHOPPING CART</h4>
@@ -49,7 +49,7 @@
         </div>
       </div>
       <hr>
-      <div class="row card">
+      <div class="row card" *ngIf="wishList.length>0">
         <div class="col-md-12 col-lg-12" style="margin-top: 10px;">
           <h4>WISH-LIST</h4>
         </div>

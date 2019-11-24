@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 var express = require('express');
+//var pdf = require('html-pdf');
 const firebase = require("firebase");
 var app = express();
 const checksum_lib = require('./checksum');
@@ -17,7 +18,11 @@ app.use(cors());
 
 app.post('/sendEmail', function (req, res) {
 	var nodemailer = require('nodemailer');
-
+	var options = { format: 'Letter' };
+	var attachFile = "";
+	/* pdf.create(html).toBuffer(function (err, buffer) {
+		attachFile = Buffer.isBuffer(buffer);
+	}); */
 	var transporter = nodemailer.createTransport({
 		service: 'Gmail',
 		auth: {
@@ -30,7 +35,13 @@ app.post('/sendEmail', function (req, res) {
 		from: 'adesh19997@gmail.com', // sender address
 		to: mailDetails.sEmail, // list of receivers
 		subject: mailDetails.sSubject, // Subject line
-		html: mailDetails.sContent// plain text body
+		html: mailDetails.sContent, // plain text body
+		/* attachments: [
+			{   
+				filename: 'yms-order.pdf',
+				content: attachFile
+			}
+		] */
 	};
 
 	transporter.sendMail(mailOptions, function (err, info) {
@@ -107,7 +118,7 @@ app.post('/getpromocodes', function (req, res) {
 					}
 				}
 				if (Promocodes[j].aProducts) {
-					if (Promocodes[j].aProducts.includes(req.body.sProduct)){
+					if (Promocodes[j].aProducts.includes(req.body.sProduct)) {
 						response.push({
 							"sName": Promocodes[j].sName,
 							"sDescription": Promocodes[j].sDescription,
@@ -155,34 +166,6 @@ app.post('/getFilteredProducts', function (req, res) {
 		});
 });
 
-app.post('/calculateDeliveryCharge', function (req, res) {
-
-	var request = require("request");
-
-	var options = {
-		method: 'POST',
-		url: 'https://robotapitest.wefast.in/api/business/1.1/calculate-order',
-		headers:
-		{
-			'postman-token': '939efdf4-2af3-ed45-3792-2639c254cb9a',
-			'cache-control': 'no-cache',
-			'content-type': 'application/json',
-			'x-dv-auth-token': 'EFAFD8ABF63D45876D2BF353C562AC1C2B53F564'
-		},
-		body: req.body,
-		json: true
-	};
-
-	request(options, function (error, response, body) {
-		if (error) {
-			res.end(JSON.stringify(error));
-		} else {
-			res.end(JSON.stringify(body));
-		}
-	});
-
-
-});
 app.post('/basicAnalysis', function (req, res) {
 	let Products = [];
 	let Orders = [];
@@ -272,4 +255,25 @@ app.post('/basicAnalysis', function (req, res) {
 			res.end(JSON.stringify(error));
 		});
 })
+app.post('/getFinances', function (req, res) {
+	let myFinances = [];
+	currentMonth = new Date().getMonth();
+	currentYear = new Date().getFullYear();
+	firebase.database().ref('/Finances').once('value', function (snapshot) {
+		let tempFin = snapshot.val();
+		var filterKeys = Object.keys(tempFin);
+		for (var j = 0; j < filterKeys.length; j++) {
+			let tempDate = new Date(tempFin[filterKeys[j]].dtTransDate);
+			let dtMonth = tempDate.getMonth();
+			let dtYr = tempDate.getFullYear();
+			if (currentMonth == dtMonth && currentYear == dtYr) {
+				myFinances.push(tempFin[[filterKeys[j]]]);
+			}
+		}
+		res.end(JSON.stringify(myFinances));
+	})
+		.catch(function (error) {
+			res.end(JSON.stringify(error));
+		})
+});
 exports.app = functions.https.onRequest(app);
