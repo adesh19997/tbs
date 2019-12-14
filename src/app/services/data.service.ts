@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'underscore';
+import { Router } from '@angular/router';
 
 const BASE_URL = environment.BASE_URL;
 const httpOptions = {
@@ -158,7 +159,7 @@ export class DataService {
   };
   orderTrack = {
     dtDate: new Date(),
-    "sDoneBy":"",
+    "sDoneBy": "",
     "status": "",
     "sRemarks": ""
   };
@@ -183,20 +184,21 @@ export class DataService {
   };
   BasicStockChartOptions = {
     chart: {
-      type: "bar"
+      type: "column"
     },
     title: {
       text: "Product-wise Stock Analysis"
     },
     subtitle: {
-      text: "Product vs Stocks"
+      text: "Product vs Stock"
     },
     xAxis: {
-      categories: []
+      categories: [],
+      crosshair: true
     },
     yAxis: {
       title: {
-        text: "Product Name"
+        text: "No. of Boxes."
       },
       labels: {
         overflow: 'justify'
@@ -319,6 +321,7 @@ export class DataService {
   bShowAdminPage: boolean = false;
   constructor(private db: AngularFireDatabase,
     public datepipe: DatePipe,
+    private router: Router,
     private http: HttpClient, ) {
   }
 
@@ -372,9 +375,15 @@ export class DataService {
             if (this.ConfigData.adminUser.includes(this.Users.sEmail)) {
               this.bShowAdminPage = true;
             }
+            if (this.Users.sPhoneNumber == null || this.Users.sPhoneNumber == undefined || this.Users.sPhoneNumber == "") {
+              this.router.navigate(['products/details']);
+            }
             return false;
           }
         });
+      }
+      if (this.Users.sPhoneNumber == null || this.Users.sPhoneNumber == undefined || this.Users.sPhoneNumber == "") {
+        this.router.navigate(['products/details']);
       }
     });
   }

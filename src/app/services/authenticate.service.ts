@@ -5,7 +5,6 @@ import * as firebaseui from 'firebaseui';
 import { Observable } from 'rxjs/Observable';
 import { DataService } from './data.service';
 
-
 @Injectable()
 export class AuthenticateService {
 

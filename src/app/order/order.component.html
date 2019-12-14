@@ -1,4 +1,4 @@
-<section style="padding:25px;" *ngIf="!data.loading">
+<section style="padding:25px;" *ngIf="!data.loading && data.bShowAdminPage">
   <hr>
   <div class="row" style="margin-top:10px;">
     <div class="col-md-6 col-sm-6 col-lg-6 text-left">
@@ -150,10 +150,25 @@
         <table class="table">
           <tbody>
             <tr>
+              <th colspan="5" class="text-center">Customer Details</th>
+            </tr>
+            <tr>
+              <th colspan="2">Customer Phone Number</th>
+              <td colspan="3">{{data.AllOrders[selectedOrder].sCustomerId}}</td>
+            </tr>
+            <tr>
+              <th colspan="2">Customer Email</th>
+              <td colspan="3">{{data.AllOrders[selectedOrder].sEmail}}</td>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr>
+              <th colspan="5" class="text-center">Order Details</th>
+            </tr>
+            <tr>
               <th>Sr. No.</th>
               <th>
                 Date
-
               </th>
               <th>Updated By</th>
               <th>Status Changed To</th>
@@ -165,6 +180,33 @@
               <td>{{order.sDoneBy}}</td>
               <td>{{order.status}}</td>
               <td>{{order.sRemarks}}</td>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr>
+              <th colspan="5" class="text-center">Product Details</th>
+            </tr>
+            <tr>
+              <th>Sr. No.</th>
+              <th>Product Name</th>
+              <th>Units Per Box</th>
+              <th>Quantity (Boxes)</th>
+              <th>Amount Per Box</th>
+            </tr>
+            <tr *ngFor="let order of data.AllOrders[selectedOrder].aProduct;let ind=index">
+              <td>{{ind + 1}}</td>
+              <td>{{order.sProductName}}</td>
+              <td>{{order.dPerBoxQantity}}</td>
+              <td>{{order.sQuantity}}</td>
+              <td>{{order.dAmount}}</td>
+            </tr>
+            <tr>
+              <th class="text-left" colspan="2">Total Items</th>
+              <td class="text-right" colspan="3">{{data.AllOrders[selectedOrder].dTotalQuantity}}</td>
+            </tr>
+            <tr>
+              <th class="text-left" colspan="2">Total Amount</th>
+              <td class="text-right" colspan="3">{{data.AllOrders[selectedOrder].dTotalAmount | currency:'INR':'symbol'}}</td>
             </tr>
           </tbody>
         </table>
@@ -206,7 +248,7 @@
               <th>Product ID</th>
               <th>Units Per Box</th>
               <th>Quantity (Boxes)</th>
-              <th>Amount Per Item</th>
+              <th>Amount Per Box</th>
               <th>
                 <a id='addID' (click)="addProduct()" title="Edit">
                   <i class="fa fa-plus"></i> Add
