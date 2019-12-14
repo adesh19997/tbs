@@ -51,20 +51,22 @@ export class BuyComponent implements OnInit {
       thirdCtrl: ['', Validators.required]
     });
     this.calculateTotal();
-    this.getPromotions()
+    //this.getPromotions()
   }
   updateUserDetls() {
     this.config.setData(this.basicFields, this.data.Users, this.basicData.value);
     this.data.updateUserDetls(this.data.Users);
   }
   buy() {
-    this.config.setData(this.addrFields, this.Order.oDeliveryAddr, this.form.value);
-    this.Order.aOrderTrack = [{
-      dtDate: new Date(),
-      "status": "order-placed",
-      "sRemarks": "order received."
-    }];
-    let text = ` <html> <head><style type="text/css">
+    if (Number(this.Order.dTotalQuantity) > 0) {
+      this.config.setData(this.addrFields, this.Order.oDeliveryAddr, this.form.value);
+      this.Order.aOrderTrack = [{
+        dtDate: new Date(),
+        "sDoneBy":this.data.Users.sEmail,
+        "status": "order-placed",
+        "sRemarks": "order Placed Online."
+      }];
+      let text = ` <html> <head><style type="text/css">
     .border {
       border-collapse: collapse;
       border: 1px solid #000000;
@@ -75,11 +77,14 @@ export class BuyComponent implements OnInit {
     }
 
    </style> <title></title></head>`
-    text += '<body><p>Hi ' + this.userData.sName + ', <br>Your order ' + this.Order.sOrderNo + ' is successfully placed. find the order details below.</p></body></html>' + document.getElementById('print-section').innerHTML;
-    this.Order.sPaymentMade = "PayTM";
-    this.Order.sOrderSource = "website";
-    this.updateUserDetls();
-    this.data.updateOrderDetails(this.Order, text, true);
+      text += '<body><p>Hi ' + this.userData.sName + ', <br>Your order ' + this.Order.sOrderNo + ' is successfully placed. find the order details below. We will contact you shortly with delivery details.</p></body></html>' + document.getElementById('print-section').innerHTML;
+      this.Order.sPaymentMade = "PayTM";
+      this.Order.sOrderSource = "website";
+      this.updateUserDetls();
+      this.data.updateOrderDetails(this.Order, text, true);
+    }else{
+      alert("No product added in Order");
+    }
   }
   setAddr(j) {
     this.form = this.config.geSectionForm(this.userData.aAddress[j], this.addrFields);

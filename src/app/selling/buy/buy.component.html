@@ -70,24 +70,26 @@
                     <tr>
                       <th>Sr. No</th>
                       <th>Product Name</th>
-                      <th>Quantity</th>
+                      <th>Units Per Box</th>
+                      <th>Quantity (Boxes)</th>
                       <th>Amount</th>
                     </tr>
                     <tr *ngFor="let product of Order.aProduct;let ind=index;">
                       <td>{{ind + 1}}</td>
                       <td>{{product.sProductName}}</td>
+                      <td>{{product.dPerBoxQantity}}</td>
                       <td>{{product.sQuantity}}</td>
                       <td>{{product.dAmount | currency:'INR':'symbol'}}</td>
                     </tr>
                     <tr>
                       <th>Total Amount</th>
-                      <td colspan="3" class="text-right">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
+                      <td colspan="4" class="text-right">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
-            <hr>
+            <!-- <hr>
             <div class="row card">
               <div class="col-md-12" style="margin-top: 10px;">
                 <h6>Offers</h6>
@@ -107,7 +109,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="row">
               <div class="col-md-6 text-left">
                 <button mat-button class="basicbutton" matStepperPrevious>Back</button>
@@ -127,36 +129,12 @@
             <tbody>
               <tr>
                 <th class="text-left">Total Items</th>
-                <td class="text-right">{{Order.dTotalQuantity}} Units</td>
-              </tr>
-              <tr>
-                <th class="text-left">Total Amount (Inclusive of taxes.)</th>
-                <td class="text-right">{{Order.dActualPrice | currency:'INR':'symbol'}}</td>
-              </tr>
-              <tr>
-                <th class="text-left">Total Tax</th>
-                <td class="text-right">{{Order.dTaxAmount | currency:'INR':'symbol'}}</td>
-              </tr>
-              <tr>
-                <th class="text-left">Delivery Charges</th>
-                <td class="text-right">{{Order.dDeilveryAmount | currency:'INR':'symbol'}}</td>
-              </tr>
-              <tr>
-                <th class="text-left">Total Discount</th>
-                <td class="text-right" style="color: greenyellow;font-weight: 700">-
-                  {{Order.dDiscountPrice | currency:'INR':'symbol'}}
-                </td>
-              </tr>
-              <tr>
-                <th class="text-left">Promotion applied</th>
-                <td class="text-right" style="color: orange;font-weight: 700;">-
-                  {{Order.dPromotionPrice | currency:'INR':'symbol'}}</td>
+                <td class="text-right">{{Order.dTotalQuantity}} Boxes</td>
               </tr>
               <tr>
                 <th class="text-left">Final Amount Payable</th>
                 <td class="text-right" style="font-weight: 700">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
               </tr>
-
             </tbody>
           </table>
         </div>
@@ -164,7 +142,7 @@
       <hr>
       <div class="row" style="margin-top:10px;">
         <div class="col-md-12 text-center">
-          <button matButton type="button" style="min-width:0px !important;" class="darkButton" (click)="goto()">
+          <button matButton type="button" style="min-width:0px !important;" class="basicbutton" (click)="goto()">
             CANCEL</button>
         </div>
       </div>
@@ -179,10 +157,10 @@
         <h6 *ngIf="Order.sOrderStatus == 'OS99'">Payment Your Order {{Order.sOrderNo}} is still Pending.</h6>
       </div>
       <div style="margin-bottom:30px;">
-        <button mat-button class="darkButton" (click)="buy()" *ngIf="Order.sOrderStatus == 'OS00'">Retry
+        <button mat-button class="basicbutton" (click)="buy()" *ngIf="Order.sOrderStatus == 'OS00'">Retry
           Payment</button>
-        <button mat-button class="darkButton" (click)="goto()"
-          *ngIf="Order.sOrderStatus == 'OS2' || Order.sOrderStatus == 'OS99'">Continue Shopping</button>
+        <button mat-button class="basicbutton" (click)="goto()"
+          *ngIf="Order.sOrderStatus == 'OS2' || Order.sOrderStatus == 'OS99'">Continue</button>
       </div>
     </div>
     <div class="col-md-3"></div>
@@ -194,12 +172,13 @@
       <tbody>
         <tr class="borderStyle">
           <th class="borderStyle">Order No.</th>
-          <th colspan="3">{{Order.sOrderNo}}</th>
+          <th colspan="4">{{Order.sOrderNo}}</th>
         </tr>
         <tr class="borderStyle">
           <th class="borderStyle">Sr No.</th>
           <th class="borderStyle">Product Name </th>
-          <th class="borderStyle">Quantity</th>
+          <th class="borderStyle">Units Per Box</th>
+          <th class="borderStyle">Quantity (Boxes)</th>
           <th class="borderStyle"> Amount Per Item</th>
         </tr>
         <tr class="borderStyle" *ngFor="let product of Order.aProduct;let ind=index">
@@ -207,6 +186,7 @@
           <td class="borderStyle">
             {{product.sProductName}}
           </td>
+          <td class="borderStyle">{{product.dPerBoxQantity}}</td>
           <td class="borderStyle">
             {{product.sQuantity}}
           </td>
@@ -218,7 +198,7 @@
           <th class="text-left borderStyle">Total Items</th>
           <td class="text-right borderStyle">{{Order.dTotalQuantity}}</td>
           <th class="text-left borderStyle">Total Amount</th>
-          <td class="text-right borderStyle">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
+          <td class="text-right borderStyle" colspan="2">{{Order.dTotalAmount | currency:'INR':'symbol'}}</td>
         </tr>
       </tbody>
     </table>

@@ -123,25 +123,6 @@ export class ConfigService {
   setAddFieldForm() {
     return [
       {
-        "sFieldName": "sProductType",
-        "sPlaceHolder": "Product Type",
-        "fieldType": "Radio Button",
-        "optionArray": this.data.getMasterVal("Product_Type"),
-        "maxlength": "",
-        "minlength": "",
-        "pattern": "",
-        "required": "",
-        "maxDate": "",
-        "minDate": "",
-        "click": "",
-        "change": "",
-        "style": "",
-        "condition": "",
-        "disable": "",
-        "mapping": "sProductType",
-        "bDisable": false
-      },
-      {
         "sFieldName": "ProdCode",
         "sPlaceHolder": "Product Code",
         "fieldType": "Text",
@@ -158,7 +139,7 @@ export class ConfigService {
         "condition": "",
         "disable": "",
         "mapping": "sUid",
-        "bDisable": false
+        "bDisable": true
       },
       {
         "sFieldName": "ProdName",
@@ -199,10 +180,10 @@ export class ConfigService {
         "bDisable": false
       },
       {
-        "sFieldName": "SubCategory",
-        "sPlaceHolder": "Sub Category",
-        "fieldType": "DropDown",
-        "optionArray": this.data.getMasterVal("Sub-Category"),
+        "sFieldName": "dPerBoxQantity",
+        "sPlaceHolder": "Quantity Per Box",
+        "fieldType": "Number",
+        "optionArray": "",
         "maxlength": "",
         "minlength": "",
         "pattern": "",
@@ -214,53 +195,13 @@ export class ConfigService {
         "style": "",
         "condition": "",
         "disable": "",
-        "mapping": "aSubCategory",
-        "mutliple": true,
-        "bDisable": false
-      },
-      {
-        "sFieldName": "Brands",
-        "sPlaceHolder": "Brands",
-        "fieldType": "DropDown",
-        "optionArray": this.data.getMasterVal("Brands"),
-        "maxlength": "",
-        "minlength": "",
-        "pattern": "",
-        "required": "",
-        "maxDate": "",
-        "minDate": "",
-        "click": "",
-        "change": "",
-        "style": "",
-        "condition": "",
-        "disable": "",
-        "mapping": "aBrands",
-        "mutliple": true,
-        "bDisable": false
-      },
-      {
-        "sFieldName": "sVariety",
-        "sPlaceHolder": "Variety",
-        "fieldType": "DropDown",
-        "optionArray": this.data.getMasterVal("Variety"),
-        "maxlength": "",
-        "minlength": "",
-        "pattern": "",
-        "required": "",
-        "maxDate": "",
-        "minDate": "",
-        "click": "",
-        "change": "",
-        "style": "",
-        "condition": "",
-        "disable": "",
-        "mapping": "sVariety",
+        "mapping": "dPerBoxQantity",
         "mutliple": false,
         "bDisable": false
       },
       {
         "sFieldName": "Price",
-        "sPlaceHolder": "Price",
+        "sPlaceHolder": "MRP Per Box",
         "fieldType": "Number",
         "optionArray": "",
         "maxlength": "",
@@ -280,7 +221,7 @@ export class ConfigService {
       },
       {
         "sFieldName": "discntPrice",
-        "sPlaceHolder": "Discount Price",
+        "sPlaceHolder": "Retail Price with GST",
         "fieldType": "Number",
         "optionArray": "",
         "maxlength": "",
@@ -299,8 +240,8 @@ export class ConfigService {
         "bDisable": false
       },
       {
-        "sFieldName": "dTaxPercent",
-        "sPlaceHolder": "Tax Percent",
+        "sFieldName": "basePrice",
+        "sPlaceHolder": "Archit Cost Price",
         "fieldType": "Number",
         "optionArray": "",
         "maxlength": "",
@@ -314,27 +255,7 @@ export class ConfigService {
         "style": "",
         "condition": "",
         "disable": "",
-        "mapping": "dTaxPercent",
-        "mutliple": false,
-        "bDisable": false
-      },
-      {
-        "sFieldName": "dTaxAmount",
-        "sPlaceHolder": "Tax Amount",
-        "fieldType": "Number",
-        "optionArray": "",
-        "maxlength": "",
-        "minlength": "",
-        "pattern": "",
-        "required": "",
-        "maxDate": "",
-        "minDate": "",
-        "click": "",
-        "change": "",
-        "style": "",
-        "condition": "",
-        "disable": "",
-        "mapping": "dTaxAmount",
+        "mapping": "dBasePrice",
         "mutliple": false,
         "bDisable": false
       },
@@ -417,65 +338,6 @@ export class ConfigService {
         "mapping": "dStockDemand",
         "mutliple": false,
         "bDisable": true
-      },
-      {
-        "sFieldName": "dFewLeftLimit",
-        "sPlaceHolder": "Few Left in Stock Limit",
-        "fieldType": "Number",
-        "optionArray": "",
-        "maxlength": "",
-        "minlength": "",
-        "pattern": "",
-        "required": "",
-        "maxDate": "",
-        "minDate": "",
-        "click": "",
-        "change": "",
-        "style": "",
-        "condition": "",
-        "disable": "",
-        "mapping": "dFewLeftLimit",
-        "mutliple": false,
-        "bDisable": false
-      },
-      {
-        "sFieldName": "dOutofStockLimit",
-        "sPlaceHolder": "Out of Stock Limit",
-        "fieldType": "Number",
-        "optionArray": "",
-        "maxlength": "",
-        "minlength": "",
-        "pattern": "",
-        "required": "",
-        "maxDate": "",
-        "minDate": "",
-        "click": "",
-        "change": "",
-        "style": "",
-        "condition": "",
-        "disable": "",
-        "mapping": "dOutofStockLimit",
-        "mutliple": false,
-        "bDisable": false
-      },
-      {
-        "sFieldName": "sMultipleSize",
-        "sPlaceHolder": "Multiple Sizes",
-        "fieldType": "Radio Button",
-        "optionArray": this.data.getMasterVal("Option"),
-        "maxlength": "",
-        "minlength": "",
-        "pattern": "",
-        "required": "",
-        "maxDate": "",
-        "minDate": "",
-        "click": "",
-        "change": "",
-        "style": "",
-        "condition": "",
-        "disable": "",
-        "mapping": "sMultipleSize",
-        "bDisable": false
       },
       {
         "sFieldName": "sShortDesc",
@@ -639,7 +501,7 @@ export class ConfigService {
       "condition": "",
       "disable": "",
       "mapping": "sEmail",
-      "bDisable": true
+      "bDisable": false
     },
     {
       "sFieldName": "mobile",
@@ -741,7 +603,7 @@ export class ConfigService {
       },
       {
         "sFieldName": "line1",
-        "sPlaceHolder": "Building/floor no./flat no.",
+        "sPlaceHolder": "Address Line 1",
         "fieldType": "Text",
         "optionArray": "",
         "maxlength": "",
@@ -760,7 +622,7 @@ export class ConfigService {
       },
       {
         "sFieldName": "line2",
-        "sPlaceHolder": "Area",
+        "sPlaceHolder": "Address Line 1",
         "fieldType": "Text",
         "optionArray": "",
         "maxlength": "",
@@ -775,6 +637,25 @@ export class ConfigService {
         "condition": "",
         "disable": "",
         "mapping": "sLine2",
+        "bDisable": false
+      },
+      {
+        "sFieldName": "sDeliveryArea",
+        "sPlaceHolder": "Delivery Area",
+        "fieldType": "DropDown",
+        "optionArray": this.data.getMasterVal("Delivery_Area"),
+        "maxlength": "",
+        "minlength": "",
+        "pattern": "",
+        "required": true,
+        "maxDate": "",
+        "minDate": "",
+        "click": "",
+        "change": "",
+        "style": "",
+        "condition": "",
+        "disable": "",
+        "mapping": "sDeliveryArea",
         "bDisable": false
       },
       {
@@ -861,7 +742,7 @@ export class ConfigService {
         "maxlength": "",
         "minlength": "",
         "pattern": "",
-        "required": true,
+        "required": false,
         "maxDate": "",
         "minDate": "",
         "click": "",
@@ -933,7 +814,7 @@ export class ConfigService {
         "condition": "",
         "disable": "",
         "mapping": "sDoneBy",
-        "bDisable": false
+        "bDisable": true
       },
       {
         "sFieldName": "sContact",
@@ -952,7 +833,7 @@ export class ConfigService {
         "condition": "",
         "disable": "",
         "mapping": "sContact",
-        "bDisable": false
+        "bDisable": true
       }
     ]
   }
@@ -1119,65 +1000,6 @@ export class ConfigService {
         "disable": "",
         "mapping": "sCustomerId",
         "mutliple": false,
-        "bDisable": false
-      },
-      {
-        "sFieldName": "Category",
-        "sPlaceHolder": "Category",
-        "fieldType": "DropDown",
-        "optionArray": this.data.getMasterVal("Category"),
-        "maxlength": "",
-        "minlength": "",
-        "pattern": "",
-        "required": "",
-        "maxDate": "",
-        "minDate": "",
-        "click": "",
-        "change": "",
-        "style": "",
-        "condition": "",
-        "disable": "",
-        "mapping": "sCategory",
-        "bDisable": false
-      },
-      {
-        "sFieldName": "SubCategory",
-        "sPlaceHolder": "Sub Category",
-        "fieldType": "DropDown",
-        "optionArray": this.data.getMasterVal("Sub-Category"),
-        "maxlength": "",
-        "minlength": "",
-        "pattern": "",
-        "required": "",
-        "maxDate": "",
-        "minDate": "",
-        "click": "",
-        "change": "",
-        "style": "",
-        "condition": "",
-        "disable": "",
-        "mapping": "aSubCategory",
-        "mutliple": true,
-        "bDisable": false
-      },
-      {
-        "sFieldName": "Brands",
-        "sPlaceHolder": "Brands",
-        "fieldType": "DropDown",
-        "optionArray": this.data.getMasterVal("Brands"),
-        "maxlength": "",
-        "minlength": "",
-        "pattern": "",
-        "required": "",
-        "maxDate": "",
-        "minDate": "",
-        "click": "",
-        "change": "",
-        "style": "",
-        "condition": "",
-        "disable": "",
-        "mapping": "aBrands",
-        "mutliple": true,
         "bDisable": false
       }
     ]
@@ -1657,24 +1479,6 @@ export class ConfigService {
         "ViewValue": "Category",
         "masterName": "Category",
         "aOptions": this.data.getMasterVal("Category")
-      },
-      {
-        "searchValue": "aBrands",
-        "ViewValue": "Brands",
-        "masterName": "Brands",
-        "aOptions": this.data.getMasterVal("Brands")
-      },
-      {
-        "searchValue": "sVariety",
-        "ViewValue": "Variety",
-        "masterName": "Variety",
-        "aOptions": this.data.getMasterVal("Variety")
-      },
-      {
-        "searchValue": "sSize",
-        "ViewValue": "Size",
-        "masterName": "Size",
-        "aOptions": this.data.getMasterVal("Size")
       }
     ];
     aFilters.forEach(element => {
@@ -1684,5 +1488,16 @@ export class ConfigService {
       });
     });
     return aFilters;
+  }
+  getInventoryUpdateFileConfig() {
+    return [
+      { "sMapping": "sName", "sHeaderName": "Name" },
+      { "sMapping": "sCategory", "sHeaderName": "Category" },
+      { "sMapping": "dPerBoxQantity", "sHeaderName": "Quantity Per Box" },
+      { "sMapping": "dDiscountPrice", "sHeaderName": "Retail Price with GST" },
+      { "sMapping": "dPrice", "sHeaderName": "MRP Per Box" },
+      { "sMapping": "dBasePrice", "sHeaderName": "Archit Cost Price" },
+      { "sMapping": "sShortDesc", "sHeaderName": "Short Description" }
+    ]
   }
 }

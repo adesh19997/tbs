@@ -88,7 +88,7 @@ export class ProductComponent implements OnInit {
   gotoProd(type, value) {
     this.aFilter = this.config.getFilterConfig();
     if (type == "All") {
-      this.data.getProducts()
+      this.data.getProducts();
     } else {
       let req: any = {};
       Object.assign(req, { [type]: value });

@@ -78,15 +78,15 @@
           </div>
           <div class="row">
             <div class="col-md-8 text-right">
-              <button matButton type="button" class="darkButton" (click)="buy(ind)"
+              <button matButton type="button" class="basicbutton" (click)="buy(ind)"
                 *ngIf="order.sOrderStatus == 'OS00'"> Retry Paymnet</button>
             </div>
             <div class="col-md-2 text-center">
-              <button matButton type="button" class="darkButton" (click)="track(ind)"
+              <button matButton type="button" class="basicbutton" (click)="track(ind)"
                 *ngIf="order.sOrderStatus != 'OS00'"> TRACK ORDER</button>
             </div>
             <div class="col-md-2 text-center">
-              <button matButton type="button" class="darkButton" (click)="cancel(ind)"> CANCEL ORDER</button>
+              <button matButton type="button" class="basicbutton" (click)="cancel(ind)"> CANCEL ORDER</button>
             </div>
           </div>
           <hr>

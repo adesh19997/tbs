@@ -1,13 +1,11 @@
-<section style="padding:25px;" *ngIf="!data.loading && data.bShowAdminPage">
+<section style="padding:25px;" *ngIf="!data.loading">
   <hr>
   <div class="row" style="margin-top:10px;">
     <div class="col-md-6 col-sm-6 col-lg-6 text-left">
       <h4>Your Orders</h4>
     </div>
-    <div class="col-md-4 col-sm-4 col-lg-4 text-right">
+    <div class="col-md-6 col-sm-6 col-lg-6 text-right">
       <button matButton type="button" class="basicbutton" (click)="createHeader(addOrder)"> Create Order</button>
-    </div>
-    <div class="col-md-2 col-sm-2 col-lg-2 text-right">
       <button matButton type="button" class="basicbutton" (click)="downloadMaster()"> Download History</button>
     </div>
   </div>
@@ -137,8 +135,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button matButton type="button" class="basicbutton" (click)="createOrder()"> Create Courier</button>
-    <button matButton type="button" class="basicbutton" (click)="SaveOrder()"> Add</button>
+    <button matButton type="button" class="basicbutton" (click)="SaveOrder()"> Save</button>
   </div>
 </ng-template>
 <ng-template #viewTrack let-c="close" let-d="dismiss">
@@ -159,7 +156,7 @@
 
               </th>
               <th>Updated By</th>
-              <th>Status Chnaged To</th>
+              <th>Status Changed To</th>
               <th>Description</th>
             </tr>
             <tr *ngFor="let order of data.AllOrders[selectedOrder].aOrderTrack;let ind=index">
@@ -207,7 +204,8 @@
               <th>Sr No.</th>
               <th>Product Name </th>
               <th>Product ID</th>
-              <th>Quantity</th>
+              <th>Units Per Box</th>
+              <th>Quantity (Boxes)</th>
               <th>Amount Per Item</th>
               <th>
                 <a id='addID' (click)="addProduct()" title="Edit">
@@ -222,11 +220,12 @@
                   <mat-select id="prdt-{{ind}}" placeholder="Name" name="prdt-{{ind}}"
                     [(ngModel)]="product.sProductName">
                     <mat-option *ngFor="let opt of data.Products" (click)="setProdData(opt,ind)" [value]="opt.sName">{{
-                      opt.sName }}</mat-option>
+                      opt.sName }} ({{opt.sCategory}})</mat-option>
                   </mat-select>
                 </mat-form-field>
               </td>
               <td>{{product.sProductId}}</td>
+              <td>{{product.dPerBoxQantity}}</td>
               <td>
                 <mat-form-field class="example-full-width">
                   <input id="qnt-{{ind}}" type="number" matInput placeholder="Quantity" name="qnt-{{ind}}"
@@ -347,18 +346,22 @@
       <tbody>
         <tr class="borderStyle">
           <th class="borderStyle">Order No.</th>
-          <th colspan="3">{{tempOrder.sOrderNo}}</th>
+          <th colspan="4">{{tempOrder.sOrderNo}}</th>
         </tr>
         <tr class="borderStyle">
           <th class="borderStyle">Sr No.</th>
           <th class="borderStyle">Product Name </th>
-          <th class="borderStyle">Quantity</th>
+          <th class="borderStyle">Units Per Box</th>
+          <th class="borderStyle">Quantity (Boxes)</th>
           <th class="borderStyle"> Amount Per Item</th>
         </tr>
         <tr class="borderStyle" *ngFor="let product of aOrderProducts;let ind=index">
           <td class="borderStyle">{{ind + 1}}</td>
           <td class="borderStyle">
             {{product.sProductName}}
+          </td>
+          <td class="borderStyle">
+            {{product.dPerBoxQantity}}
           </td>
           <td class="borderStyle">
             {{product.sQuantity}}
@@ -371,7 +374,7 @@
           <th class="text-left borderStyle">Total Items</th>
           <td class="text-right borderStyle">{{tempOrder.dTotalQuantity}}</td>
           <th class="text-left borderStyle">Total Amount</th>
-          <td class="text-right borderStyle">{{tempOrder.dTotalAmount | currency:'INR':'symbol'}}</td>
+          <td class="text-right borderStyle" colspan="2">{{tempOrder.dTotalAmount | currency:'INR':'symbol'}}</td>
         </tr>
       </tbody>
     </table>

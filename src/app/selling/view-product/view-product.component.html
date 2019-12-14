@@ -1,6 +1,6 @@
 <section style="padding:25px;">
   <div class="row">
-    <div class="col-md-6 col-sm-6 col-lg-6 card">
+    <div class="col-md-3 col-sm-3 col-lg-3 card">
       <div class="left-center">
         <a (click)="poster('prev')"><i class="fa fa-chevron-left arrow"></i> </a>
       </div>
@@ -9,37 +9,33 @@
         <a (click)="poster('next')"><i class="fa fa-chevron-right arrow"></i></a>
       </div>
     </div>
-    <div class="col-md-4 col-sm-4 col-lg-4 right-border">
+    <div class="col-md-7 col-sm-7 col-lg-7 right-border">
       <div class="row">
         <div class="col-md-6">
           <div class="row">
-            <div class="col-md-12"> <span style="font-size: 24px;">{{product.sName}}</span><span
+            <div class="col-md-12"> <span style="font-size: 24px;">{{product.sName}} ({{product.sCategory}})</span><span
                 class="control-label">{{product.sShortDesc}}</span></div>
             <div class="col-md-12">
-              <span [ngClass]="product.dAvgRating>=1 ? 'fa fa-star rating':'fa fa-star'"></span>
+              <!-- <span [ngClass]="product.dAvgRating>=1 ? 'fa fa-star rating':'fa fa-star'"></span>
               <span [ngClass]="product.dAvgRating>=2 ? 'fa fa-star rating':'fa fa-star'"></span>
               <span [ngClass]="product.dAvgRating>=3 ? 'fa fa-star rating':'fa fa-star'"></span>
               <span [ngClass]="product.dAvgRating>=4 ? 'fa fa-star rating':'fa fa-star'"></span>
-              <span [ngClass]="product.dAvgRating>=5 ? 'fa fa-star rating':'fa fa-star'"></span>
+              <span [ngClass]="product.dAvgRating>=5 ? 'fa fa-star rating':'fa fa-star'"></span> -->
             </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="row">
             <div class="col-md-12 text-right">
-              <span class="strikethrough">{{product.dPrice | currency:'INR':'symbol'}}</span>
+              <span>Retail Price with GST: {{product.dPrice | currency:'INR':'symbol'}}</span>
               <br>
-              <h4 style="color: black;font-size: 24px;">{{product.dDiscountPrice | currency:'INR':'symbol'}}
+              <h4 style="color: black;font-size: 24px;">MRP Per Box: {{product.dDiscountPrice | currency:'INR':'symbol'}}
               </h4>
               <span>{{product.dDiscountPercent}} % off</span>
+              <br>
+              <span>Quantity Per Box: {{product.dPerBoxQantity}} Units</span>
             </div>
           </div>
-        </div>
-        <div class="col-md-12 text-center" style="margin-bottom:10px;">
-          <span class="red"
-            *ngIf="product.dStockAvailable<=product.dFewLeftLimit &&  product.dStockAvailable>product.dOutofStockLimit">Only
-            4 Items left in Stock</span>
-          <span class="red" *ngIf="product.dStockAvailable<=product.dOutofStockLimit">Out of Stock</span>
         </div>
       </div>
       <div class="row card" *ngIf="product.sMultipleSize=='Yes'">
@@ -71,24 +67,23 @@
       </div>
       <div class="row">
         <div class="col-md-12" style="margin-bottom:10px;">
-          <button matButton type="button" class="darkButton example-full-width" (click)="addToCart('wishlist')"> Add
+          <button matButton type="button" class="basicbutton example-full-width" (click)="addToCart('wishlist')"> Add
             to
             WishList</button>
         </div>
         <div class="col-md-12" style="margin-bottom:10px;">
-          <button matButton type="button" class="darkButton example-full-width"
-            *ngIf="product.dStockAvailable>product.dOutofStockLimit" (click)="addToCart('cart')"> Add to
+          <button matButton type="button" class="basicbutton example-full-width" (click)="addToCart('cart')"> Add to
             Cart</button>
         </div>
         <div class="col-md-12 text-center" style="margin-bottom:10px;">
-          <button matButton type="button" class="darkButton example-full-width"
+          <button matButton type="button" class="basicbutton example-full-width"
             *ngIf="product.dStockAvailable>product.dOutofStockLimit" (click)="buy()"> Buy</button>
         </div>
       </div>
     </div>
   </div>
   <hr>
-  <div class="row" style="margin-top:10px;">
+  <!-- <div class="row" style="margin-top:10px;">
     <div class="col-md-6">
       <div class="row card">
         <div class="col-md-6">
@@ -108,7 +103,7 @@
           </mat-form-field>
         </div>
         <div class="col-md-3 col-sm-3 col-lg-3 text-right" style="margin-bottom:10px;">
-          <button matButton type="button" class="darkButton example-full-width" (click)="addReview()"> Add
+          <button matButton type="button" class="basicbutton example-full-width" (click)="addReview()"> Add
             Review</button>
         </div>
       </div>
@@ -118,8 +113,8 @@
     <div class="col-md-12">
       <h4>Product Reviews</h4>
     </div>
-  </div>
-  <hr>
+  </div> -->
+  <!-- <hr>
   <div class="row" style="margin-top:10px;" *ngFor="let review of product.aReviews">
     <div class="col-md-12 col-sm-12 col-lg-12 text-left">
       <h6>{{review.sUserName}}</h6><span>{{review.dtDate | date: 'dd/MM/yyyy, h:mm a'}}</span><br>
@@ -132,5 +127,5 @@
     <div class="col-md-12 col-sm-12 col-lg-12">
       <p class="product-description">{{review.sDescription}}</p>
     </div>
-  </div>
+  </div> -->
 </section>

@@ -5,11 +5,11 @@ const firebase = require("firebase");
 var app = express();
 const checksum_lib = require('./checksum');
 firebase.initializeApp({
-	apiKey: 'AIzaSyAHdBM-Y1cnQ2ZATN3sdAv01SDc3SNo3Ws',
-	authDomain: 'tecpixels-bs.firebaseapp.com',
-	databaseURL: 'https://tecpixels-bs.firebaseio.com',
-	projectId: 'tecpixels-bs',
-	storageBucket: 'gs://tecpixels-bs.appspot.com/'
+	apiKey: 'AIzaSyDJnRF3i6U7zK4YgPritBGf6Pap8L-iU3o',
+	authDomain: 'architenterprise-63174.firebaseapp.com',
+	databaseURL:'https://architenterprise-63174.firebaseio.com/',
+	projectId:'architenterprise-63174',
+	storageBucket:'gs://architenterprise-63174.appspot.com'
 });
 app.use(express.json());
 
@@ -26,13 +26,13 @@ app.post('/sendEmail', function (req, res) {
 	var transporter = nodemailer.createTransport({
 		service: 'Gmail',
 		auth: {
-			user: 'adesh19997@gmail.com',
-			pass: 'Softcell@2019'
+			user: 'architenterprises80@gmail.com',
+			pass: 'architent@0412'
 		}
 	});
 	var mailDetails = req.body.mailDetails;
 	const mailOptions = {
-		from: 'adesh19997@gmail.com', // sender address
+		from: 'architenterprises80@gmail.com', // sender address
 		to: mailDetails.sEmail, // list of receivers
 		subject: mailDetails.sSubject, // Subject line
 		html: mailDetails.sContent, // plain text body

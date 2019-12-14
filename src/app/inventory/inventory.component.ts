@@ -41,6 +41,7 @@ export class InventoryComponent implements OnInit {
   };
   aSizes = this.data.getMasterVal("Size");
   dir: any = "";
+  excelBuffer: any;
   constructor(private config: ConfigService,
     public data: DataService,
     public storage: StorageService,
@@ -115,7 +116,8 @@ export class InventoryComponent implements OnInit {
     if (Array.isArray(this.data.Products)) {
       i = this.data.Products.length + 1;
     }
-    this.Product.sUid = this.addform.controls["ProdName"].value + this.addform.controls["Category"].value + (i).toString();
+    this.Product.sUid = "AREP" + this.addform.controls["ProdName"].value + this.addform.controls["Category"].value;
+    this.Product.sUid = this.Product.sUid.replace(/[^a-zA-Z0-9]+/g, "");
     if (Array.isArray(this.data.Products)) {
       tempObj = this.data.Products.filter(obj => obj.sName === this.addform.controls["ProdName"].value && obj.sCategory === this.addform.controls["Category"].value);
     }
@@ -188,7 +190,16 @@ export class InventoryComponent implements OnInit {
 
   }
   downloadProductList() {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.data.Products);
+    let downLoadObj = []
+    let keys = this.config.getInventoryUpdateFileConfig();
+    this.data.Products.forEach(product => {
+      let tempObj = {};
+      keys.forEach(element => {
+        tempObj[element.sHeaderName] = product[element.sMapping];
+      });
+      downLoadObj.push(tempObj);
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(downLoadObj);
     /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
@@ -221,5 +232,54 @@ export class InventoryComponent implements OnInit {
   deleteSize(ind) {
     this.Product.aSizeList.splice(ind, 1);
   }
-  
+  readExcelFile(file: any) {
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      this.excelBuffer = fileReader.result;
+      var data = new Uint8Array(this.excelBuffer);
+      var arr = new Array();
+      for (var i = 0; i != data.length; i++) {
+        arr[i] = String.fromCharCode(data[i]);
+      }
+      var bstr = arr.join("");
+      var workbook = XLSX.read(bstr, { type: 'binary' });
+      var first_sheet_name = workbook.SheetNames[0];
+      var worksheet = workbook.Sheets[first_sheet_name];
+      let xlsData = XLSX.utils.sheet_to_json(worksheet, { raw: true, header: 1 });
+      let filekeys = this.config.getInventoryUpdateFileConfig();
+      let result = []
+      xlsData.forEach((element, ind) => {
+        let tempObj = JSON.parse(JSON.stringify(this.data.Product));
+        if (ind != 0) {
+          filekeys.forEach((innerElement, ind1) => {
+            if (element[ind1]) {
+              tempObj[innerElement.sMapping] = element[ind1].toString();
+            } else {
+              tempObj[innerElement.sMapping] = "";
+            }
+          });
+          tempObj.sUid = "AREP" + tempObj.sName + tempObj.sCategory;
+          tempObj.sUid = tempObj.sUid.replace(/[^a-zA-Z0-9]+/g, "");
+          let prevObj = this.data.Products.filter(obj => obj.sUid == tempObj.sUid);
+          if (prevObj.length > 0) {
+            tempObj.dStockAvailable = prevObj[0].dStockAvailable;
+            tempObj.dStockSold = prevObj[0].dStockSold;
+            tempObj.dStockDemand = prevObj[0].dStockDemand;
+            tempObj.dInCart = prevObj[0].dInCart;
+            tempObj.aImages = prevObj[0].aImages;
+          }
+          tempObj.dDiscountPercent = (((Number(tempObj.dPrice) - Number(tempObj.dDiscountPrice)) / Number(tempObj.dPrice)) * 100).toFixed(2);
+          result.push(tempObj);
+          this.data.updateProductDetails(tempObj);
+        }
+      });
+      this.modalRef.close();
+    }
+    fileReader.readAsArrayBuffer(file);
+  }
+  uploadFile(importEvent: any): void {
+    let files = importEvent.target.files;
+    let file = files[0];
+    this.readExcelFile(file);
+  }
 }

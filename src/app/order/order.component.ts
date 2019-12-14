@@ -56,6 +56,7 @@ export class OrderComponent implements OnInit {
         this.data.checkTransStatus();
       }
     }
+    this.data.getProducts();
   }
   openPopup(newContents) {
     this.modalRef = this.modalService.open(newContents, { windowClass: 'buss-modal' });
@@ -66,13 +67,21 @@ export class OrderComponent implements OnInit {
       this.data.AllOrders[this.selectedOrder].aChequeDetails = [];
     }
     this.orderTrack = JSON.parse(JSON.stringify(this.data.orderTrack));
+    this.orderTrack.sDoneBy = this.data.Users.sEmail;
+    this.orderTrack.sContact = this.data.Users.sPhoneNumber;
     this.orderform = this.config.geSectionForm(this.orderTrack, this.orderField);
     this.openPopup(editOrder);
   }
   SaveOrder() {
     this.config.setData(this.orderField, this.orderTrack, this.orderform.value);
-    this.data.AllOrders[this.selectedOrder].aOrderTrack.push(this.orderTrack);
     this.data.AllOrders[this.selectedOrder].sOrderStatus = this.orderTrack.status;
+    let master = this.data.getMasterVal("Order_Stage");
+    let masterOBJ = _.findWhere(master, { "value": this.orderTrack.status });
+    if (masterOBJ) {
+      this.orderTrack.status = masterOBJ.viewValue;
+      this.data.AllOrders[this.selectedOrder].sOrderViewStatus = masterOBJ.viewValue;
+    }
+    this.data.AllOrders[this.selectedOrder].aOrderTrack.push(this.orderTrack);
     this.modalRef.close();
     this.data.updateOrder(this.data.AllOrders[this.selectedOrder]);
   }
@@ -180,8 +189,13 @@ export class OrderComponent implements OnInit {
       this.data.Users.dTotalOrder = 1;
     }
     this.tempOrder.dtDate = new Date();
-    this.tempOrder.sOrderNo = "YMS" + dateStr + this.tempOrder.sCustomerId + (this.data.AllOrders.length + 1).toString();
+    this.tempOrder.sOrderNo = "AREP" + dateStr + this.tempOrder.sCustomerId + (this.data.AllOrders.length + 1).toString();
     this.tempOrder.sOrderStatus = "OS2";
+    let master = this.data.getMasterVal("Order_Stage");
+    let masterOBJ = _.findWhere(master, { "value": "OS2" });
+    if (masterOBJ) {
+      this.tempOrder.sOrderViewStatus = masterOBJ.viewValue;
+    }
     this.tempOrder.aProduct = this.aOrderProducts;
     this.tempOrder.sPaymentMade = "Direct-Cash";
     this.tempOrder.oDeliveryAddr = this.deliverAddr;
@@ -197,7 +211,7 @@ export class OrderComponent implements OnInit {
     this.aOrderProducts.push({
       sProductId: "",
       sProductName: "",
-      sQuantity: "",
+      sQuantity: "1",
       dAmount: 0
     })
   }
@@ -205,6 +219,7 @@ export class OrderComponent implements OnInit {
     this.aOrderProducts[ind].sProductId = opt.sUid;
     this.aOrderProducts[ind].sProductName = opt.sName;
     this.aOrderProducts[ind].dAmount = opt.dDiscountPrice;
+    this.aOrderProducts[ind].dPerBoxQantity = opt.dPerBoxQantity;
   }
   calculateTotal() {
     this.tempOrder.dTotalQuantity = 0;

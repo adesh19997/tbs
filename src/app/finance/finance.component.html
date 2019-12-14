@@ -1,4 +1,4 @@
-<section style="padding:25px;" *ngIf="!data.loading && data.bShowAdminPage">
+<section style="padding:25px;" *ngIf="!data.loading">
     <div class="row">
         <div class="col-md-12 card">
             <div class="row">
@@ -15,7 +15,7 @@
             <hr>
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <button matButton type="button" class="darkButton" (click)="downoadAll()"> Download
+                    <button matButton type="button" class="basicbutton" (click)="downoadAll()"> Download
                         Finances</button>
                 </div>
             </div>

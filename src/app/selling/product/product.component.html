@@ -12,27 +12,11 @@
   </div>
   <div class="row" *ngIf="!data.onlyProduct" style="margin-top:25px;">
     <div class="col-md-12 text-center">
-      <h3 class="titleBig"><a>Shop By Category</a></h3>
+      <h3 class="titleBig"><a>Order By Category</a></h3>
     </div>
     <hr>
     <div class="col-md-3 col-lg-3 col-sm-3 box" *ngFor="let prod of data.MainPage.aCategory;let ind=index;">
       <div class="row" (click)="gotoProd('sCategory',prod.sName)">
-        <div class="col-md-12 text-center">
-          <img id="prodImg-{{ind}}" name="prodImg-{{ind}}" alt="Avatar" [src]="prod.sUrl" class="prodImg">
-        </div>
-      </div>
-      <div class="row" style="margin-top:20px;">
-        <div class="col-md-12 text-center">
-          <h4 class="title"><a>{{prod.sName}}</a></h4>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-12 text-center" style="margin-top:25px;">
-      <h3 class="titleBig"><a>Shop By Brands</a></h3>
-    </div>
-    <hr>
-    <div class="col-md-3 col-lg-3 col-sm-3 box" *ngFor="let prod of data.MainPage.aBrand;let ind=index;">
-      <div class="row" (click)="gotoProd('aBrands',prod.sName)">
         <div class="col-md-12 text-center">
           <img id="prodImg-{{ind}}" name="prodImg-{{ind}}" alt="Avatar" [src]="prod.sUrl" class="prodImg">
         </div>
@@ -62,7 +46,7 @@
               <span class="Icon">{{prod.sShortDesc}}</span>
               <br>
               <a (click)="gotoView(ind)"><i class="fa fa fa-search Icon"></i></a>
-              <a (click)="addToCart(ind,'cart')" *ngIf="prod.dStockAvailable>prod.dOutofStockLimit"><i class="fa fa-shopping-cart Icon"></i></a>
+              <a (click)="addToCart(ind,'cart')" ><i class="fa fa-shopping-cart Icon"></i></a>
               <a (click)="addToCart(ind,'wishlist')"><i class="fa fa-heart-o Icon"></i></a>
             </div>
             <div class="bottom">
@@ -71,15 +55,13 @@
           </div>
           <div class="row" style="margin-top:20px;">
             <div class="col-md-12 text-center">
-              <h4 class="title"><a>{{prod.sName}}</a></h4>
+              <h4 class="title"><a>{{prod.sName}} ({{prod.sCategory}})</a></h4>
             </div>
             <div class="col-md-12 text-center">
-              <span class="strikethrough">{{prod.dPrice | currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span
-                style="color: black;">{{prod.dDiscountPrice |
+              <span>Retail Price with GST: {{prod.dPrice | currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span
+                style="color: black;">MRP Per Box: {{prod.dDiscountPrice |
                       currency:'INR':'symbol'}}</span>&nbsp;&nbsp;<span>{{prod.dDiscountPercent}} % off</span>
                       <br>
-                      <span class="red" *ngIf="prod.dStockAvailable<=prod.dFewLeftLimit &&  prod.dStockAvailable>prod.dOutofStockLimit">Only a 4 Items left in Stock</span>
-                      <span class="red" *ngIf="prod.dStockAvailable<=prod.dOutofStockLimit">Out of Stock</span>
             </div>
           </div>
         </div>

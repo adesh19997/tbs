@@ -1,9 +1,10 @@
-<section style="padding:25px;" *ngIf="!data.loading && data.bShowAdminPage">
+<section style="padding:25px;" *ngIf="!data.loading">
   <div class="row" *ngIf="!addProd">
     <div class="col-md-6 col-sm-6 col-lg-6">
       <h4>Product List</h4>
     </div>
     <div class="col-md-6 col-sm-6 col-lg-6 text-right">
+        <button matButton type="button" class="basicbutton" (click)="openPopup(addFile)"> Update Inventory</button>
       <button matButton type="button" class="basicbutton" (click)="downloadProductList()"> Download History</button>
     </div>
   </div>
@@ -82,13 +83,13 @@
     </div>
   </div>
   <hr>
-  <div class="row" *ngIf="addProd">
+  <div class="row" *ngIf="addProd && Product.sMultipleSize =='Yes'">
     <div class="col-md-12 col-sm-12 col-lg-12">
       <h4>Size Details</h4>
     </div>
   </div>
   <hr>
-  <div class="row " *ngIf="addProd">
+  <div class="row " *ngIf="addProd && Product.sMultipleSize =='Yes'">
     <div class="col-md-12">
       <table class="table">
         <tbody>
@@ -258,5 +259,24 @@
   </div>
   <div class="modal-footer">
     <button matButton type="button" class="basicbutton" (click)="SaveStock()"> Add</button>
+  </div>
+</ng-template>
+<ng-template #addFile let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4>Upload</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row" *ngIf="!isLoading">
+      <div class="col-md-6 col-sm-6 col-lg-6">
+        <label class="btn-bs-file btn btn-md btn-primary">
+          <i class="fa fa-random"></i> Add
+          <input type="file" style="display: none;" class="fileInput" id="importLeads" #fileInput
+            (click)="fileInput.value = null" name="importLeads" (change)="uploadFile($event,addMaster);">
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button id='control33' mat-button type="button" class="btn btn-primary" (click)="closePopup()">Close</button>
   </div>
 </ng-template>

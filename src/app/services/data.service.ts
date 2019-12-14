@@ -70,10 +70,10 @@ export class DataService {
     aProductLine: "",
     dPrice: null,
     dDiscountPrice: null,
-    dStockAvailable: null,
-    dStockSold: null,
-    dStockDemand: null,
-    dInCart: null,
+    dStockAvailable: 0,
+    dStockSold: 0,
+    dStockDemand: 0,
+    dInCart: 0,
     dFewLeftLimit: 12,
     dOutofStockLimit: 6,
     aVariants: [],
@@ -158,6 +158,7 @@ export class DataService {
   };
   orderTrack = {
     dtDate: new Date(),
+    "sDoneBy":"",
     "status": "",
     "sRemarks": ""
   };
@@ -260,26 +261,6 @@ export class DataService {
       },
       {
         name: 'Orders Delivered',
-        data: []
-      },
-      {
-        name: 'Orders shipped',
-        data: []
-      },
-      {
-        name: 'Orders on Way',
-        data: []
-      },
-      {
-        name: 'Orders Cancelled',
-        data: []
-      },
-      {
-        name: 'Orders Payment Done',
-        data: []
-      },
-      {
-        name: 'Orders Payment Failed',
         data: []
       }
     ]
@@ -445,7 +426,7 @@ export class DataService {
     let request = {
       "mailDetails": {
         "sEmail": order.sEmail,
-        "sSubject": "TechPixels: Order Details",
+        "sSubject": "Archit EnterPrise: Order Details",
         "sContent": html
       }
     }
@@ -473,7 +454,9 @@ export class DataService {
           tempObj.dQuantity = Number(element.sQuantity);
         });
         if (transaction) {
-          this.initiatePayment();
+          this.Order.sOrderStatus = 'OS2';
+          this.bDisableScreen = false;
+          //this.initiatePayment();
         } else {
           this.bDisableScreen = false;
         }
@@ -496,71 +479,42 @@ export class DataService {
     });
   }
   calculateOrderAnalysis() {
-    this.AllOrders = _.sortBy(this.AllOrders, 'dtDate').reverse();
-    let currDate = this.AllOrders[0].dtDate;
-    let OrderReceived = 0;
-    let OrderOnWay = 0;
-    let OrderShipped = 0;
-    let OrderPaymentDone = 0;
-    let OrderCancelled = 0;
-    let OrderDelivered = 0;
-    let OrderPaymentFailed = 0;
-    this.BasicOrderChartOptions.xAxis.categories.push(currDate.toString());
+    if (this.AllOrders.length > 0) {
+      this.AllOrders = _.sortBy(this.AllOrders, 'dtDate').reverse();
+      let currDate = this.AllOrders[0].dtDate;
+      let OrderReceived = 0;
+      let OrderDelivered = 0;
+      this.BasicOrderChartOptions.xAxis.categories.push(currDate.toString());
 
-    this.AllOrders.forEach(element => {
-      if (element.dtDate < currDate) {
-        let existInd = this.BasicOrderChartOptions.xAxis.categories.indexOf(element.dtDate);
-        if (existInd >= 0) {
+      this.AllOrders.forEach(element => {
+        if (element.dtDate < currDate) {
+          let existInd = this.BasicOrderChartOptions.xAxis.categories.indexOf(element.dtDate);
+          if (existInd >= 0) {
 
-          currDate = new Date(this.BasicOrderChartOptions.xAxis.categories[existInd]);
+            currDate = new Date(this.BasicOrderChartOptions.xAxis.categories[existInd]);
 
-          OrderReceived = this.BasicOrderChartOptions.series[0].data[existInd];
-          OrderDelivered = this.BasicOrderChartOptions.series[1].data[existInd];
-          OrderShipped = this.BasicOrderChartOptions.series[2].data[existInd];
-          OrderOnWay = this.BasicOrderChartOptions.series[3].data[existInd];
-          OrderCancelled = this.BasicOrderChartOptions.series[4].data[existInd];
-          OrderPaymentDone = this.BasicOrderChartOptions.series[5].data[existInd];
-          OrderPaymentFailed = this.BasicOrderChartOptions.series[6].data[existInd];
-        } else {
+            OrderReceived = this.BasicOrderChartOptions.series[0].data[existInd];
+            OrderDelivered = this.BasicOrderChartOptions.series[1].data[existInd];
+          } else {
 
-          this.BasicOrderChartOptions.series[0].data.push(OrderReceived);
-          this.BasicOrderChartOptions.series[1].data.push(OrderDelivered);
-          this.BasicOrderChartOptions.series[2].data.push(OrderShipped);
-          this.BasicOrderChartOptions.series[3].data.push(OrderOnWay);
-          this.BasicOrderChartOptions.series[4].data.push(OrderCancelled);
-          this.BasicOrderChartOptions.series[5].data.push(OrderPaymentDone);
-          this.BasicOrderChartOptions.series[6].data.push(OrderPaymentFailed);
+            this.BasicOrderChartOptions.series[0].data.push(OrderReceived);
+            this.BasicOrderChartOptions.series[1].data.push(OrderDelivered);
 
-          OrderReceived = 0;
-          OrderOnWay = 0;
-          OrderShipped = 0;
-          OrderPaymentDone = 0;
-          OrderCancelled = 0;
-          OrderDelivered = 0;
-          OrderPaymentFailed = 0;
+            OrderReceived = 0;
+            OrderDelivered = 0;
 
-          currDate = element.dtDate;
-          this.BasicOrderChartOptions.xAxis.categories.push(currDate.toString());
+            currDate = element.dtDate;
+            this.BasicOrderChartOptions.xAxis.categories.push(currDate.toString());
+          }
+
         }
-
-      }
-      if (element.sOrderStatus == "OS1") {
-        OrderReceived += 1;
-      } else if (element.sOrderStatus == "OS3") {
-        OrderShipped += 1;
-      } else if (element.sOrderStatus == "OS4") {
-        OrderOnWay += 1;
-      } else if (element.sOrderStatus == "OS2") {
-        OrderPaymentDone += 1;
-      } else if (element.sOrderStatus == "OS7") {
-        OrderCancelled += 1;
-      } else if (element.sOrderStatus == "OS6") {
-        OrderDelivered += 1;
-      } else if (element.sOrderStatus == "OS00") {
-        OrderPaymentFailed += 1;
-      }
-
-    });
+        if (element.sOrderStatus == "OS1") {
+          OrderReceived += 1;
+        } else if (element.sOrderStatus == "OS6") {
+          OrderDelivered += 1;
+        }
+      });
+    }
   }
   createOrder(products) {
     let date = new Date();
@@ -573,7 +527,7 @@ export class DataService {
     this.Order.dTotalAmount = 0;
     this.Order.dTotalQuantity = 0;
     this.Users.dTotalOrder += 1;
-    this.Order.sOrderNo = "YMS" + dateStr + this.Users.sPhoneNumber + (this.AllOrders.length + 1).toString();
+    this.Order.sOrderNo = "AREP" + dateStr + this.Users.sPhoneNumber + (this.AllOrders.length + 1).toString();
     this.Order.sCustomerId = this.Users.sPhoneNumber;
     this.Order.sEmail = this.Users.sEmail;
     this.Order.sOrderStatus = "OS1";
@@ -590,6 +544,7 @@ export class DataService {
         let temp = {
           sProductId: element.sProductId,
           sProductName: element.sProductName,
+          dPerBoxQantity: element.ProdDetls.dPerBoxQantity,
           sQuantity: element.sQuantity,
           dAmount: element.dAmount
         };
@@ -845,11 +800,6 @@ export class DataService {
   }
   postDataToPaytm(requestJson): Observable<any> {
     return this.http.post('https://securegw-stage.paytm.in/order/status', requestJson, httpOptions)
-      .map(this.returnJsonResponse)
-      .catch(this.handleErrorObservable)
-  }
-  postDataToWeFast(requestJson, endpoint): Observable<any> {
-    return this.http.post(environment.WEFAST_URL + endpoint, requestJson, weFasthttpOptions)
       .map(this.returnJsonResponse)
       .catch(this.handleErrorObservable)
   }
