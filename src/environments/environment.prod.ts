@@ -12,5 +12,5 @@ export const environment = {
   CALLBACK_URL:"https://tecpixels-bs.firebaseapp.com/",
   WEFAST_URL:"https://robotapitest.wefast.in/api/business/1.1/",
   PAYTM_MID:"pmePaM98534008405439",
-  version:"YMS 0.0.1"
+  version:"YMS 0.0.2"
 };
